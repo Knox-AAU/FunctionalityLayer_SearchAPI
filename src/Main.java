@@ -1,7 +1,10 @@
+import Query.QueryBuilder;
 
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
+        QueryBuilder q = new QueryBuilder();
+        String[] t = {"hej", "med", "dig"};
+        System.out.println(new QueryBuilder().GenerateQuery(t));
     }
 }
