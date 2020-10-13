@@ -1,13 +1,16 @@
-import Query.QueryBuilder;
 
-import java.util.Arrays;
+import tokenizer.*;
 import java.util.List;
 
 public class Main {
-
     public static void main(String[] args) {
-        QueryBuilder q = new QueryBuilder();
-        List<String> t = Arrays.asList("Pumpe", "roer", "vand");
-        System.out.println(new QueryBuilder().GenerateQuery(t));
+
+        // Initializes an instance of tokenizer with input string
+        // gets a list of tokens from the input string
+        List<Token> tokens = new Tokenizer("Kul til grill").getFilteredTokens();
+        
+        for (Token t : tokens) {
+            System.out.println(t.getValue());
+        }
     }
 }
