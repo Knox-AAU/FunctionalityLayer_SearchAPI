@@ -8,11 +8,10 @@ public class Main {
 
         // Initializes an instance of tokenizer with input string
         // gets a list of tokens from the input string
-        Tokenizer t = new Tokenizer("Kul til grill");
-        List<Token> tokens = t.getFilteredTokens();
+        List<Token> tokens = new Tokenizer("Kul til grill").getFilteredTokens();
         
-        for (Token a : tokens) {
-            System.out.println(a.getValue());
+        for (Token t : tokens) {
+            System.out.println(t.getValue());
         }
     }
 }
