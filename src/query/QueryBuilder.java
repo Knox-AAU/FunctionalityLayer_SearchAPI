@@ -1,4 +1,4 @@
-package Query;
+package query;
 import java.util.List;
 
 public class QueryBuilder {
