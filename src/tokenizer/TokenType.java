@@ -18,6 +18,7 @@ public enum TokenType {
         return this.pattern;
     }
 
+    // removes uneccesary tokens
     public boolean isAuxiliary() {
         return this == SPACE;
     }

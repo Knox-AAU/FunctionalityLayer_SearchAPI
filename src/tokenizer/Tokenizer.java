@@ -16,6 +16,7 @@ public class Tokenizer {
         generateTokens(input);
     }
 
+    // Starts at the start of a string, and generates the tokens
     private void generateTokens(String source) {
         index = 0;
         Token token = nextToken(source);
@@ -26,6 +27,7 @@ public class Tokenizer {
         }
     }
 
+    // takes the source string as input, and returns the next token in the input string
     @Nullable
     private Token nextToken(String source) {
         for (TokenType type : TokenType.values()) {
@@ -41,6 +43,7 @@ public class Tokenizer {
         return null;
     }
 
+    // returns a list of the tokens (aka the list of keywords)
     public List<Token> getFilteredTokens() {
 
         List<Token> filteredTokens = new ArrayList<>();
