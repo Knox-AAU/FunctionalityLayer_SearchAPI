@@ -1,4 +1,4 @@
-package com.company;
+import java.io.Console;
 
 public class Main {
 
