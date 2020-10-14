@@ -6,11 +6,11 @@ public class QueryBuilder {
     private StringBuilder prefix;
     private StringBuilder query;
 
-    public void AddPrefix(String name, String source){
+    public void addPrefix(String name, String source){
         prefix.append(String.format("PREFIX %s %s\n",name , source));
     }
 
-    public Query GenerateQuery(List<String> terms, String endPoint) {
+    public Query generateQuery(List<String> terms, String endPoint) {
 
         query.append(prefix);
 
@@ -27,6 +27,5 @@ public class QueryBuilder {
         query.append("}\n");
 
         return new Query(query.toString(), endPoint);
-
     }
 }

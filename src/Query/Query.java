@@ -12,7 +12,7 @@ public class Query {
         endPoint = ep;
     }
 
-    public void Execute(){
+    public void execute(){
         //TODO
     }
 
