@@ -3,19 +3,30 @@ import java.util.List;
 
 public class QueryBuilder {
 
-    public String GenerateQuery(List<String> terms) {
+    private StringBuilder prefix;
+    private StringBuilder query;
 
-        String query = "SELECT DISTINCT ?document \n";
-        query += "WHERE{\n";
+    public void AddPrefix(String name, String source){
+        prefix.append(String.format("PREFIX %s %s\n",name , source));
+    }
+
+    public Query GenerateQuery(List<String> terms, String endPoint) {
+
+        query.append(prefix);
+
+        query.append("SELECT DISTINCT ?document \n");
+        query.append("WHERE{\n");
 
         for (int i = 0; i < terms.size(); i++) {
-            query += "{" + String.format("term:\"%s\" rdf:isIn ?document",terms.get(i)) + "}\n";
+            query.append(String.format("{ term:%s rdf:isIn ?document }", terms.get(i)));
 
             if(i < terms.size() - 1) {
-                query += "UNION\n";
+                query.append("UNION\n");
             }
         }
-        query += "}\n";
-        return query;
+        query.append("}\n");
+
+        return new Query(query.toString(), endPoint);
+
     }
 }
