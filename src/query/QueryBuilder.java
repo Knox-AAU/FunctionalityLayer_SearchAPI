@@ -3,23 +3,17 @@ import java.util.List;
 
 public class QueryBuilder {
 
-    private StringBuilder prefix;
     private StringBuilder query;
 
-    public void addPrefix(String name, String source){
-        prefix.append(String.format("PREFIX %s %s\n",name , source));
-    }
+    public Query generateQuery(List<String> terms, String endPoint){
 
-    public Query generateQuery(List<String> terms, String endPoint) {
-
-        query.append(prefix);
+        this.query = new StringBuilder();
 
         query.append("SELECT DISTINCT ?document \n");
         query.append("WHERE{\n");
 
         for (int i = 0; i < terms.size(); i++) {
-            query.append(String.format("{ term:%s rdf:isIn ?document }", terms.get(i)));
-
+            query.append(String.format("{ %s rdf:isIn ?document }", terms.get(i)));
             if(i < terms.size() - 1) {
                 query.append("UNION\n");
             }
@@ -28,4 +22,12 @@ public class QueryBuilder {
 
         return new Query(query.toString(), endPoint);
     }
+
+    public Query generateQuery(String query, String endPoint){
+
+        this.query = new StringBuilder(query);
+        return new Query(query.toString(), endPoint);
+    }
+
+
 }

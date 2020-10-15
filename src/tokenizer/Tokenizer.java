@@ -1,7 +1,5 @@
 package tokenizer;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,7 +26,6 @@ public class Tokenizer {
     }
 
     // takes the source string as input, and returns the next token in the input string
-    @Nullable
     private Token nextToken(String source) {
         for (TokenType type : TokenType.values()) {
 
