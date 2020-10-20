@@ -1,4 +1,5 @@
 package query;
+
 import java.util.List;
 
 public class QueryBuilder {
@@ -18,6 +19,7 @@ public class QueryBuilder {
                 query.append("UNION\n");
             }
         }
+
         query.append("}\n");
 
         return new Query(query.toString(), endPoint);
