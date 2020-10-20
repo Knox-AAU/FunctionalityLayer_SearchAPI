@@ -1,4 +1,5 @@
 package query;
+
 import com.bordercloud.sparql.*;
 import java.net.URI;
 import java.util.HashMap;

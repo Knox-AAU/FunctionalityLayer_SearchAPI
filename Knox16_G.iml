@@ -17,5 +17,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="com.bordercloud:SPARQL-JAVA:1.0.9" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
