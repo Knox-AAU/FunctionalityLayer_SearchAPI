@@ -6,27 +6,41 @@ import java.util.regex.Matcher;
 
 public class Tokenizer {
 
+    /* Holds all the tokens */
     private List<Token> tokens;
+
+    /* Used as an index for substring */
     private int index;
 
     public Tokenizer(String input) {
         tokens = new ArrayList<>();
-        generateTokens(input);
+        tokenize(input);
     }
 
-    // Starts at the start of a string, and generates the tokens
-    private void generateTokens(String source) {
+    /*
+     * Generates token from a given string and adds them to a list
+     *
+     * @param source: The string to tokenize
+     */
+    private void tokenize(String source) {
+
         index = 0;
-        Token token = nextToken(source);
+        Token token = extract(source);
 
         while (token != null) {
             tokens.add(token);
-            token = nextToken(source);
+            token = extract(source);
         }
     }
 
-    // takes the source string as input, and returns the next token in the input string
-    private Token nextToken(String source) {
+    /*
+     * Extracts a token from a string, and returns it while incrementing index
+     * to create a substring for the next token extraction.
+     *
+     * @param source: the string to extract tokens from
+     */
+    private Token extract(String source) {
+
         for (TokenType type : TokenType.values()) {
 
             Matcher m = type.getPattern().matcher(source.substring(index));
@@ -40,7 +54,9 @@ public class Tokenizer {
         return null;
     }
 
-    // returns a list of the tokens (aka the list of keywords)
+    /*
+     * Returns the filtered tokens (unnecessary tokens such as space removed)
+     */
     public List<Token> getFilteredTokens() {
 
         List<Token> filteredTokens = new ArrayList<>();
