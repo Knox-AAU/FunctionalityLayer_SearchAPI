@@ -28,6 +28,4 @@ public class QueryBuilder {
         this.query = new StringBuilder(query);
         return new Query(query.toString(), endPoint);
     }
-
-
 }
