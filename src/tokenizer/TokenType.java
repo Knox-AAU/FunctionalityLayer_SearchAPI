@@ -6,7 +6,7 @@ public enum TokenType {
 
     SPACE("^ "),
 
-    KEYWORD("([^\\s]+)");
+    KEYWORD("([\\w]+)");
 
     private final Pattern pattern;
 
@@ -18,7 +18,9 @@ public enum TokenType {
         return this.pattern;
     }
 
-    // Is used to remove unnecessary tokens
+    /*
+     * Returns true if the type is auxiliary
+     */
     public boolean isAuxiliary() {
         return this == SPACE;
     }

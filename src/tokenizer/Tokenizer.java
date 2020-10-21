@@ -1,7 +1,5 @@
 package tokenizer;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -25,6 +23,7 @@ public class Tokenizer {
      * @param source: The string to tokenize
      */
     private void tokenize(String source) {
+
         index = 0;
         Token token = extract(source);
 
@@ -41,6 +40,7 @@ public class Tokenizer {
      * @param source: the string to extract tokens from
      */
     private Token extract(String source) {
+
         for (TokenType type : TokenType.values()) {
 
             Matcher m = type.getPattern().matcher(source.substring(index));
