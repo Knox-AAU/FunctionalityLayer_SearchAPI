@@ -1,5 +1,6 @@
 package TokenizerRelatedTests;
 
+import org.junit.jupiter.api.BeforeAll;
 import tokenizer.*;
 import org.junit.jupiter.api.Test;
 
@@ -11,26 +12,43 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TokenizerTest {
 
+    Tokenizer testTokenizer = new Tokenizer("test test1");
+
     @Test
     void getFilteredTokens() {
         // arrange
-        Tokenizer testTokenizer;
         List<Token> testList;
         List<Token> testList2 = new ArrayList<>();
-        // act
-        testTokenizer = new Tokenizer("test test1");
-        testList = testTokenizer.getFilteredTokens();
+        int i = 0;
 
+        // act
+        testList = testTokenizer.getFilteredTokens();
         testList2.add(new Token(TokenType.KEYWORD, "test"));
         testList2.add(new Token(TokenType.KEYWORD, "test1"));
 
         // assert
-        //value test
-        assertEquals(testList.get(0).getValue(), testList2.get(0).getValue());
-        assertEquals(testList.get(1).getValue(), testList2.get(1).getValue());
-        //TokenType test
-        assertEquals(testList.get(0).getType(), testList2.get(0).getType());
-        assertEquals(testList.get(1).getType(), testList2.get(1).getType());
+        for(Token t : testList){
+            assertEquals(testList.get(i).getValue(), testList2.get(i).getValue());
+            i++;
+        }
+    }
 
+    @Test
+    void getFilteredTokens1() {
+        // arrange
+        List<Token> testList;
+        List<Token> testList2 = new ArrayList<>();
+        int i = 0;
+
+        // act
+        testList = testTokenizer.getFilteredTokens();
+        testList2.add(new Token(TokenType.KEYWORD, "test"));
+        testList2.add(new Token(TokenType.KEYWORD, "test1"));
+
+        // assert
+        for(Token t : testList){
+            assertEquals(testList.get(i).getType(), testList2.get(i).getType());
+            i++;
+        }
     }
 }

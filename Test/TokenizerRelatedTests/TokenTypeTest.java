@@ -21,9 +21,15 @@ class TokenTypeTest {
     void isAuxiliary() {
         // arrange
         Token testToken = new Token(TokenType.KEYWORD, "1");
-        Token testToken1 = new Token(TokenType.SPACE, " ");
         // act + assert
         assertFalse(testToken.getType().isAuxiliary());
-        assertTrue(testToken1.getType().isAuxiliary());
+    }
+
+    @Test
+    void isAuxiliary1() {
+        // arrange
+        Token testToken = new Token(TokenType.SPACE, " ");
+        // act + assert
+        assertTrue(testToken.getType().isAuxiliary());
     }
 }
