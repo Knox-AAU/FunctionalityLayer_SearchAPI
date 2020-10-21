@@ -14,7 +14,9 @@ public class Query {
         this.endPoint = endPoint;
     }
 
-    public void execute(boolean print) {
+    public String execute() {
+
+        String response = null;
 
         try {
             URI endpointURI = URI.create(endPoint);
@@ -23,16 +25,14 @@ public class Query {
             sc.setEndpointRead(endpointURI);
             SparqlResult sr = sc.query(query);
 
-            System.out.println(sr.resultRaw);
-
-            if (print) {
-                printResult(sr.getModel(), 40);
-            }
+            response = sr.resultRaw;
         }
         catch(SparqlClientException e){
             System.out.println(e);
             e.printStackTrace();
         }
+
+        return response;
     }
 
     private static void printResult(SparqlResultModel rs , int size) {
@@ -47,5 +47,12 @@ public class Query {
             }
             System.out.print("\n");
         }
+    }
+
+    @Override
+    public int hashCode(){
+        int result = query.hashCode();
+        result += endPoint.hashCode();
+        return result;
     }
 }
