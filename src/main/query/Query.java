@@ -1,4 +1,4 @@
-package query;
+package main.query;
 
 import com.bordercloud.sparql.*;
 import java.net.URI;

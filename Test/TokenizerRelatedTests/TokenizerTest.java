@@ -1,10 +1,10 @@
 package TokenizerRelatedTests;
 
-import org.junit.jupiter.api.BeforeAll;
-import tokenizer.*;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
+import main.tokenizer.Token;
+import main.tokenizer.TokenType;
+import main.tokenizer.Tokenizer;
 import java.util.ArrayList;
 import java.util.List;
 

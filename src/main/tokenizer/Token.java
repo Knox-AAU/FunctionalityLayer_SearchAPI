@@ -1,4 +1,4 @@
-package tokenizer;
+package main.tokenizer;
 
 public class Token {
 

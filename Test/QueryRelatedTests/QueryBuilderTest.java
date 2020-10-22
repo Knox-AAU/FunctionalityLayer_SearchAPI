@@ -1,14 +1,11 @@
 package QueryRelatedTests;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import query.Query;
-import query.QueryBuilder;
-import tokenizer.Token;
-import tokenizer.TokenType;
-import tokenizer.Tokenizer;
+import main.query.Query;
+import main.query.QueryBuilder;
+import main.tokenizer.Token;
+import main.tokenizer.Tokenizer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

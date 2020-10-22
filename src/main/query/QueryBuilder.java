@@ -1,6 +1,6 @@
-package query;
+package main.query;
 
-import tokenizer.Token;
+import main.tokenizer.Token;
 
 import java.util.List;
 

@@ -1,9 +1,7 @@
 package QueryRelatedTests;
 
 import org.junit.jupiter.api.Test;
-import query.Query;
-import query.QueryBuilder;
-import tokenizer.Tokenizer;
+import main.query.Query;
 
 import static org.junit.jupiter.api.Assertions.*;
 

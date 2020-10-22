@@ -1,4 +1,4 @@
-package tokenizer;
+package main.tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;
