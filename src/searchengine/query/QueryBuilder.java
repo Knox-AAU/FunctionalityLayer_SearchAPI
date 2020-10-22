@@ -1,6 +1,6 @@
-package main.query;
+package searchengine.query;
 
-import main.tokenizer.Token;
+import searchengine.tokenizer.Token;
 
 import java.util.List;
 

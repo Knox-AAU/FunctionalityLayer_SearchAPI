@@ -2,9 +2,9 @@ package TokenizerRelatedTests;
 
 import org.junit.jupiter.api.Test;
 
-import main.tokenizer.Token;
-import main.tokenizer.TokenType;
-import main.tokenizer.Tokenizer;
+import searchengine.tokenizer.Token;
+import searchengine.tokenizer.TokenType;
+import searchengine.tokenizer.Tokenizer;
 import java.util.ArrayList;
 import java.util.List;
 

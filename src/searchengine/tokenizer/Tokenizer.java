@@ -1,4 +1,4 @@
-package main.tokenizer;
+package searchengine.tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;

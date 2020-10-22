@@ -1,8 +1,8 @@
 package TokenizerRelatedTests;
 
 import org.junit.jupiter.api.Test;
-import main.tokenizer.Token;
-import main.tokenizer.TokenType;
+import searchengine.tokenizer.Token;
+import searchengine.tokenizer.TokenType;
 
 import static org.junit.jupiter.api.Assertions.*;
 

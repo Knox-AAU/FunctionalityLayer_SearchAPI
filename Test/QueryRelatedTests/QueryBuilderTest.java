@@ -1,10 +1,10 @@
 package QueryRelatedTests;
 
 import org.junit.jupiter.api.Test;
-import main.query.Query;
-import main.query.QueryBuilder;
-import main.tokenizer.Token;
-import main.tokenizer.Tokenizer;
+import searchengine.query.Query;
+import searchengine.query.QueryBuilder;
+import searchengine.tokenizer.Token;
+import searchengine.tokenizer.Tokenizer;
 
 import java.util.List;
 

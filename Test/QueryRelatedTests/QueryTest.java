@@ -1,7 +1,7 @@
 package QueryRelatedTests;
 
 import org.junit.jupiter.api.Test;
-import main.query.Query;
+import searchengine.query.Query;
 
 import static org.junit.jupiter.api.Assertions.*;
 
