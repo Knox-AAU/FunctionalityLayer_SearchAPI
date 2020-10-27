@@ -1,16 +1,23 @@
 package searchengine.restcontrollers;
 
-import searchengine.tokenizer.Tokenizer;
+import searchengine.query.*;
+import searchengine.tokenizer.*;
+import java.util.List;
 
 public class Search {
 
-    private Tokenizer tokenizer;
+    private String result;
 
     public Search(String input) {
-        tokenizer = new Tokenizer(input);
+        List<Token> tokens = new Tokenizer(input).getFilteredTokens();
+        Query query = new QueryBuilder().generateQuery(tokens, "");
+
+        result = query.execute();
     }
 
-    public Tokenizer getTokenizer() {
-        return tokenizer;
+    public String getResult() {
+        return result;
     }
 }
+
+
