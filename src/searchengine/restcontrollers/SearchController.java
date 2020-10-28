@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SearchController {
 
     @GetMapping("/search")
-    public Search greeting(@RequestParam(value = "q", defaultValue = "World") String input) {
+    public Search search(@RequestParam(value = "q", defaultValue = "") String input) {
         return new Search(input);
     }
 }

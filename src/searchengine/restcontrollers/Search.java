@@ -6,17 +6,26 @@ import java.util.List;
 
 public class Search {
 
-    private String result;
+    private String title;
+    private String pdfPath;
+    private int rank;
 
     public Search(String input) {
-        List<Token> tokens = new Tokenizer(input).getFilteredTokens();
-        Query query = new QueryBuilder().generateQuery(tokens, "");
-
-        result = query.execute();
+        this.title = "TITLE" ;
+        this.pdfPath = "placeholder.pdf";
+        this.rank = 1;
     }
 
-    public String getResult() {
-        return result;
+    public String getTitle(){
+        return this.title;
+    }
+
+    public String getPdfPath(){
+        return this.pdfPath;
+    }
+
+    public int getRank(){
+        return this.rank;
     }
 }
 
