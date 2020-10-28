@@ -15,11 +15,69 @@ class QueryTest {
                 "{\n" +
                 "  ?item wdt:P31 wd:Q146.\n" +
                 "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
-                "} LIMIT 5";
+                "}" +
+                "ORDER BY DESC(?itemLabel)" +
+                "LIMIT 5";
         Query query1 = new Query(querystring, "https://query.wikidata.org/sparql");
 
-        String expected = "[{\"item\":\"http://www.wikidata.org/entity/Q378619\",\"itemLabel\":\"CC\"},{\"item\":\"http://www.wikidata.org/entity/Q498787\",\"itemLabel\":\"Muezza\"},{\"item\":\"http://www.wikidata.org/entity/Q677525\",\"itemLabel\":\"Orangey\"},{\"item\":\"http://www.wikidata.org/entity/Q851190\",\"itemLabel\":\"Mrs. Chippy\"},{\"item\":\"http://www.wikidata.org/entity/Q1050083\",\"itemLabel\":\"Catmando\"}]";
-
+        String expected = "{\n" +
+                "  \"head\" : {\n" +
+                "    \"vars\" : [ \"item\", \"itemLabel\" ]\n" +
+                "  },\n" +
+                "  \"results\" : {\n" +
+                "    \"bindings\" : [ {\n" +
+                "      \"item\" : {\n" +
+                "        \"type\" : \"uri\",\n" +
+                "        \"value\" : \"http://www.wikidata.org/entity/Q61133276\"\n" +
+                "      },\n" +
+                "      \"itemLabel\" : {\n" +
+                "        \"xml:lang\" : \"en\",\n" +
+                "        \"type\" : \"literal\",\n" +
+                "        \"value\" : \"Şero\"\n" +
+                "      }\n" +
+                "    }, {\n" +
+                "      \"item\" : {\n" +
+                "        \"type\" : \"uri\",\n" +
+                "        \"value\" : \"http://www.wikidata.org/entity/Q94993819\"\n" +
+                "      },\n" +
+                "      \"itemLabel\" : {\n" +
+                "        \"xml:lang\" : \"en\",\n" +
+                "        \"type\" : \"literal\",\n" +
+                "        \"value\" : \"Zipper\"\n" +
+                "      }\n" +
+                "    }, {\n" +
+                "      \"item\" : {\n" +
+                "        \"type\" : \"uri\",\n" +
+                "        \"value\" : \"http://www.wikidata.org/entity/Q2300851\"\n" +
+                "      },\n" +
+                "      \"itemLabel\" : {\n" +
+                "        \"xml:lang\" : \"en\",\n" +
+                "        \"type\" : \"literal\",\n" +
+                "        \"value\" : \"Winnie\"\n" +
+                "      }\n" +
+                "    }, {\n" +
+                "      \"item\" : {\n" +
+                "        \"type\" : \"uri\",\n" +
+                "        \"value\" : \"http://www.wikidata.org/entity/Q10393754\"\n" +
+                "      },\n" +
+                "      \"itemLabel\" : {\n" +
+                "        \"xml:lang\" : \"en\",\n" +
+                "        \"type\" : \"literal\",\n" +
+                "        \"value\" : \"Willow\"\n" +
+                "      }\n" +
+                "    }, {\n" +
+                "      \"item\" : {\n" +
+                "        \"type\" : \"uri\",\n" +
+                "        \"value\" : \"http://www.wikidata.org/entity/Q1759652\"\n" +
+                "      },\n" +
+                "      \"itemLabel\" : {\n" +
+                "        \"xml:lang\" : \"en\",\n" +
+                "        \"type\" : \"literal\",\n" +
+                "        \"value\" : \"Wilberforce\"\n" +
+                "      }\n" +
+                "    } ]\n" +
+                "  }\n" +
+                "}";
         // act
         String result = query1.execute();
 

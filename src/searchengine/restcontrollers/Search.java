@@ -10,8 +10,9 @@ public class Search {
     private String pdfPath;
     private int rank;
 
+
     public Search(String input) {
-        this.title = "TITLE" ;
+        this.title = "TITLE";
         this.pdfPath = "placeholder.pdf";
         this.rank = 1;
     }
