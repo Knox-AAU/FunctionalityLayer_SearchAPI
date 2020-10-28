@@ -26,9 +26,6 @@ public class Query {
             SparqlResult sr = sc.query(query, MimeType.json);
 
             response = sr.resultRaw;
-            printResult(sr.getModel(), 30);
-            System.out.println( sr.getModel().toString());
-
         }
         catch(SparqlClientException e){
             System.out.println(e);
