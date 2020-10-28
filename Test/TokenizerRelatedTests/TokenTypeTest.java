@@ -13,7 +13,7 @@ class TokenTypeTest {
     @Test
     void getPattern() {
         // arrange + act + assert
-        Pattern testPattern = Pattern.compile("([^\\s]+)");
+        Pattern testPattern = Pattern.compile("([\\w]+)");
         assertEquals(TokenType.KEYWORD.getPattern().pattern(), testPattern.pattern());
     }
 

@@ -24,7 +24,7 @@ class QueryTest {
         String result = query1.execute();
 
         // assert
-        assertEquals(result, expected);
+        assertEquals(expected, result);
 
     }
 }
