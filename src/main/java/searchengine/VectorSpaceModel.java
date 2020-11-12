@@ -1,13 +1,16 @@
 package searchengine;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.lang.Math;
 
 public class VectorSpaceModel {
 
-    public VectorSpaceModel() {
+    /* <File name, <Term, Frequency>> */
+    private HashMap<String, HashMap<String, Integer>> tfHashMap = new HashMap<>();
 
+    public VectorSpaceModel() {
     }
 
     /*
