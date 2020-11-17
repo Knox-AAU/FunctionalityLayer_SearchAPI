@@ -9,9 +9,9 @@ public class Document {
     private String title;
     private double score;
 
-    public Document(String name, String content) {
+    public Document(String title, String content) {
 
-        this.title = name;
+        this.title = title;
         termFrequency = new HashMap<String, Integer>();
 
         String[] sArray = content.split("\\s+");
@@ -26,14 +26,6 @@ public class Document {
         }
     }
 
-    public void createTfidf(HashMap<String, Double> idf){
-
-        tfidf = new HashMap<String, Double>();
-
-        for(String term : termFrequency.keySet()){
-            tfidf.put(term, termFrequency.get(term) * idf.getOrDefault(term, 0.0));
-        }
-    }
 
     public double getScore(){
         return this.score;
@@ -53,6 +45,10 @@ public class Document {
 
     public HashMap<String, Double> getTfidf() {
         return tfidf;
+    }
+
+    public void setTfidf(HashMap<String, Double> tfidf) {
+        this.tfidf = tfidf;
     }
 
 }

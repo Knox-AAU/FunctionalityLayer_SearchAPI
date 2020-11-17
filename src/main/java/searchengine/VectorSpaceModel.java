@@ -1,68 +1,19 @@
 package searchengine;
 
+import javax.print.Doc;
 import java.util.*;
 import java.lang.Math;
 
 public class VectorSpaceModel {
 
-    /* <File name, <Term, Frequency>> */
-    private HashMap<String, HashMap<String, Integer>> tfHashMap = new HashMap<>();
+    private Document query;
 
-    public VectorSpaceModel() {
+    public VectorSpaceModel(Document query) {
+        this.query = query;
     }
 
-    /*
-     *
-     *
-     */
-    private double termFrequency(int rawTF) {
-        if (rawTF == 0){
-            return 0;
-        }
-
-        return 1 + Math.log(rawTF);
-    }
-
-    /*
-     *
-     *
-     */
-    private double inverseDocumentFrequency(String term) {
-
-        return 0;
-    }
-
-    /*
-     *
-     *
-     */
-    private double[] getVector(String document) {
-
-        return null;
-    }
-
-    /*
-     * Assigns a score to a document based on a query
-     *
-     * @param a: Document to score
-     * @param b: Query
-     */
-
-    public void giveDocumentScore(Document document, Document query) {
-
-        Set<String> uniqueterms = new HashSet<>();
-        uniqueterms.addAll(document.getTfidf().keySet());
-        uniqueterms.addAll(query.getTfidf().keySet());
-
-        List<Double> documentVector = new ArrayList<>();
-        List<Double> queryVector = new ArrayList<>();
-
-        for(String term : uniqueterms){
-            documentVector.add(document.getTfidf().getOrDefault(term, 0.0));
-            queryVector.add(query.getTfidf().getOrDefault(term, 0.0));
-        }
-
-        document.setScore(cosineSimilarityScore(documentVector, queryVector));
+    public Document getQuery() {
+        return query;
     }
 
     /*
@@ -72,35 +23,23 @@ public class VectorSpaceModel {
      * @param b: Second vector
      * @return: The cosine similarity score
      */
+    public double cosineSimilarityScore(Document doc) {
 
-    public double cosineSimilarityScore(List<Double> a, List<Double> b) {
+        Set<String> uniqueTerms = new HashSet<>();
+        double temp = 0.0;
 
-        /* The dimension of the vector */
-        int n = a.size();
-
-        /* The nominator of the formula for cosine similarity */
-        double sum = 0;
-
-        /* The denominator of the formula for cosine similarity */
-        double squaredA = 0;
-        double squaredB = 0;
-
-        for (int i = 1; i < n; i++) {
-            squaredA += Math.pow(a.get(i), 2);
-            squaredB += Math.pow(b.get(i), 2);
-
-            sum += a.get(i) * b.get(i);
+        for (String term : doc.getTfidf().keySet()) {
+            uniqueTerms.add(term);
         }
 
-        return sum / (Math.sqrt(squaredA) * Math.sqrt(squaredB));
-    }
+        for (String term : query.getTfidf().keySet()) {
+            uniqueTerms.add(term);
+        }
 
-    /*
-     *
-     *
-     */
-    public void retrieve(String query) {
-
+        for (String term : uniqueTerms) {
+            temp += doc.getTfidf().getOrDefault(term, 0.0) * query.getTfidf().getOrDefault(term, 0.0);
+        }
+        return (temp / (getLength(doc)*getLength(query)));
     }
 
     public List<Document> createTestData(){
@@ -119,42 +58,84 @@ public class VectorSpaceModel {
         //ret.add(new Document(String.valueOf(i++), "2S albumin storage proteins are becoming of increasing interest in nutritional and clinical studies as they have been reported as major food allergens in seeds of many mono- and di-cotyledonous plants. This review describes the main biochemical, structural and functional properties of these proteins thought to play a role in determining their potential allergenicity. 2S albumins are considered to sensitize directly via the gastrointestinal tract (GIT). The high stability of their intrinsic protein structure, dominated by a well-conserved skeleton of cysteine residues, to the harsh conditions present in the GIT suggests that these proteins are able to cross the gut mucosal barrier to sensitize the mucosal immune system and/or elicit an allergic response. The flexible and solvent-exposed hypervariable region of these proteins is immunodominant and has the ability to bind IgE from allergic patientsๅซ sera. Several linear IgE-binding epitopes of 2S albumins spanning this region have been described to play a major role in allergenicity; the role of conformational epitopes of these proteins in food allergy is far from being understood and need to be investigated. Finally, the interaction of these proteins with other components of the food matrix might influence the absorption rates of immunologically reactive 2S albumins but also in their immune response."));
         //ret.add(new Document(String.valueOf(i++), "3,N(4)-Ethano-2'-deoxycytidine (ethano-dC) may be incorporated successfully into synthetic oligodeoxynucleotides by omitting the capping procedure used in the automated DNA synthetic protocols immediately after inserting the lesion and in all iterations thereafter. Ethano-dC is sensitive to acetic anhydride found in the capping reagent, and multiple oligomeric products are formed. These products were identified by examining the reaction of ethano-dC with the capping reagent, and several acetylated, ring-opened products were characterized by electrospray mass spectrometry and collision induced dissociation experiments on a tandem quadrupole mass spectrometer. A scheme for the formation of the acetylated products is proposed. In addition, the mutagenic profile of ethano-dC was re-examined and compared to that for etheno-dC. Ethano-dC is principally a blocking lesion; however, when encountered by the exo(-)Klenow fragment of DNA polymerase, dAMP (22%), TMP (16%), dGMP (5.3%) and dCMP (1.2%) were all incorporated opposite ethano-dC, along with an oligomer containing a one-base deletion (0.6%)."));
 
-        ret.add(new Document(String.valueOf(i++), "china is bigger than germany"));
-        ret.add(new Document(String.valueOf(i++), "russia is bigger than denmark"));
-        ret.add(new Document(String.valueOf(i++), "monaco is bigger than russia"));
-        ret.add(new Document(String.valueOf(i++), "monaco is smaller than germany"));
+        //ret.add(new Document(String.valueOf(i++), "china is bigger than germany"));
+        //ret.add(new Document(String.valueOf(i++), "russia is bigger than denmark"));
+        //ret.add(new Document(String.valueOf(i++), "monaco is bigger than russia"));
+        //ret.add(new Document(String.valueOf(i++), "monaco is smaller than germany"));
+
+        ret.add(new Document(String.valueOf(i++), "new york times"));
+        ret.add(new Document(String.valueOf(i++), "new york post"));
+        ret.add(new Document(String.valueOf(i++), "los angeles times"));
 
         return ret;
     }
 
-    public void createTfidf(List<Document> dList, Document query){
-
-        HashMap<String, Integer> df = new HashMap<>();
+    public HashMap<String, Double> getIdf(List<Document> docs) {
         HashMap<String, Double> idf = new HashMap<>();
+        HashMap<String, Integer> df = new HashMap<>();
 
-        for(Document d : dList){
-            for(String term : d.getTermFrequency().keySet()) {
+        for (Document doc : docs) {
+            for (String term : doc.getTermFrequency().keySet()){
                 if (df.containsKey(term)) {
-                    df.put(term, df.get(term) + 1);
+                    df.put(term, df.get(term)+1);
                 }
-                else{
+                else {
                     df.put(term, 1);
                 }
             }
         }
 
-        for(String term : df.keySet()) {
-            idf.put(term, Math.log10(dList.size() / (double) df.get(term)));
+        for (String term : df.keySet()) {
+            idf.put(term, logBase2(docs.size() / (double)df.get(term)));
         }
 
-        for(Document d : dList) {
-            d.createTfidf(idf);
-        }
-        query.createTfidf(idf);
+        return idf;
+    }
 
-        for(String term : idf.keySet()){
-            System.out.println(term + " | " + idf.get(term));
+    public void calculateTfidf(List<Document> docs) {
+        HashMap<String, Double> idf = getIdf(docs);
+        HashMap<String, Double> tfidf = new HashMap<>();
+        int maximumFrequency = 0;
+
+        for (Document doc : docs) {
+            for (String term : idf.keySet()) {
+                tfidf.put(term, (double)doc.getTermFrequency().getOrDefault(term, 0) * idf.get(term));
+            }
+            doc.setTfidf(tfidf);
+            tfidf = new HashMap<>();
         }
 
+        for (String term : query.getTermFrequency().keySet()) {
+            int termFrequency = query.getTermFrequency().get(term);
+            if (termFrequency > maximumFrequency) {
+                maximumFrequency = termFrequency;
+            }
+        }
+
+        for (String term : idf.keySet()) {
+            tfidf.put(term, (double)query.getTermFrequency().getOrDefault(term, 0) / maximumFrequency * idf.getOrDefault(term, 0.0));
+        }
+        query.setTfidf(tfidf);
+    }
+
+    private double logBase2(double input) {
+        return Math.log10(input) / Math.log10(2);
+    }
+
+    private double getLength(Document doc) {
+
+        double temp = 0.0;
+        for (String term : doc.getTfidf().keySet()) {
+            temp += Math.pow(doc.getTfidf().get(term), 2);
+        }
+        temp = Math.sqrt(temp);
+
+        return temp;
+    }
+
+    public void assignScore (List<Document> docs) {
+        for (Document doc : docs) {
+            doc.setScore(cosineSimilarityScore(doc));
+        }
     }
 }
