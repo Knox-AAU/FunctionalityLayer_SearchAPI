@@ -1,14 +1,13 @@
 package searchengine;
 
-import javax.print.Doc;
 import java.util.*;
 import java.lang.Math;
 
 public class VectorSpaceModel {
 
-    private Document query;
+    private Vector query;
 
-    public VectorSpaceModel(Document query) {
+    public VectorSpaceModel(Vector query) {
         this.query = query;
     }
 
@@ -18,7 +17,7 @@ public class VectorSpaceModel {
      * @param doc: The document to score
      * @return: The cosine similarity score
      */
-    public double cosineSimilarityScore(Document doc) {
+    private double cosineSimilarityScore(Document doc) {
 
         Set<String> uniqueTerms = new HashSet<>();
         double ret = 0.0;
@@ -113,11 +112,11 @@ public class VectorSpaceModel {
      * @param doc: The document
      * @return: The length
      */
-    private double getLength(Document doc) {
+    private double getLength(Vector vec) {
 
         double temp = 0.0;
-        for (String term : doc.getTfidf().keySet()) {
-            temp += Math.pow(doc.getTfidf().get(term), 2);
+        for (String term : vec.getTfidf().keySet()) {
+            temp += Math.pow(vec.getTfidf().get(term), 2);
         }
         temp = Math.sqrt(temp);
 
@@ -141,7 +140,7 @@ public class VectorSpaceModel {
      * @param doc: The document to score
      * @return: The cosine similarity score
      */
-    public Document getQuery() {
+    public Vector getQuery() {
         return query;
     }
 
