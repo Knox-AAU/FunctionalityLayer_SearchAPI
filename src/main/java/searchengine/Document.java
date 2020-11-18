@@ -26,17 +26,16 @@ public class Document {
         }
     }
 
-
     public double getScore(){
         return this.score;
     }
 
-    public String getTitle(){
-        return title;
-    }
-
     public void setScore(double value){
         this.score = value;
+    }
+
+    public String getTitle(){
+        return title;
     }
 
     public HashMap<String, Integer> getTermFrequency() {
