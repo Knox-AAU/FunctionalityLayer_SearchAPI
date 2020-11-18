@@ -1,7 +1,5 @@
 package searchengine;
 
-import java.util.HashMap;
-
 public class Document extends Vector {
 
     private String title;

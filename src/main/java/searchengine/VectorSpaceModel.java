@@ -49,7 +49,7 @@ public class VectorSpaceModel {
      * @param docs: the list of documents
      * @return: idf of every term in the documents
      */
-    public HashMap<String, Double> getIdf(List<Document> docs) {
+    private HashMap<String, Double> calculateIdf(List<Document> docs) {
         HashMap<String, Double> idf = new HashMap<>();
         HashMap<String, Integer> df = new HashMap<>();
 
@@ -79,7 +79,7 @@ public class VectorSpaceModel {
      * @param doc: The list of documents
      */
     public void calculateTfidf(List<Document> docs) {
-        HashMap<String, Double> idf = getIdf(docs);
+        HashMap<String, Double> idf = calculateIdf(docs);
         HashMap<String, Double> tfidf = new HashMap<>();
         int maximumFrequency = 0;
 
