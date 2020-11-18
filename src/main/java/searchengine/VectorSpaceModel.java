@@ -36,10 +36,7 @@ public class VectorSpaceModel {
                     * query.getTfidf().getOrDefault(term, 0.0);
         }
 
-        double doclen = getLength(doc);
-        double qlen = getLength(query);
-
-        return dotProduct / (doclen*qlen);
+        return dotProduct / (getLength(doc) * getLength(query));
     }
 
     /*
