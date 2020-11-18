@@ -20,7 +20,7 @@ public class VectorSpaceModel {
     private double cosineSimilarityScore(Document doc) {
 
         Set<String> uniqueTerms = new HashSet<>();
-        double ret = 0.0;
+        double dotProduct = 0;
 
         for (String term : doc.getTfidf().keySet()) {
             uniqueTerms.add(term);
@@ -30,18 +30,16 @@ public class VectorSpaceModel {
             uniqueTerms.add(term);
         }
 
-        // The dotproduct of the document and the vector
+        // The dot product of the document and the vector
         for (String term : uniqueTerms) {
-            ret += doc.getTfidf().getOrDefault(term, 0.0)
+            dotProduct += doc.getTfidf().getOrDefault(term, 0.0)
                     * query.getTfidf().getOrDefault(term, 0.0);
         }
 
         double doclen = getLength(doc);
         double qlen = getLength(query);
 
-        ret = ret / (doclen*qlen);
-
-        return ret;
+        return dotProduct / (doclen*qlen);
     }
 
     /*
@@ -54,7 +52,7 @@ public class VectorSpaceModel {
         HashMap<String, Double> idf = new HashMap<>();
         HashMap<String, Integer> df = new HashMap<>();
 
-        //Get the document frequency of each term
+        // Get the document frequency of each term
         for (Document doc : docs) {
             for (String term : doc.getTermFrequency().keySet()){
                 if (df.containsKey(term)) {
@@ -66,7 +64,7 @@ public class VectorSpaceModel {
             }
         }
 
-        //Get the inverse document frequency of each term
+        // Get the inverse document frequency of each term
         for (String term : df.keySet()) {
             idf.put(term, Math.log10(docs.size() / (double)df.get(term)));
         }
@@ -83,7 +81,7 @@ public class VectorSpaceModel {
         HashMap<String, Double> idf = calculateIdf(docs);
         int maximumFrequency = 0;
 
-        //Assign tfidf for each document
+        // Assign tfidf for each document
         for (Document doc : docs) {
             doc.setTfidf(new HashMap<String, Double>());
             for (String term : idf.keySet()) {
@@ -91,7 +89,7 @@ public class VectorSpaceModel {
             }
         }
 
-        //Assign tfidf for the query
+        // Assign tfidf for the query
         for (String term : query.getTermFrequency().keySet()) {
             int termFrequency = query.getTermFrequency().get(term);
             if (termFrequency > maximumFrequency) {
