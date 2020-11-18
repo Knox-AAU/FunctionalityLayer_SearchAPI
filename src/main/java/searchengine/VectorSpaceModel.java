@@ -32,7 +32,8 @@ public class VectorSpaceModel {
 
         // The dotproduct of the document and the vector
         for (String term : uniqueTerms) {
-            ret += doc.getTfidf().getOrDefault(term, 0.0) * query.getTfidf().getOrDefault(term, 0.0);
+            ret += doc.getTfidf().getOrDefault(term, 0.0)
+                    * query.getTfidf().getOrDefault(term, 0.0);
         }
 
         double doclen = getLength(doc);
@@ -80,16 +81,14 @@ public class VectorSpaceModel {
      */
     public void calculateTfidf(List<Document> docs) {
         HashMap<String, Double> idf = calculateIdf(docs);
-        HashMap<String, Double> tfidf = new HashMap<>();
         int maximumFrequency = 0;
 
         //Assign tfidf for each document
         for (Document doc : docs) {
+            doc.setTfidf(new HashMap<String, Double>());
             for (String term : idf.keySet()) {
-                tfidf.put(term, (double)doc.getTermFrequency().getOrDefault(term, 0) * idf.get(term));
+                doc.getTfidf().put(term, (double)doc.getTermFrequency().getOrDefault(term, 0) * idf.get(term));
             }
-            doc.setTfidf(tfidf);
-            tfidf = new HashMap<>();
         }
 
         //Assign tfidf for the query
@@ -100,10 +99,10 @@ public class VectorSpaceModel {
             }
         }
 
+        query.setTfidf(new HashMap<String, Double>());
         for (String term : idf.keySet()) {
-            tfidf.put(term, (double)query.getTermFrequency().getOrDefault(term, 0) / maximumFrequency * idf.getOrDefault(term, 0.0));
+            query.getTfidf().put(term, (double)query.getTermFrequency().getOrDefault(term, 0) / maximumFrequency * idf.getOrDefault(term, 0.0));
         }
-        query.setTfidf(tfidf);
     }
 
     /*
