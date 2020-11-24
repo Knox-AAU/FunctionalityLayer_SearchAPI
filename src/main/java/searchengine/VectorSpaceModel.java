@@ -129,16 +129,6 @@ public class VectorSpaceModel {
     }
 
     /*
-     * Calculates the cosine similarity score between a document and the query
-     *
-     * @param doc: The document to score
-     * @return: The cosine similarity score
-     */
-    public Vector getQuery() {
-        return query;
-    }
-
-    /*
      * Calculates log base 2 of a value
      *
      * @param doc: The value
