@@ -1,11 +1,12 @@
 package searchengine;
 
-import org.springframework.boot.SpringApplication;
+import com.github.xjavathehutt.porterstemmer.PorterStemmer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 @SpringBootApplication
 public class Application {
@@ -13,54 +14,61 @@ public class Application {
 	public static void main(String[] args) {
 		//SpringApplication.run(Application.class, args);
 
-		//Document d = new Document("hej hej hej med med dig");
+		List<Document> docs = new ArrayList<>();
 
-		List<Document> docs = new ArrayList<Document>();
+		String[] remove = new String[] { "[", "]", "(", ")", "-", ".", "," };
 
-		Document query = new Document("query","is denmark smaller that russia");
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("documents.txt"));
+			String currentLine;
 
-		VectorSpaceModel vsm = new VectorSpaceModel();
+			while ((currentLine = br.readLine()) != null) {
 
-		docs = vsm.createTestData();
+				currentLine = currentLine.toLowerCase();
+				currentLine = currentLine.replace("\t", " ");
 
-		vsm.createTfidf(docs, query);
+				for (String s : remove) {
+					currentLine = currentLine.replace(s, "");
+				}
 
-		for(Document d : docs){
-			vsm.giveDocumentScore(d, query);
-		}
+				StringTokenizer st = new StringTokenizer(currentLine, " ");
 
-		System.out.println("TERM FREQ");
-		for(Document d : docs){
-			System.out.println(d.getTitle());
-			for(String term : d.getTermFrequency().keySet()){
-				System.out.println(term + " | " + d.getTermFrequency().get(term));
+				String id = st.nextToken();
+				String term;
+
+				StringBuilder content = new StringBuilder();
+
+				while (st.hasMoreTokens()) {
+					term = st.nextToken();
+
+					term = PorterStemmer.stem(term);
+					content.append(term).append(" ");
+				}
+
+				docs.add(new Document(id, content.toString()));
 			}
 		}
-		System.out.println("q");
-		for(String term : query.getTermFrequency().keySet()){
-			System.out.println(term + " | " + query.getTermFrequency().get(term));
+		catch (IOException ex) {
+			ex.printStackTrace();
 		}
-		System.out.println();
 
-		System.out.println("TFIDF");
-		for(Document d : docs){
-			System.out.println(d.getTitle());
-			for(String term : d.getTfidf().keySet()){
-				System.out.println(term + " | " + d.getTfidf().get(term));
-			}
-		}
-		System.out.println("q");
-		for(String term : query.getTfidf().keySet()){
-			System.out.println(term + " | " + query.getTfidf().get(term));
-		}
-		System.out.println();
 
-		System.out.println("SCORE");
-		for(Document d : docs){
-			System.out.println(d.getTitle() + " | " + d.getScore());
+
+		VectorSpaceModel VSM = new VectorSpaceModel(new Vector("The nucleotide sequence"));
+
+		long start = System.nanoTime();
+		VSM.calculateTfidf(docs);
+		VSM.assignScore(docs);
+		long elapsedTime = System.nanoTime() - start;
+		System.out.println((double) elapsedTime / 1000000000);
+
+		Collections.sort(docs);
+		Collections.reverse(docs);
+
+		for (int i = 0; i < 20; i++) {
+			System.out.println(i + 1 + ". " + docs.get(i).getTitle() + " : " + docs.get(i).getScore());
 		}
 
 
 	}
-
 }
