@@ -1,6 +1,7 @@
 package searchengine;
 
 import java.util.HashMap;
+import com.github.xjavathehutt.porterstemmer.PorterStemmer;
 
 public class Vector {
     protected HashMap<String, Integer> termFrequency;
@@ -12,6 +13,10 @@ public class Vector {
         String[] sArray = content.split("\\s+");
 
         for (String s : sArray) {
+
+            s = PorterStemmer.stem(s);
+            s = s.toLowerCase();
+
             if (termFrequency.containsKey(s)) {
                 termFrequency.put(s, termFrequency.get(s) + 1);
             }
