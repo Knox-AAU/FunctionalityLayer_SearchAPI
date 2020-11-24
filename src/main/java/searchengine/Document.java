@@ -1,9 +1,11 @@
 package searchengine;
 
-public class Document extends Vector {
+import javax.print.Doc;
+
+public class Document extends Vector implements Comparable<Document> {
 
     private String title;
-    private double score;
+    private Double score;
 
     public Document(String title, String content) {
         super(content);
@@ -11,7 +13,7 @@ public class Document extends Vector {
         this.title = title;
     }
 
-    public double getScore(){
+    public Double getScore(){
         return this.score;
     }
 
@@ -21,5 +23,10 @@ public class Document extends Vector {
 
     public String getTitle(){
         return title;
+    }
+
+    @Override
+    public int compareTo(Document o) {
+        return this.getScore().compareTo(o.getScore());
     }
 }
