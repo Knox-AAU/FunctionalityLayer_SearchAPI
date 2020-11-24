@@ -1,6 +1,7 @@
 package searchengine;
 
 import com.github.xjavathehutt.porterstemmer.PorterStemmer;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.BufferedReader;
@@ -12,7 +13,7 @@ import java.util.*;
 public class Application {
 
 	public static void main(String[] args) {
-		//SpringApplication.run(Application.class, args);
+		SpringApplication.run(Application.class, args);
 
 		List<Document> docs = new ArrayList<>();
 
@@ -56,19 +57,18 @@ public class Application {
 
 		VectorSpaceModel VSM = new VectorSpaceModel(new Vector("The nucleotide sequence"));
 
+
 		long start = System.nanoTime();
 		VSM.calculateTfidf(docs);
 		VSM.assignScore(docs);
 		long elapsedTime = System.nanoTime() - start;
-		System.out.println((double) elapsedTime / 1000000000);
+		System.out.println((double) elapsedTime / 1000000000 + " sekunder");
 
 		Collections.sort(docs);
 		Collections.reverse(docs);
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 1206; i++) {
 			System.out.println(i + 1 + ". " + docs.get(i).getTitle() + " : " + docs.get(i).getScore());
 		}
-
-
 	}
 }

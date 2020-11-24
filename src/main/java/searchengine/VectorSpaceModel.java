@@ -22,13 +22,8 @@ public class VectorSpaceModel {
         Set<String> uniqueTerms = new HashSet<>();
         double dotProduct = 0;
 
-        for (String term : doc.getTfidf().keySet()) {
-            uniqueTerms.add(term);
-        }
-
-        for (String term : query.getTfidf().keySet()) {
-            uniqueTerms.add(term);
-        }
+        uniqueTerms.addAll(doc.getTfidf().keySet());
+        uniqueTerms.addAll(query.getTfidf().keySet());
 
         // The dot product of the document and the vector
         for (String term : uniqueTerms) {
@@ -80,8 +75,8 @@ public class VectorSpaceModel {
 
         // Assign tfidf for each document
         for (Document doc : docs) {
-            doc.setTfidf(new HashMap<String, Double>());
-            for (String term : idf.keySet()) {
+            doc.setTfidf(new HashMap<>());
+            for (String term : doc.getTermFrequency().keySet()) {
                 doc.getTfidf().put(term, (double)doc.getTermFrequency().getOrDefault(term, 0) * idf.get(term));
             }
         }
@@ -95,7 +90,7 @@ public class VectorSpaceModel {
         }
 
         query.setTfidf(new HashMap<String, Double>());
-        for (String term : idf.keySet()) {
+        for (String term : query.getTermFrequency().keySet()) {
             query.getTfidf().put(term, (double)query.getTermFrequency().getOrDefault(term, 0) / maximumFrequency * idf.getOrDefault(term, 0.0));
         }
     }
