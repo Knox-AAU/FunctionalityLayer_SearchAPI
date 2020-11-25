@@ -1,30 +1,27 @@
 package searchengine.restcontrollers;
 
-import searchengine.query.Query;
-import searchengine.query.QueryBuilder;
-import searchengine.tokenizer.Token;
-import searchengine.tokenizer.Tokenizer;
-
+import searchengine.Document;
+import searchengine.VectorSpaceModel;
+import java.util.Collections;
 import java.util.List;
+
 
 public class Search {
 
-    private String result;
+    private List<Document> result;
 
-    /*
-     *
-     *
-     */
+    public Search() {}
+
     public Search(String input) {
-        List<Token> tokens = new Tokenizer(input).getFilteredTokens();
-        Query query = new QueryBuilder().generateQuery(tokens, "");
-
-        result = query.execute();
+        result = new VectorSpaceModel().retrieve(input, 1);
+        Collections.sort(result);
+        Collections.reverse(result);
     }
 
-    public String getResult() {
+    public List<Document> getResult() {
         return result;
     }
+
 }
 
 

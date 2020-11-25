@@ -1,52 +1,32 @@
 package searchengine;
 
+import com.github.xjavathehutt.porterstemmer.PorterStemmer;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
-import java.lang.Math;
 
 public class VectorSpaceModel {
 
-    private Vector query;
+    /* <Id, <Term, Occurrences> */
+    private HashMap<Integer, HashMap<String, Integer>> documentTF = new HashMap<>();
 
-    public VectorSpaceModel(Vector query) {
-        this.query = query;
-    }
+    /* <Term, Occurrences> */
+    private HashMap<String, Integer> queryTF = new HashMap<>();
 
-    /*
-     * Calculates the cosine similarity score between a document and the query
-     *
-     * @param doc: The document to score
-     * @return: The cosine similarity score
-     */
-    private double cosineSimilarityScore(Document doc) {
+    /* <Id, <Term, Score>> */
+    private HashMap<Integer, HashMap<String, Double>> documentTFIDF = new HashMap<>();
 
-        Set<String> uniqueTerms = new HashSet<>();
-        double dotProduct = 0;
+    /* <Term, Score> */
+    private HashMap<String, Double> queryTFIDF = new HashMap<>();
 
-        uniqueTerms.addAll(doc.getTfidf().keySet());
-        uniqueTerms.addAll(query.getTfidf().keySet());
-
-        // The dot product of the document and the vector
-        for (String term : uniqueTerms) {
-            dotProduct += doc.getTfidf().getOrDefault(term, 0.0)
-                    * query.getTfidf().getOrDefault(term, 0.0);
-        }
-
-        return dotProduct / (getLength(doc) * getLength(query));
-    }
-
-    /*
-     * Calculates the idf of a list of documents
-     *
-     * @param docs: the list of documents
-     * @return: idf of every term in the documents
-     */
-    private HashMap<String, Double> calculateIdf(List<Document> docs) {
+    private HashMap<String, Double> calculateIDF() {
         HashMap<String, Double> idf = new HashMap<>();
         HashMap<String, Integer> df = new HashMap<>();
 
-        // Get the document frequency of each term
-        for (Document doc : docs) {
-            for (String term : doc.getTermFrequency().keySet()){
+        for (int id : documentTF.keySet()) {
+            for (String term : documentTF.get(id).keySet()) {
                 if (df.containsKey(term)) {
                     df.put(term, df.get(term)+1);
                 }
@@ -56,80 +36,149 @@ public class VectorSpaceModel {
             }
         }
 
+
         // Get the inverse document frequency of each term
         for (String term : df.keySet()) {
-            idf.put(term, Math.log10(docs.size() / (double)df.get(term)));
+            idf.put(term, Math.log10(documentTF.size() / (double)df.get(term)));
         }
 
         return idf;
     }
 
-    /*
-     * Calculates the tfidf of the documents in a list of documents and the query
-     *
-     * @param doc: The list of documents
-     */
-    public void calculateTfidf(List<Document> docs) {
-        HashMap<String, Double> idf = calculateIdf(docs);
+    private void calculateTFIDF() {
+        HashMap<String, Double> idf = calculateIDF();
         int maximumFrequency = 0;
 
-        // Assign tfidf for each document
-        for (Document doc : docs) {
-            doc.setTfidf(new HashMap<>());
-            for (String term : doc.getTermFrequency().keySet()) {
-                doc.getTfidf().put(term, (double)doc.getTermFrequency().getOrDefault(term, 0) * idf.get(term));
+        for (int id : documentTF.keySet()) {
+            HashMap<String, Double> innerMap = new HashMap<>();
+
+            for (String term : documentTF.get(id).keySet()) {
+                innerMap.put(term, (double) documentTF.get(id).getOrDefault(term, 0) * idf.get(term));
             }
+
+            documentTFIDF.put(id, innerMap);
         }
 
         // Assign tfidf for the query
-        for (String term : query.getTermFrequency().keySet()) {
-            int termFrequency = query.getTermFrequency().get(term);
+        for (String term : queryTF.keySet()) {
+            int termFrequency = queryTF.get(term);
             if (termFrequency > maximumFrequency) {
                 maximumFrequency = termFrequency;
             }
         }
 
-        query.setTfidf(new HashMap<String, Double>());
-        for (String term : query.getTermFrequency().keySet()) {
-            query.getTfidf().put(term, (double)query.getTermFrequency().getOrDefault(term, 0) / maximumFrequency * idf.getOrDefault(term, 0.0));
+        for (String term : queryTF.keySet()) {
+            queryTFIDF.put(term, (double) queryTF.getOrDefault(term, 0) / maximumFrequency * idf.getOrDefault(term, 0.0));
         }
     }
 
-    /*
-     * Calculates the length of a document represented as a vector
-     *
-     * @param doc: The document
-     * @return: The length
-     */
-    private double getLength(Vector vec) {
+    private double cosineSimilarityScore(HashMap<String, Double> doc) {
+
+        Set<String> uniqueTerms = new HashSet<>();
+        double dotProduct = 0;
+
+        uniqueTerms.addAll(doc.keySet());
+        uniqueTerms.addAll(queryTFIDF.keySet());
+
+        // The dot product of the document and the vector
+        for (String term : uniqueTerms) {
+            dotProduct += doc.getOrDefault(term, 0.0)
+                    * queryTFIDF.getOrDefault(term, 0.0);
+        }
+
+        return dotProduct / (getLength(doc) * getLength(queryTFIDF));
+    }
+
+    private double getLength(HashMap<String, Double> tfidf) {
 
         double temp = 0.0;
-        for (String term : vec.getTfidf().keySet()) {
-            temp += Math.pow(vec.getTfidf().get(term), 2);
+        for (String term : tfidf.keySet()) {
+            temp += Math.pow(tfidf.get(term), 2);
         }
         temp = Math.sqrt(temp);
 
         return temp;
     }
 
-    /*
-     * Assigns a score to every document in a list
-     *
-     * @param doc: The list of documents
-     */
-    public void assignScore (List<Document> docs) {
-        for (Document doc : docs) {
-            doc.setScore(cosineSimilarityScore(doc));
+    public List<Document> retrieve(String query, int total) {
+        List<Document> documents = new ArrayList<>();
+        documentTF = loadDocuments();
+
+        String[] sArray = query.split("\\s+");
+
+        for (String s : sArray) {
+
+            s = PorterStemmer.stem(s);
+            s = s.toLowerCase();
+
+            if (queryTF.containsKey(s)) {
+                queryTF.put(s, queryTF.get(s) + 1);
+            }
+            else {
+                queryTF.put(s, 1);
+            }
         }
+
+        calculateTFIDF();
+
+        for (int id : documentTF.keySet()) {
+            documents.add(new Document(id, cosineSimilarityScore(documentTFIDF.get(id))));
+        }
+
+        return documents;
     }
 
-    /*
-     * Calculates log base 2 of a value
-     *
-     * @param doc: The value
-     * @return: log base 2 of the value
-     */
-    private double logBase2(double input) {
-        return Math.log10(input) / Math.log10(2);
+    private HashMap<Integer, HashMap<String, Integer>> loadDocuments() {
+
+        HashMap<Integer, HashMap<String, Integer>> termFrequency = new HashMap<>();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("documents.txt"));
+            String currentLine;
+
+            String[] remove = new String[] { "[", "]", "(", ")", "-", ".", "," };
+
+            while ((currentLine = br.readLine()) != null) {
+
+                currentLine = currentLine.toLowerCase();
+                currentLine = currentLine.replace("\t", " ");
+
+                for (String s : remove) {
+                    currentLine = currentLine.replace(s, "");
+                }
+
+                StringTokenizer st = new StringTokenizer(currentLine, " ");
+
+                int id = Integer.parseInt(st.nextToken());
+                String term;
+
+                while (st.hasMoreTokens()) {
+                    term = PorterStemmer.stem(st.nextToken());
+
+                    if (termFrequency.containsKey(id)) {
+                        HashMap<String, Integer> temp = termFrequency.get(id);
+
+                        if (temp.containsKey(term)) {
+                            temp.put(term, temp.get(term) + 1);
+                        }
+                        else {
+                            temp.put(term, 1);
+                        }
+
+                        termFrequency.put(id, temp);
+                    }
+                    else {
+                        final String test = term;
+                        HashMap<String, Integer> temp = new HashMap<>() {{ put(test, 1); }};
+                        termFrequency.put(id, temp);
+                    }
+                }
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return termFrequency;
     }
 }

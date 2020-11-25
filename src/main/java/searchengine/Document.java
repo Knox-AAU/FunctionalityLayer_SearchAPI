@@ -1,28 +1,21 @@
 package searchengine;
 
-import javax.print.Doc;
+public class Document implements Comparable<Document> {
 
-public class Document extends Vector implements Comparable<Document> {
+    private final int id;
+    private final double score;
 
-    private String title;
-    private Double score;
-
-    public Document(String title, String content) {
-        super(content);
-
-        this.title = title;
+    public Document(int id, double score) {
+        this.id = id;
+        this.score = score;
     }
 
-    public Double getScore(){
-        return this.score;
+    public int getId() {
+        return id;
     }
 
-    public void setScore(double value){
-        this.score = value;
-    }
-
-    public String getTitle(){
-        return title;
+    public Double getScore() {
+        return score;
     }
 
     @Override
