@@ -21,6 +21,25 @@ public class VectorSpaceModel {
     /* <Term, Score> */
     private HashMap<String, Double> queryTFIDF = new HashMap<>();
 
+    public VectorSpaceModel(String query) {
+        documentTF = loadDocuments();
+
+        String[] sArray = query.split("\\s+");
+
+        for (String s : sArray) {
+
+            s = PorterStemmer.stem(s);
+            s = s.toLowerCase();
+
+            if (queryTF.containsKey(s)) {
+                queryTF.put(s, queryTF.get(s) + 1);
+            }
+            else {
+                queryTF.put(s, 1);
+            }
+        }
+    }
+
     private HashMap<String, Double> calculateIDF() {
         HashMap<String, Double> idf = new HashMap<>();
         HashMap<String, Integer> df = new HashMap<>();
@@ -100,25 +119,8 @@ public class VectorSpaceModel {
         return temp;
     }
 
-    public List<Document> retrieve(String query, int total) {
+    public List<Document> retrieve(int total) {
         List<Document> documents = new ArrayList<>();
-        documentTF = loadDocuments();
-
-        String[] sArray = query.split("\\s+");
-
-        for (String s : sArray) {
-
-            s = PorterStemmer.stem(s);
-            s = s.toLowerCase();
-
-            if (queryTF.containsKey(s)) {
-                queryTF.put(s, queryTF.get(s) + 1);
-            }
-            else {
-                queryTF.put(s, 1);
-            }
-        }
-
         calculateTFIDF();
 
         for (int id : documentTF.keySet()) {
