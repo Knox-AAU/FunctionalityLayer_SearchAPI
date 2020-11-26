@@ -10,8 +10,6 @@ public class Search {
 
     private List<Document> result;
 
-    public Search() {}
-
     public Search(String input) {
         result = new VectorSpaceModel(input, "documents.txt").retrieve(1);
         Collections.sort(result);
