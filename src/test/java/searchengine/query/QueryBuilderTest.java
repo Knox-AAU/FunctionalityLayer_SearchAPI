@@ -23,7 +23,7 @@ class QueryBuilderTest {
         Query query2 = new Query(
                 "SELECT DISTINCT ?document \n" +
                         "WHERE{\n" +
-                        "{ test rdf:isIn ?document }" +
+                        "{ test.txt rdf:isIn ?document }" +
                         "UNION\n" +
                         "{ for rdf:isIn ?document }" +
                         "UNION\n" +
