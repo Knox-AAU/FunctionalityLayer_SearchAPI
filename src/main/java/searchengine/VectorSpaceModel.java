@@ -10,7 +10,7 @@ import java.util.*;
 public class VectorSpaceModel {
 
     /* <Id, <Term, Occurrences> */
-    private HashMap<Integer, HashMap<String, Integer>> documentTF = new HashMap<>();
+    private HashMap<Integer, HashMap<String, Integer>> documentTF;
 
     /* <Term, Occurrences> */
     private HashMap<String, Integer> queryTF = new HashMap<>();
@@ -21,8 +21,8 @@ public class VectorSpaceModel {
     /* <Term, Score> */
     private HashMap<String, Double> queryTFIDF = new HashMap<>();
 
-    public VectorSpaceModel(String query) {
-        documentTF = loadDocuments();
+    public VectorSpaceModel(String query, String file) {
+        documentTF = loadDocuments(file);
 
         String[] sArray = query.split("\\s+");
 
@@ -130,12 +130,12 @@ public class VectorSpaceModel {
         return documents;
     }
 
-    private HashMap<Integer, HashMap<String, Integer>> loadDocuments() {
+    private HashMap<Integer, HashMap<String, Integer>> loadDocuments(String file) {
 
         HashMap<Integer, HashMap<String, Integer>> termFrequency = new HashMap<>();
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("documents.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(file));
             String currentLine;
 
             String[] remove = new String[] { "[", "]", "(", ")", "-", ".", "," };

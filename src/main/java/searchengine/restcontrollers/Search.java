@@ -13,7 +13,7 @@ public class Search {
     public Search() {}
 
     public Search(String input) {
-        result = new VectorSpaceModel(input).retrieve(1);
+        result = new VectorSpaceModel(input, "documents.txt").retrieve(1);
         Collections.sort(result);
         Collections.reverse(result);
     }

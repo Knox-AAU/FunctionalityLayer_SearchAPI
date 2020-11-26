@@ -12,24 +12,11 @@ class SearchTest {
     //arrange
     @BeforeAll
     static void setup(){
-        search = new Search("test");
+        search = new Search("test.txt");
     }
 
-    @Test
-    void getTitle() {
-        //assert
-        assertEquals("TITLE", search.getResult());
-    }
 
     @Test
-    void getPdfPath() {
-        //assert
-        //assertEquals("placeholder.pdf", search.getPdfPath());
-    }
-
-    @Test
-    void getRank() {
-        //assert
-        //assertEquals(1, search.getRank());
+    void getResult() {
     }
 }
