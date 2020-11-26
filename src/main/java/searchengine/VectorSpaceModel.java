@@ -21,11 +21,17 @@ public class VectorSpaceModel {
     /* <Term, Score> */
     private HashMap<String, Double> queryTFIDF = new HashMap<>();
 
+    /*
+     * @param query: The query
+     * @param file: The file with the documents
+     */
+
     public VectorSpaceModel(String query, String file) {
         documentTF = loadDocuments(file);
 
         String[] sArray = query.split("\\s+");
 
+        // fills the queryTF HashMap with the stemmed terms from the query
         for (String s : sArray) {
 
             s = PorterStemmer.stem(s);
@@ -40,10 +46,16 @@ public class VectorSpaceModel {
         }
     }
 
+    /*
+     * Calculates the IDF score for all documents
+     *
+     * @return A HashMap<String, Double> of idf values
+     */
     private HashMap<String, Double> calculateIDF() {
         HashMap<String, Double> idf = new HashMap<>();
         HashMap<String, Integer> df = new HashMap<>();
 
+        // fills the documentTF HashMap for all documents
         for (int id : documentTF.keySet()) {
             for (String term : documentTF.get(id).keySet()) {
                 if (df.containsKey(term)) {
@@ -64,10 +76,15 @@ public class VectorSpaceModel {
         return idf;
     }
 
+    /*
+     * Calculates the TF-IDF value of all documents and the query
+     */
+
     private void calculateTFIDF() {
         HashMap<String, Double> idf = calculateIDF();
         int maximumFrequency = 0;
 
+        // assign tfidf for all documents
         for (int id : documentTF.keySet()) {
             HashMap<String, Double> innerMap = new HashMap<>();
 
@@ -78,7 +95,7 @@ public class VectorSpaceModel {
             documentTFIDF.put(id, innerMap);
         }
 
-        // Assign tfidf for the query
+        // Iterates through all the terms in the query to find the highest frequency for a term
         for (String term : queryTF.keySet()) {
             int termFrequency = queryTF.get(term);
             if (termFrequency > maximumFrequency) {
@@ -86,11 +103,18 @@ public class VectorSpaceModel {
             }
         }
 
+        // Assign tfidf for the query
         for (String term : queryTF.keySet()) {
             queryTFIDF.put(term, (double) queryTF.getOrDefault(term, 0) / maximumFrequency * idf.getOrDefault(term, 0.0));
         }
     }
 
+    /*
+     * Calculates the cosine similarity score of a document and the query
+     *
+     * @param doc: the document to be scored
+     * @return the cosine similarity scor e
+     */
     private double cosineSimilarityScore(HashMap<String, Double> doc) {
 
         Set<String> uniqueTerms = new HashSet<>();
@@ -108,6 +132,12 @@ public class VectorSpaceModel {
         return dotProduct / (getLength(doc) * getLength(queryTFIDF));
     }
 
+    /*
+     * Calculates the length of a document represented as a vector
+     *
+     * @param doc: the document
+     * @return the length of the document
+     */
     private double getLength(HashMap<String, Double> tfidf) {
 
         double temp = 0.0;
@@ -119,10 +149,16 @@ public class VectorSpaceModel {
         return temp;
     }
 
+    /*
+     * retrieve a list of scored documents
+     *
+     * @param total: the amount of documents to be retrieved
+     */
     public List<Document> retrieve(int total) {
         List<Document> documents = new ArrayList<>();
         calculateTFIDF();
 
+        // adds all documents to the list of documents
         for (int id : documentTF.keySet()) {
             documents.add(new Document(id, cosineSimilarityScore(documentTFIDF.get(id))));
         }
@@ -130,6 +166,12 @@ public class VectorSpaceModel {
         return documents;
     }
 
+    /*
+     * Load the documents from a file
+     *
+     * @param file: the file from which the documents will be loaded from
+     * @return the term frequency of the documents
+     */
     private HashMap<Integer, HashMap<String, Integer>> loadDocuments(String file) {
 
         HashMap<Integer, HashMap<String, Integer>> termFrequency = new HashMap<>();
