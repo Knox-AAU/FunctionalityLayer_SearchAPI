@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 public class SearchController {
 
     @PostMapping(path = "/search", consumes = "application/json", produces = "application/json")
-    public Search postSearch (@RequestBody String input) {
-       return new Search(input);
+    public Search postSearch (@RequestBody Search search) {
+       return search;
     }
 
 }

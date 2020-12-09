@@ -8,18 +8,15 @@ import java.util.List;
 
 public class Search {
 
-    private List<Document> result;
+    private String query;
 
-    public Search(String input) {
-        result = new VectorSpaceModel(input, "documents.txt").retrieve(1);
-        Collections.sort(result);
-        Collections.reverse(result);
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     public List<Document> getResult() {
-        return result;
+        return new VectorSpaceModel(query, "documents.txt").retrieve(10);
     }
-
 }
 
 

@@ -12,7 +12,8 @@ class SearchTest {
     //arrange
     @BeforeAll
     static void setup(){
-        search = new Search("test.txt");
+        search = new Search();
+        search.setQuery("test");
     }
 
 
