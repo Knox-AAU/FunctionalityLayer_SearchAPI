@@ -11,7 +11,7 @@ class QueryBuilderTest {
 
     Tokenizer testTokenizer = new Tokenizer("test for creating query");
     String testEndpoint = "https://example.org/sparql";
-
+/*
     @Test
     void generateQuery() {
         //arrange
@@ -45,5 +45,5 @@ class QueryBuilderTest {
 
         //assert
 
-    }
+    }*/
 }

@@ -8,14 +8,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class SearchTest {
 
     static Search search;
-
+/*
     //arrange
     @BeforeAll
     static void setup(){
         search = new Search();
         search.setQuery("test");
     }
-
+*/
 
     @Test
     void getResult() {

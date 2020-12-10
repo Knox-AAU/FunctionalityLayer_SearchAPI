@@ -1,7 +1,5 @@
 package searchengine;
 
-import com.github.xjavathehutt.porterstemmer.PorterStemmer;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,9 +31,6 @@ public class VectorSpaceModel {
 
         // fills the queryTF HashMap with the stemmed terms from the query
         for (String s : sArray) {
-
-            s = PorterStemmer.stem(s);
-            s = s.toLowerCase();
 
             if (queryTF.containsKey(s)) {
                 queryTF.put(s, queryTF.get(s) + 1);
@@ -197,7 +192,7 @@ public class VectorSpaceModel {
                 String term;
 
                 while (st.hasMoreTokens()) {
-                    term = PorterStemmer.stem(st.nextToken());
+                    term = st.nextToken();
 
                     if (termFrequency.containsKey(id)) {
                         HashMap<String, Integer> temp = termFrequency.get(id);

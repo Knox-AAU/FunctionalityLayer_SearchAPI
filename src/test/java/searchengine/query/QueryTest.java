@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class QueryTest {
-
+/*
     @Test
     void execute() {
         // arrange
@@ -83,5 +83,5 @@ class QueryTest {
         // assert
         assertEquals(expected, result);
 
-    }
+    }*/
 }
