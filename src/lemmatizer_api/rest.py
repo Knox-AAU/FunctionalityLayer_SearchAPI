@@ -15,7 +15,12 @@ api = Api(app)
 
 class Term(Resource):
     def get(self, word):
-        termlist = word.split()
+        termlist = []
+
+        termlist.append(word)
+        for word in word.split():
+            termlist.append(word)
+
         cleaner = CleanerImp()
         lemmatized_words = [{term : cleaner.lemmatize(term)} for term in termlist]
         return jsonify(lemmatized_words)
