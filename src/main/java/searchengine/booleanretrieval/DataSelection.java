@@ -14,33 +14,23 @@ public class DataSelection {
 
     public List<Document> sendQuery(String input){
 
-        String tempTitle = "";
         List<Document> documents = new ArrayList<>();
-        int i = 0;
-
-        String[] terms = input.split("\\s+");
-        StringBuilder query = new StringBuilder();
-
-        for (int j = 0; j < terms.length; j++){
-            if (j < terms.length-1){
-                query.append(String.format("wordname='%s' OR ", terms[j]));
-            }
-            else{
-                query.append(String.format("wordname='%s'", terms[j]));
-            }
-        }
 
         try {
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/wordcount","postgres","1234");
             Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(buildQuery(input));
+            /*
+            "SELECT DISTINCT wordname, amount, articletitle, filepath, totalwordsinarticle " +
+            "FROM wordratios " +
+            "WHERE articletitle " +
+            "IN ( SELECT DISTINCT articletitle " +
+            "FROM wordratios WHERE " + query + ")" +
+            "ORDER BY articletitle;");*/
 
-            ResultSet rs = stmt.executeQuery("SELECT DISTINCT wordname, amount, articletitle, filepath, totalwordsinarticle " +
-                    "FROM wordratios " +
-                    "WHERE articletitle " +
-                    "IN ( SELECT DISTINCT articletitle " +
-                    "FROM wordratios WHERE " + query + ")" +
-                    "ORDER BY articletitle;");
+            Document doc = null;
+            String tempTitle = null;
 
             while (rs.next()) {
                 String wordname = rs.getString("wordname");
@@ -49,15 +39,15 @@ public class DataSelection {
                 String filepath = rs.getString("filepath");
                 int totalWordsInArticle = rs.getInt("totalwordsinarticle");
 
-                if (!tempTitle.equals(title)) {
-                    i++;
-                    documents.add(new Document(title, filepath, totalWordsInArticle));
+                if (tempTitle == null || !tempTitle.equals(title)) {
+                    tempTitle = title;
+                    documents.add(doc);
+                    doc = new Document(title, filepath, totalWordsInArticle);
                 }
-                documents.get(i-1).TF.put(wordname, amount);
-                tempTitle = title;
+                doc.TF.put(wordname, amount);
             }
 
-            rs.close();;
+            rs.close();
             stmt.close();
             conn.close();
 
@@ -67,4 +57,27 @@ public class DataSelection {
 
         return documents;
     }
+
+    private String buildQuery(String input)
+    {
+        StringBuilder query = new StringBuilder();
+        String[] terms = input.split("\\s+");
+
+        query.append("SELECT DISTINCT wordname, amount, articletitle, filepath, totalwordsinarticle ");
+        query.append("FROM wordratios ");
+        query.append("WHERE articletitle ");
+        query.append("IN ( SELECT DISTINCT articletitle ");
+        for (int i = 0; i < terms.length; i++){
+            if (i < terms.length-1){
+                query.append(String.format("wordname='%s' OR ", terms[i]));
+            }
+            else{
+                query.append(String.format("wordname='%s'", terms[i]));
+            }
+        }
+        query.append("ORDER BY articletitle;");
+
+        return query.toString();
+    }
+
 }
