@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DataSelection {
 
-    public void sendQuery(String input, List<Document> documents, HashMap<String, HashMap<String, Integer>> TF){
+    public void sendQuery(String input){
 
         Connection conn = null;
         Statement stmt = null;
@@ -46,7 +46,7 @@ public class DataSelection {
                 String filepath = rs.getString("filepath");
                 int totalWordsInArticle = rs.getInt("totalwordsinarticle");
 
-                TF.put(title, new HashMap<>(){{put(wordname, amount);}});
+                System.out.println(wordname);
             }
 
             rs.close();;

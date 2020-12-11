@@ -31,8 +31,6 @@ public class VectorSpaceModel {
 
     public VectorSpaceModel(String query, String file) {
 
-        new DataSelection().sendQuery(query, documents, documentTF);
-
         String[] sArray = query.split("\\s+");
 
         // fills the queryTF HashMap with the stemmed terms from the query
