@@ -10,27 +10,21 @@ import java.util.*;
 
 public class VectorSpaceModel {
 
-    /* <Title, <Term, Occurrences> */
-    private HashMap<String, HashMap<String, Integer>> documentTF;
-
     /* <Term, Occurrences> */
     private HashMap<String, Integer> queryTF = new HashMap<>();
-
-    /* <Title, <Term, Score>> */
-    private HashMap<String, HashMap<String, Double>> documentTFIDF = new HashMap<>();
 
     /* <Term, Score> */
     private HashMap<String, Double> queryTFIDF = new HashMap<>();
 
-    private List<Document> documents;
+    private String query;
 
     /*
      * @param query: The query
      * @param file: The file with the documents
      */
 
-    public VectorSpaceModel(String query, String file) {
-
+    public VectorSpaceModel(String query) {
+        this.query = query;
         String[] sArray = query.split("\\s+");
 
         // fills the queryTF HashMap with the stemmed terms from the query
@@ -50,13 +44,13 @@ public class VectorSpaceModel {
      *
      * @return A HashMap<String, Double> of idf values
      */
-    private HashMap<String, Double> calculateIDF() {
+    private HashMap<String, Double> calculateIDF(List<Document> documents) {
         HashMap<String, Double> idf = new HashMap<>();
         HashMap<String, Integer> df = new HashMap<>();
 
         // fills the documentTF HashMap for all documents
-        for (String title : documentTF.keySet()) {
-            for (String term : documentTF.get(title).keySet()) {
+        for (Document document : documents) {
+            for (String term : document.TF.keySet()) {
                 if (df.containsKey(term)) {
                     df.put(term, df.get(term)+1);
                 }
@@ -66,10 +60,9 @@ public class VectorSpaceModel {
             }
         }
 
-
         // Get the inverse document frequency of each term
         for (String term : df.keySet()) {
-            idf.put(term, Math.log10(documentTF.size() / (double)df.get(term)));
+            idf.put(term, Math.log10(documents.size() / (double)df.get(term)));
         }
 
         return idf;
@@ -79,19 +72,19 @@ public class VectorSpaceModel {
      * Calculates the TF-IDF value of all documents and the query
      */
 
-    private void calculateTFIDF() {
-        HashMap<String, Double> idf = calculateIDF();
+    private void calculateTFIDF(List<Document> documents) {
+        HashMap<String, Double> idf = calculateIDF(documents);
         int maximumFrequency = 0;
 
         // assign tfidf for all documents
-        for (String title : documentTF.keySet()) {
+        for (Document document : documents) {
             HashMap<String, Double> innerMap = new HashMap<>();
 
-            for (String term : documentTF.get(title).keySet()) {
-                innerMap.put(term, (double) documentTF.get(title).getOrDefault(term, 0) * idf.get(term));
+            for (String term : document.TF.keySet()) {
+                innerMap.put(term, (double) document.TF.getOrDefault(term, 0) * idf.get(term));
             }
 
-            documentTFIDF.put(title, innerMap);
+            document.TFIDF = innerMap;
         }
 
         // Iterates through all the terms in the query to find the highest frequency for a term
@@ -104,7 +97,7 @@ public class VectorSpaceModel {
 
         // Assign tfidf for the query
         for (String term : queryTF.keySet()) {
-            queryTFIDF.put(term, (double) queryTF.getOrDefault(term, 0) / maximumFrequency * idf.getOrDefault(term, 0.0));
+            queryTFIDF.put(term, (double)(0.5 + (0.5 * queryTF.getOrDefault(term, 0) / maximumFrequency) * idf.getOrDefault(term, 0.0)));
         }
     }
 
@@ -114,21 +107,23 @@ public class VectorSpaceModel {
      * @param doc: the document to be scored
      * @return the cosine similarity scor e
      */
-    private double cosineSimilarityScore(HashMap<String, Double> doc) {
+    private ScoredDocument cosineSimilarityScore(Document doc) {
 
         Set<String> uniqueTerms = new HashSet<>();
         double dotProduct = 0;
 
-        uniqueTerms.addAll(doc.keySet());
+        uniqueTerms.addAll(doc.TF.keySet());
         uniqueTerms.addAll(queryTFIDF.keySet());
 
         // The dot product of the document and the vector
         for (String term : uniqueTerms) {
-            dotProduct += doc.getOrDefault(term, 0.0)
+            dotProduct += doc.TF.getOrDefault(term, 0)
                     * queryTFIDF.getOrDefault(term, 0.0);
         }
 
-        return dotProduct / (getLength(doc) * getLength(queryTFIDF));
+        double score = dotProduct / (getLength(doc.TFIDF) * getLength(queryTFIDF));
+
+        return new ScoredDocument(doc.getTitle(), score, doc.getFilepath());
     }
 
     /*
@@ -140,6 +135,7 @@ public class VectorSpaceModel {
     private double getLength(HashMap<String, Double> tfidf) {
 
         double temp = 0.0;
+
         for (String term : tfidf.keySet()) {
             temp += Math.pow(tfidf.get(term), 2);
         }
@@ -153,70 +149,16 @@ public class VectorSpaceModel {
      *
      * @param total: the amount of documents to be retrieved
      */
-    public List<Document> retrieve(int total) {
-        List<Document> documents = new ArrayList<>();
-        calculateTFIDF();
+    public List<ScoredDocument> retrieve() {
+        DataSelection data = new DataSelection();
+        List<Document> documents = data.sendQuery(this.query);
+        calculateTFIDF(documents);
 
-        return documents;
-    }
-
-    /*
-     * Load the documents from a file
-     *
-     * @param file: the file from which the documents will be loaded from
-     * @return the term frequency of the documents
-     */
-    private HashMap<Integer, HashMap<String, Integer>> loadDocuments(String file) {
-
-        HashMap<Integer, HashMap<String, Integer>> termFrequency = new HashMap<>();
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String currentLine;
-
-            String[] remove = new String[] { "[", "]", "(", ")", "-", ".", "," };
-
-            while ((currentLine = br.readLine()) != null) {
-
-                currentLine = currentLine.toLowerCase();
-                currentLine = currentLine.replace("\t", " ");
-
-                for (String s : remove) {
-                    currentLine = currentLine.replace(s, "");
-                }
-
-                StringTokenizer st = new StringTokenizer(currentLine, " ");
-
-                int id = Integer.parseInt(st.nextToken());
-                String term;
-
-                while (st.hasMoreTokens()) {
-                    term = st.nextToken();
-
-                    if (termFrequency.containsKey(id)) {
-                        HashMap<String, Integer> temp = termFrequency.get(id);
-
-                        if (temp.containsKey(term)) {
-                            temp.put(term, temp.get(term) + 1);
-                        }
-                        else {
-                            temp.put(term, 1);
-                        }
-
-                        termFrequency.put(id, temp);
-                    }
-                    else {
-                        final String test = term;
-                        HashMap<String, Integer> temp = new HashMap<>() {{ put(test, 1); }};
-                        termFrequency.put(id, temp);
-                    }
-                }
-            }
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
+        List<ScoredDocument> scoredDocuments = new ArrayList<>();
+        for (Document doc : documents) {
+            scoredDocuments.add(cosineSimilarityScore(doc));
         }
 
-        return termFrequency;
+        return scoredDocuments;
     }
 }

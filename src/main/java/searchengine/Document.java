@@ -7,7 +7,7 @@ public class Document {
     /* <Title, <Term, Occurrences>> */
     public HashMap<String, Integer> TF = new HashMap<>();
     /* <Title, <Term, Score>> */
-    public HashMap<String, HashMap<String, Double>> TFIDF = new HashMap<>();
+    public HashMap<String, Double> TFIDF = new HashMap<>();
 
     private String title;
     private String filepath;
@@ -27,5 +27,9 @@ public class Document {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getFilepath() {
+        return filepath;
     }
 }

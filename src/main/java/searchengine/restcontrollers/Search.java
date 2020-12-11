@@ -1,6 +1,7 @@
 package searchengine.restcontrollers;
 
 import searchengine.Document;
+import searchengine.ScoredDocument;
 import searchengine.VectorSpaceModel;
 
 import java.io.IOException;
@@ -14,13 +15,13 @@ import java.util.Scanner;
 
 public class Search {
 
-    List<Document> result;
+    List<ScoredDocument> result;
 
     public Search(String input){
-        result = new VectorSpaceModel(input, "documents.txt").retrieve(10);
+        result = new VectorSpaceModel(input).retrieve();
     }
 
-    public List<Document> getResult() {
+    public List<ScoredDocument> getResult() {
         return result;
     }
 }

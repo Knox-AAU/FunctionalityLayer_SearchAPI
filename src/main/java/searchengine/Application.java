@@ -8,9 +8,8 @@ import searchengine.booleanretrieval.DataSelection;
 public class Application {
 
 	public static void main(String[] args) {
-		//SpringApplication.run(Application.class, args);
-		DataSelection ds = new DataSelection();
-		ds.sendQuery("used forms");
+		SpringApplication.run(Application.class, args);
+
 	}
 }
 
