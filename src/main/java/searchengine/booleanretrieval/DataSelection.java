@@ -6,24 +6,30 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class DataSelection {
 
-    public void sendQuery(String input){
+    public List<Document> sendQuery(String input){
+
+        String tempTitle = "";
+        List<Document> documents = new ArrayList<>();
+        int i = 0;
+
 
         Connection conn = null;
         Statement stmt = null;
         String[] terms = input.split("\\s+");
         StringBuilder query = new StringBuilder();
 
-        for (int i = 0; i < terms.length; i++){
-            if (i < terms.length-1){
-                query.append(String.format("wordname='%s' OR ", terms[i]));
+        for (int j = 0; j < terms.length; j++){
+            if (j < terms.length-1){
+                query.append(String.format("wordname='%s' OR ", terms[j]));
             }
             else{
-                query.append(String.format("wordname='%s'", terms[i]));
+                query.append(String.format("wordname='%s'", terms[j]));
             }
         }
 
@@ -37,16 +43,26 @@ public class DataSelection {
                     "WHERE articletitle " +
                     "IN ( SELECT DISTINCT articletitle " +
                     "FROM wordratios WHERE " + query + ")" +
-                    "ORDER BY amount DESC;");
+                    "ORDER BY articletitle;");
 
             while (rs.next()) {
+
                 String wordname = rs.getString("wordname");
                 int amount = rs.getInt("amount");
                 String title = rs.getString("articletitle");
                 String filepath = rs.getString("filepath");
                 int totalWordsInArticle = rs.getInt("totalwordsinarticle");
 
-                System.out.println(wordname);
+                if(tempTitle != title){
+                    i++;
+                    documents.add(new Document(title, filepath, totalWordsInArticle));
+                    documents.get(i-1).TF.put(wordname, amount);
+                }
+                else {
+                    documents.get(i-1).TF.put(wordname, amount);
+                }
+
+                tempTitle = title;
             }
 
             rs.close();;
@@ -55,6 +71,11 @@ public class DataSelection {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
+        for (Document doc : documents){
+            System.out.println(doc.getTitle());
+        }
+
+        return documents;
+    }
 }

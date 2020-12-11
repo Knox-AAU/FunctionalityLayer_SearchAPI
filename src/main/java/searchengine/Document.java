@@ -1,25 +1,31 @@
 package searchengine;
 
-public class Document implements Comparable<Document> {
+import java.util.HashMap;
 
-    private final int id;
-    private final double score;
+public class Document {
 
-    public Document(int id, double score) {
-        this.id = id;
-        this.score = score;
+    /* <Title, <Term, Occurrences>> */
+    public HashMap<String, Integer> TF = new HashMap<>();
+    /* <Title, <Term, Score>> */
+    public HashMap<String, HashMap<String, Double>> TFIDF = new HashMap<>();
+
+    private String title;
+    private String filepath;
+    private int totalwordsinarticle;
+
+    public Document(){}
+
+    public Document(String title, String filepath, int totalwordsinarticle) {
+        this.title = title;
+        this.filepath = filepath;
+        this.totalwordsinarticle = totalwordsinarticle;
     }
 
-    public int getId() {
-        return id;
+    public String getTitle() {
+        return title;
     }
 
-    public Double getScore() {
-        return score;
-    }
-
-    @Override
-    public int compareTo(Document o) {
-        return this.getScore().compareTo(o.getScore());
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
