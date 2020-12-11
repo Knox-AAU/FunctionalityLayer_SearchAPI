@@ -1,5 +1,8 @@
 package searchengine;
 
+import searchengine.booleanretrieval.DataSelection;
+
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,17 +10,19 @@ import java.util.*;
 
 public class VectorSpaceModel {
 
-    /* <Id, <Term, Occurrences> */
-    private HashMap<Integer, HashMap<String, Integer>> documentTF;
+    /* <Title, <Term, Occurrences> */
+    private HashMap<String, HashMap<String, Integer>> documentTF;
 
     /* <Term, Occurrences> */
     private HashMap<String, Integer> queryTF = new HashMap<>();
 
-    /* <Id, <Term, Score>> */
-    private HashMap<Integer, HashMap<String, Double>> documentTFIDF = new HashMap<>();
+    /* <Title, <Term, Score>> */
+    private HashMap<String, HashMap<String, Double>> documentTFIDF = new HashMap<>();
 
     /* <Term, Score> */
     private HashMap<String, Double> queryTFIDF = new HashMap<>();
+
+    private List<Document> documents;
 
     /*
      * @param query: The query
@@ -25,7 +30,8 @@ public class VectorSpaceModel {
      */
 
     public VectorSpaceModel(String query, String file) {
-        documentTF = loadDocuments(file);
+
+        new DataSelection().sendQuery(query, documents, documentTF);
 
         String[] sArray = query.split("\\s+");
 
@@ -51,8 +57,8 @@ public class VectorSpaceModel {
         HashMap<String, Integer> df = new HashMap<>();
 
         // fills the documentTF HashMap for all documents
-        for (int id : documentTF.keySet()) {
-            for (String term : documentTF.get(id).keySet()) {
+        for (String title : documentTF.keySet()) {
+            for (String term : documentTF.get(title).keySet()) {
                 if (df.containsKey(term)) {
                     df.put(term, df.get(term)+1);
                 }
@@ -80,14 +86,14 @@ public class VectorSpaceModel {
         int maximumFrequency = 0;
 
         // assign tfidf for all documents
-        for (int id : documentTF.keySet()) {
+        for (String title : documentTF.keySet()) {
             HashMap<String, Double> innerMap = new HashMap<>();
 
-            for (String term : documentTF.get(id).keySet()) {
-                innerMap.put(term, (double) documentTF.get(id).getOrDefault(term, 0) * idf.get(term));
+            for (String term : documentTF.get(title).keySet()) {
+                innerMap.put(term, (double) documentTF.get(title).getOrDefault(term, 0) * idf.get(term));
             }
 
-            documentTFIDF.put(id, innerMap);
+            documentTFIDF.put(title, innerMap);
         }
 
         // Iterates through all the terms in the query to find the highest frequency for a term
@@ -152,11 +158,6 @@ public class VectorSpaceModel {
     public List<Document> retrieve(int total) {
         List<Document> documents = new ArrayList<>();
         calculateTFIDF();
-
-        // adds all documents to the list of documents
-        for (int id : documentTF.keySet()) {
-            documents.add(new Document(id, cosineSimilarityScore(documentTFIDF.get(id))));
-        }
 
         return documents;
     }
