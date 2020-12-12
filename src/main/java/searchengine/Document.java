@@ -11,14 +11,13 @@ public class Document {
 
     private String title;
     private String filepath;
-    private int totalwordsinarticle;
 
     public Document(){}
 
-    public Document(String title, String filepath, int totalwordsinarticle) {
+    public Document(String title, String filepath) {
         this.title = title;
         this.filepath = filepath;
-        this.totalwordsinarticle = totalwordsinarticle;
+
     }
 
     public String getTitle() {

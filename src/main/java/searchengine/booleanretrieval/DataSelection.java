@@ -42,7 +42,7 @@ public class DataSelection {
                 if (tempTitle == null || !tempTitle.equals(title)) {
                     tempTitle = title;
                     documents.add(doc);
-                    doc = new Document(title, filepath, totalWordsInArticle);
+                    doc = new Document(title, filepath);
                 }
                 doc.TF.put(wordname, amount);
             }
@@ -67,16 +67,17 @@ public class DataSelection {
         query.append("FROM wordratios ");
         query.append("WHERE articletitle ");
         query.append("IN ( SELECT DISTINCT articletitle ");
+        query.append("FROM wordratios WHERE ");
         for (int i = 0; i < terms.length; i++){
             if (i < terms.length-1){
                 query.append(String.format("wordname='%s' OR ", terms[i]));
             }
             else{
-                query.append(String.format("wordname='%s'", terms[i]));
+                query.append(String.format("wordname='%s' ", terms[i]));
             }
         }
-        query.append("ORDER BY articletitle;");
-
+        query.append(") ORDER BY articletitle;");
+        System.out.print(query.toString());
         return query.toString();
     }
 
