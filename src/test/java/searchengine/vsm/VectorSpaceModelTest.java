@@ -3,51 +3,74 @@ package searchengine.vsm;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import searchengine.Document;
+import searchengine.ScoredDocument;
 import searchengine.VectorSpaceModel;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class VectorSpaceModelTest {
-/*
-    // arrange
+
+    static Document doc1;
+    static Document doc2;
+    static Document doc3;
+    static Document doc4;
     static VectorSpaceModel vsm;
-    static List<Document> docs;
-    // act *
+    static List<Document> documents;
+    static List<ScoredDocument> scoredDocuments;
+
     @BeforeAll
-    static void setUp(){
-       vsm = new VectorSpaceModel("is denmark smaller than russia", "test.txt");
-       docs = vsm.retrieve(1);
+    static void setup() {
+        // arrange
+        vsm = new VectorSpaceModel("is denmark smaller than russia");
+
+        documents = new ArrayList<>();
+        scoredDocuments = new ArrayList<>();
+
+        doc1 = new Document("test1", "/test/test1");
+        doc1.getTF().put("china", 1);
+        doc1.getTF().put("is", 1);
+        doc1.getTF().put("bigger", 1);
+        doc1.getTF().put("than", 1);
+        doc1.getTF().put("germany", 1);
+        documents.add(doc1);
+
+        doc2 = new Document("test1", "/test/test2");
+        doc2.getTF().put("russia", 1);
+        doc2.getTF().put("is", 1);
+        doc2.getTF().put("bigger", 1);
+        doc2.getTF().put("than", 1);
+        doc2.getTF().put("denmark", 1);
+        documents.add(doc2);
+
+        doc3 = new Document("test1", "/test/test3");
+        doc3.getTF().put("monaco", 1);
+        doc3.getTF().put("is", 1);
+        doc3.getTF().put("bigger", 1);
+        doc3.getTF().put("than", 1);
+        doc3.getTF().put("russia", 1);
+        documents.add(doc3);
+
+        doc4 = new Document("test1", "/test/test4");
+        doc4.getTF().put("monaco", 1);
+        doc4.getTF().put("is", 1);
+        doc4.getTF().put("smaller", 1);
+        doc4.getTF().put("than", 1);
+        doc4.getTF().put("germany", 1);
+        documents.add(doc4);
+
     }
 
-    // assert
     @Test
-    void retrieve1() {
-        assertEquals(1, docs.get(0).getId());
-        assertEquals(0, docs.get(0).getScore());
+    void getScoredDocuments() {
+        // act
+        scoredDocuments = vsm.getScoredDocuments(documents);
+        // assert
+        assertEquals(0.9833348077203219, scoredDocuments.get(0).getScore());
+        assertEquals(2.410689524797079, scoredDocuments.get(1).getScore());
+        assertEquals(2.5044097360019095, scoredDocuments.get(2).getScore());
+        assertEquals(1.6443215345808004, scoredDocuments.get(3).getScore());
     }
-
-    // assert
-    @Test
-    void retrieve2() {
-        assertEquals(2, docs.get(1).getId());
-        assertEquals(0.7328392782074931, docs.get(1).getScore());
-    }
-
-    // assert
-    @Test
-    void retrieve3() {
-        assertEquals(3, docs.get(2).getId());
-        assertEquals(0.22616387156387965, docs.get(2).getScore());
-    }
-
-    // assert
-    @Test
-    void retrieve4() {
-        assertEquals(4, docs.get(3).getId());
-        assertEquals(0.5443310539518174, docs.get(3).getScore());
-    }
- */
 }

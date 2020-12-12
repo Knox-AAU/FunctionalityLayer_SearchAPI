@@ -97,7 +97,7 @@ public class VectorSpaceModel {
 
         // Assign tfidf for the query
         for (String term : queryTF.keySet()) {
-            queryTFIDF.put(term, 0.5 + (0.5 * queryTF.getOrDefault(term, 0) / maximumFrequency) * idf.getOrDefault(term, 0.0));
+            queryTFIDF.put(term, 0.5 + (0.5 * queryTF.getOrDefault(term, 0) / (maximumFrequency * queryTF.getOrDefault(term, 0))) * idf.getOrDefault(term, 0.0));
         }
     }
 
