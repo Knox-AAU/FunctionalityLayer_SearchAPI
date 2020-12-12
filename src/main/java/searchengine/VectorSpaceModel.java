@@ -16,18 +16,18 @@ public class VectorSpaceModel {
     /* <Term, Score> */
     private HashMap<String, Double> queryTFIDF = new HashMap<>();
 
-    private String query;
-
     /*
      * @param query: The query
-     * @param file: The file with the documents
      */
-
     public VectorSpaceModel(String query) {
-        this.query = query;
+        createQueryTF(query);
+    }
+
+    private void createQueryTF(String query){
+        // Split the query into terms and places them in an array
         String[] sArray = query.split("\\s+");
 
-        // fills the queryTF HashMap with the stemmed terms from the query
+        // fills the queryTF HashMap with term in query
         for (String s : sArray) {
 
             if (queryTF.containsKey(s)) {
@@ -50,7 +50,7 @@ public class VectorSpaceModel {
 
         // fills the documentTF HashMap for all documents
         for (Document document : documents) {
-            for (String term : document.TF.keySet()) {
+            for (String term : document.getTF().keySet()) {
                 if (df.containsKey(term)) {
                     df.put(term, df.get(term)+1);
                 }
@@ -80,11 +80,11 @@ public class VectorSpaceModel {
         for (Document document : documents) {
             HashMap<String, Double> innerMap = new HashMap<>();
 
-            for (String term : document.TF.keySet()) {
-                innerMap.put(term, (double) document.TF.getOrDefault(term, 0) * idf.get(term));
+            for (String term : document.getTF().keySet()) {
+                innerMap.put(term, (double) document.getTF().getOrDefault(term, 0) * idf.get(term));
             }
 
-            document.TFIDF = innerMap;
+            document.setTFIDF(innerMap);
         }
 
         // Iterates through all the terms in the query to find the highest frequency for a term
@@ -97,7 +97,7 @@ public class VectorSpaceModel {
 
         // Assign tfidf for the query
         for (String term : queryTF.keySet()) {
-            queryTFIDF.put(term, (double)(0.5 + (0.5 * queryTF.getOrDefault(term, 0) / maximumFrequency) * idf.getOrDefault(term, 0.0)));
+            queryTFIDF.put(term, 0.5 + (0.5 * queryTF.getOrDefault(term, 0) / maximumFrequency) * idf.getOrDefault(term, 0.0));
         }
     }
 
@@ -107,23 +107,21 @@ public class VectorSpaceModel {
      * @param doc: the document to be scored
      * @return the cosine similarity scor e
      */
-    private ScoredDocument cosineSimilarityScore(Document doc) {
+    private Double cosineSimilarityScore(Document doc) {
 
         Set<String> uniqueTerms = new HashSet<>();
         double dotProduct = 0;
 
-        uniqueTerms.addAll(doc.TF.keySet());
+        uniqueTerms.addAll(doc.getTF().keySet());
         uniqueTerms.addAll(queryTFIDF.keySet());
 
         // The dot product of the document and the vector
         for (String term : uniqueTerms) {
-            dotProduct += doc.TF.getOrDefault(term, 0)
+            dotProduct += doc.getTF().getOrDefault(term, 0)
                     * queryTFIDF.getOrDefault(term, 0.0);
         }
 
-        double score = dotProduct / (getLength(doc.TFIDF) * getLength(queryTFIDF));
-
-        return new ScoredDocument(doc.getTitle(), score, doc.getFilepath());
+        return dotProduct / (getLength(doc.getTFIDF()) * getLength(queryTFIDF));
     }
 
     /*
@@ -134,14 +132,13 @@ public class VectorSpaceModel {
      */
     private double getLength(HashMap<String, Double> tfidf) {
 
-        double temp = 0.0;
+        double length = 0.0;
 
         for (String term : tfidf.keySet()) {
-            temp += Math.pow(tfidf.get(term), 2);
+            length += Math.pow(tfidf.get(term), 2);
         }
-        temp = Math.sqrt(temp);
 
-        return temp;
+        return Math.sqrt(length);
     }
 
     /*
@@ -149,14 +146,15 @@ public class VectorSpaceModel {
      *
      * @param total: the amount of documents to be retrieved
      */
-    public List<ScoredDocument> retrieve() {
-        DataSelection data = new DataSelection();
-        List<Document> documents = data.sendQuery(this.query);
-        calculateTFIDF(documents);
+    public List<ScoredDocument> getScoredDocuments(List<Document> documents) {
 
         List<ScoredDocument> scoredDocuments = new ArrayList<>();
+
+        calculateTFIDF(documents);
+
         for (Document doc : documents) {
-            scoredDocuments.add(cosineSimilarityScore(doc));
+            Double score = cosineSimilarityScore(doc);
+            scoredDocuments.add(new ScoredDocument(doc.getTitle(), score, doc.getFilepath()));
         }
 
         return scoredDocuments;

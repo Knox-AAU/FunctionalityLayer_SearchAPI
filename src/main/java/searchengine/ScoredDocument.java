@@ -1,9 +1,9 @@
 package searchengine;
 
 public class ScoredDocument {
-    String title;
-    double score;
-    String filepath;
+    private final String title;
+    private final double score;
+    private final String filepath;
 
     public ScoredDocument(String title, double score, String filepath){
         this.title = title;
@@ -23,15 +23,4 @@ public class ScoredDocument {
         return title;
     }
 
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }

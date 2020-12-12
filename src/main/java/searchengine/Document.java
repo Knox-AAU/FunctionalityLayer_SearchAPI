@@ -5,9 +5,9 @@ import java.util.HashMap;
 public class Document {
 
     /* <Title, <Term, Occurrences>> */
-    public HashMap<String, Integer> TF = new HashMap<>();
+    private HashMap<String, Integer> TF = new HashMap<>();
     /* <Title, <Term, Score>> */
-    public HashMap<String, Double> TFIDF = new HashMap<>();
+    private HashMap<String, Double> TFIDF = new HashMap<>();
 
     private String title;
     private String filepath;
@@ -18,6 +18,18 @@ public class Document {
         this.title = title;
         this.filepath = filepath;
 
+    }
+
+    public HashMap<String, Double> getTFIDF() {
+        return TFIDF;
+    }
+
+    public HashMap<String, Integer> getTF() {
+        return TF;
+    }
+
+    public void setTFIDF(HashMap<String, Double> TFIDF) {
+        this.TFIDF = TFIDF;
     }
 
     public String getTitle() {

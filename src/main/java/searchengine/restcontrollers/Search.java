@@ -3,6 +3,7 @@ package searchengine.restcontrollers;
 import searchengine.Document;
 import searchengine.ScoredDocument;
 import searchengine.VectorSpaceModel;
+import searchengine.booleanretrieval.DataSelection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,10 +16,11 @@ import java.util.Scanner;
 
 public class Search {
 
-    List<ScoredDocument> result;
+    private List<ScoredDocument> result;
 
     public Search(String input){
-        result = new VectorSpaceModel(input).retrieve();
+         List<Document> documents = new DataSelection().retrieveDocuments(input);
+         result = new VectorSpaceModel(input).getScoredDocuments(documents);
     }
 
     public List<ScoredDocument> getResult() {

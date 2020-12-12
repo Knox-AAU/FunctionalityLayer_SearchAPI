@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DataSelection {
 
-    public List<Document> sendQuery(String input){
+    public List<Document> retrieveDocuments(String input){
 
         List<Document> documents = new ArrayList<>();
 
@@ -21,30 +21,22 @@ public class DataSelection {
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/wordcount","postgres","1234");
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(buildQuery(input));
-            /*
-            "SELECT DISTINCT wordname, amount, articletitle, filepath, totalwordsinarticle " +
-            "FROM wordratios " +
-            "WHERE articletitle " +
-            "IN ( SELECT DISTINCT articletitle " +
-            "FROM wordratios WHERE " + query + ")" +
-            "ORDER BY articletitle;");*/
 
-            Document doc = null;
-            String tempTitle = null;
+            String tempTitle = "";
+            int i = 0;
 
             while (rs.next()) {
                 String wordname = rs.getString("wordname");
                 int amount = rs.getInt("amount");
                 String title = rs.getString("articletitle");
                 String filepath = rs.getString("filepath");
-                int totalWordsInArticle = rs.getInt("totalwordsinarticle");
 
-                if (tempTitle == null || !tempTitle.equals(title)) {
-                    tempTitle = title;
-                    documents.add(doc);
-                    doc = new Document(title, filepath);
+                if (!tempTitle.equals(title)) {
+                    i++;
+                    documents.add(new Document(title, filepath));
                 }
-                doc.TF.put(wordname, amount);
+                documents.get(i-1).getTF().put(wordname, amount);
+                tempTitle = title;
             }
 
             rs.close();
@@ -63,7 +55,7 @@ public class DataSelection {
         StringBuilder query = new StringBuilder();
         String[] terms = input.split("\\s+");
 
-        query.append("SELECT DISTINCT wordname, amount, articletitle, filepath, totalwordsinarticle ");
+        query.append("SELECT DISTINCT wordname, amount, articletitle, filepath ");
         query.append("FROM wordratios ");
         query.append("WHERE articletitle ");
         query.append("IN ( SELECT DISTINCT articletitle ");
@@ -77,7 +69,7 @@ public class DataSelection {
             }
         }
         query.append(") ORDER BY articletitle;");
-        System.out.print(query.toString());
+
         return query.toString();
     }
 
