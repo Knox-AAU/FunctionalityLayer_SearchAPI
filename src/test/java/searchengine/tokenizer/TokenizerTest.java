@@ -28,4 +28,23 @@ class TokenizerTest {
             i++;
         }
     }
+
+    @Test
+    void getFilteredTokens1() {
+        // arrange
+        List<Token> testList;
+        List<Token> testList2 = new ArrayList<>();
+        int i = 0;
+
+        // act
+        testList = testTokenizer.getFilteredTokens();
+        testList2.add(new Token(TokenType.KEYWORD, "test"));
+        testList2.add(new Token(TokenType.KEYWORD, "test1"));
+
+        // assert
+        for(Token t : testList){
+            assertEquals(testList.get(i).getType(), testList2.get(i).getType());
+            i++;
+        }
+    }
 }
