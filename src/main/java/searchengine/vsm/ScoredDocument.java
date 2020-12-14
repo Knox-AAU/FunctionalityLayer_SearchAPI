@@ -1,8 +1,8 @@
 package searchengine.vsm;
 
-public class ScoredDocument {
+public class ScoredDocument implements Comparable<ScoredDocument> {
     private final String title;
-    private final double score;
+    private final Double score;
     private final String filepath;
 
     public ScoredDocument(String title, double score, String filepath){
@@ -11,7 +11,7 @@ public class ScoredDocument {
         this.filepath = filepath;
     }
 
-    public double getScore() {
+    public Double getScore() {
         return score;
     }
 
@@ -23,4 +23,8 @@ public class ScoredDocument {
         return title;
     }
 
+    @Override
+    public int compareTo(ScoredDocument o) {
+        return this.getScore().compareTo(o.getScore());
+    }
 }

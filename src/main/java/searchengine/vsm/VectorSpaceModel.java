@@ -151,6 +151,7 @@ public class VectorSpaceModel {
             scoredDocuments.add(new ScoredDocument(doc.getTitle(), score, doc.getFilepath()));
         }
 
+        scoredDocuments.sort(Collections.reverseOrder());
         return scoredDocuments;
     }
 }

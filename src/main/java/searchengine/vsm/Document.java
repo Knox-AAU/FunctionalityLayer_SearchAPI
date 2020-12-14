@@ -12,8 +12,6 @@ public class Document {
     private String title;
     private String filepath;
 
-    public Document(){}
-
     public Document(String title, String filepath) {
         this.title = title;
         this.filepath = filepath;
