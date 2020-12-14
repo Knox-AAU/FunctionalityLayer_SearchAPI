@@ -1,11 +1,5 @@
 package searchengine.vsm;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import searchengine.Document;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class DocumentTest {
     /*
     // Arrange

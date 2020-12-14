@@ -1,4 +1,4 @@
-package searchengine;
+package searchengine.vsm;
 
 public class ScoredDocument {
     private final String title;

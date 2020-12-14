@@ -1,11 +1,5 @@
-package searchengine;
+package searchengine.vsm;
 
-import searchengine.booleanretrieval.DataSelection;
-
-import javax.xml.crypto.Data;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 public class VectorSpaceModel {

@@ -2,9 +2,6 @@ package searchengine.vsm;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import searchengine.Document;
-import searchengine.ScoredDocument;
-import searchengine.VectorSpaceModel;
 
 import java.util.ArrayList;
 import java.util.List;

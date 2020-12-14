@@ -1,4 +1,4 @@
-package searchengine;
+package searchengine.vsm;
 
 import java.util.HashMap;
 

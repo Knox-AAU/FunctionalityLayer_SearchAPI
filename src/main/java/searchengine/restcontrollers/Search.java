@@ -1,17 +1,11 @@
 package searchengine.restcontrollers;
 
-import searchengine.Document;
-import searchengine.ScoredDocument;
-import searchengine.VectorSpaceModel;
+import searchengine.vsm.Document;
+import searchengine.vsm.ScoredDocument;
+import searchengine.vsm.VectorSpaceModel;
 import searchengine.booleanretrieval.DataSelection;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 
 public class Search {
