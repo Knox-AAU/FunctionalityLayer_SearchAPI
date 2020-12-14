@@ -24,28 +24,28 @@ class VectorSpaceModelTest {
 
     /* assert */
     @Test
-    void document1values() {
+    void retrieve1() {
         assertEquals(1, docs.get(0).getId());
         assertEquals(0, docs.get(0).getScore());
     }
 
     /* assert */
     @Test
-    void document2values() {
+    void retrieve2() {
         assertEquals(2, docs.get(1).getId());
         assertEquals(0.7328392782074931, docs.get(1).getScore());
     }
 
     /* assert */
     @Test
-    void document3values() {
+    void retrieve3() {
         assertEquals(3, docs.get(2).getId());
         assertEquals(0.22616387156387965, docs.get(2).getScore());
     }
 
     /* assert */
     @Test
-    void documents4values() {
+    void retrieve4() {
         assertEquals(4, docs.get(3).getId());
         assertEquals(0.5443310539518174, docs.get(3).getScore());
     }
