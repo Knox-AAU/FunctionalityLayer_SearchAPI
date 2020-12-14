@@ -1,26 +1,23 @@
 package searchengine.restcontrollers;
 
-import searchengine.Document;
-import searchengine.VectorSpaceModel;
+import searchengine.vsm.Document;
+import searchengine.vsm.ScoredDocument;
+import searchengine.vsm.VectorSpaceModel;
+import searchengine.booleanretrieval.DataSelection;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 
 public class Search {
 
-    List<Document> result;
+    private List<ScoredDocument> result;
 
     public Search(String input){
-        result = new VectorSpaceModel(input, "documents.txt").retrieve(10);
+         List<Document> documents = new DataSelection().retrieveDocuments(input);
+         result = new VectorSpaceModel(input).getScoredDocuments(documents);
     }
 
-    public List<Document> getResult() {
+    public List<ScoredDocument> getResult() {
         return result;
     }
 }
