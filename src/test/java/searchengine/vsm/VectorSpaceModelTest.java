@@ -57,27 +57,27 @@ class VectorSpaceModelTest {
     @Test
     void assertScore() {
         // assert score
-        assertEquals(0.0, scoredDocuments.get(0).getScore());
-        assertEquals(1.4606636323886681, scoredDocuments.get(1).getScore());
-        assertEquals(0.7513001189965488, scoredDocuments.get(2).getScore());
-        assertEquals(0.9041143105210954, scoredDocuments.get(3).getScore());
+        assertEquals(1.4273547170767573, scoredDocuments.get(0).getScore());
+        assertEquals(0.9870592488560553, scoredDocuments.get(1).getScore());
+        assertEquals(0.731332001624914, scoredDocuments.get(2).getScore());
+        assertEquals(0.0, scoredDocuments.get(3).getScore());
     }
 
     @Test
     void assertTitle() {
         // assert title
-        assertEquals("test1", scoredDocuments.get(0).getTitle());
-        assertEquals("test2", scoredDocuments.get(1).getTitle());
-        assertEquals("test3", scoredDocuments.get(2).getTitle());
-        assertEquals("test4", scoredDocuments.get(3).getTitle());
+        assertEquals("test2", scoredDocuments.get(0).getTitle());
+        assertEquals("test3", scoredDocuments.get(1).getTitle());
+        assertEquals("test4", scoredDocuments.get(2).getTitle());
+        assertEquals("test1", scoredDocuments.get(3).getTitle());
     }
 
     @Test
     void assertFilePath() {
         // assert filepath
-        assertEquals("/test/test1", scoredDocuments.get(0).getFilepath());
-        assertEquals("/test/test2", scoredDocuments.get(1).getFilepath());
-        assertEquals("/test/test3", scoredDocuments.get(2).getFilepath());
-        assertEquals("/test/test4", scoredDocuments.get(3).getFilepath());
+        assertEquals("/test/test2", scoredDocuments.get(0).getFilepath());
+        assertEquals("/test/test3", scoredDocuments.get(1).getFilepath());
+        assertEquals("/test/test4", scoredDocuments.get(2).getFilepath());
+        assertEquals("/test/test1", scoredDocuments.get(3).getFilepath());
     }
 }
