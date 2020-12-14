@@ -4,18 +4,18 @@ import java.util.HashMap;
 
 public class Document {
 
-    /* <Title, <Term, Occurrences>> */
+    /* <Title, <Term, Amount>> */
     private HashMap<String, Integer> TF = new HashMap<>();
     /* <Title, <Term, Score>> */
     private HashMap<String, Double> TFIDF = new HashMap<>();
 
     private String title;
+
     private String filepath;
 
     public Document(String title, String filepath) {
         this.title = title;
         this.filepath = filepath;
-
     }
 
     public HashMap<String, Double> getTFIDF() {

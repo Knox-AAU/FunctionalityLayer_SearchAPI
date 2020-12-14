@@ -4,7 +4,7 @@ import java.util.*;
 
 public class VectorSpaceModel {
 
-    /* <Term, Occurrences> */
+    /* <Term, Amount> */
     private HashMap<String, Integer> queryTF = new HashMap<>();
 
     /* <Term, Score> */
@@ -17,6 +17,9 @@ public class VectorSpaceModel {
         createQueryTF(query);
     }
 
+    /*
+    *Splits the input from UI into individual terms
+     */
     private void createQueryTF(String query){
         // Split the query into terms and places them in an array
         String[] sArray = query.split("\\s+");
@@ -99,7 +102,7 @@ public class VectorSpaceModel {
      * Calculates the cosine similarity score of a document and the query
      *
      * @param doc: the document to be scored
-     * @return the cosine similarity scor e
+     * @return the cosine similarity score
      */
     private Double cosineSimilarityScore(Document doc) {
 
@@ -121,7 +124,7 @@ public class VectorSpaceModel {
     /*
      * Calculates the length of a document represented as a vector
      *
-     * @param doc: the document
+     * @param tfidf: the tfidf hashmap of a document
      * @return the length of the document
      */
     private double getLength(HashMap<String, Double> tfidf) {
@@ -138,7 +141,8 @@ public class VectorSpaceModel {
     /*
      * retrieve a list of scored documents
      *
-     * @param total: the amount of documents to be retrieved
+     * @param documents: The list of documents retrieved from the database
+     * @return the list of ScoredDocuments
      */
     public List<ScoredDocument> getScoredDocuments(List<Document> documents) {
 
