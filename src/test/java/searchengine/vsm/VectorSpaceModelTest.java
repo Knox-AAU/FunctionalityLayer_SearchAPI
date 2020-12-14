@@ -31,46 +31,56 @@ class VectorSpaceModelTest {
 
         doc1 = new Document("test1", "/test/test1");
         doc1.getTF().put("china", 1);
-        doc1.getTF().put("is", 1);
         doc1.getTF().put("bigger", 1);
-        doc1.getTF().put("than", 1);
         doc1.getTF().put("germany", 1);
         documents.add(doc1);
 
-        doc2 = new Document("test1", "/test/test2");
+        doc2 = new Document("test2", "/test/test2");
         doc2.getTF().put("russia", 1);
-        doc2.getTF().put("is", 1);
         doc2.getTF().put("bigger", 1);
-        doc2.getTF().put("than", 1);
         doc2.getTF().put("denmark", 1);
         documents.add(doc2);
 
-        doc3 = new Document("test1", "/test/test3");
-        doc3.getTF().put("monaco", 1);
-        doc3.getTF().put("is", 1);
-        doc3.getTF().put("bigger", 1);
-        doc3.getTF().put("than", 1);
+        doc3 = new Document("test3", "/test/test3");
         doc3.getTF().put("russia", 1);
+        doc3.getTF().put("bigger", 1);
+        doc3.getTF().put("monaco", 1);
         documents.add(doc3);
 
-        doc4 = new Document("test1", "/test/test4");
+        doc4 = new Document("test4", "/test/test4");
         doc4.getTF().put("monaco", 1);
-        doc4.getTF().put("is", 1);
         doc4.getTF().put("smaller", 1);
-        doc4.getTF().put("than", 1);
         doc4.getTF().put("germany", 1);
         documents.add(doc4);
 
+        // act
+        scoredDocuments = vsm.getScoredDocuments(documents);
     }
 
     @Test
-    void getScoredDocuments() {
-        // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
-        // assert
-        assertEquals(0.9833348077203219, scoredDocuments.get(0).getScore());
-        assertEquals(2.410689524797079, scoredDocuments.get(1).getScore());
-        assertEquals(2.5044097360019095, scoredDocuments.get(2).getScore());
-        assertEquals(1.6443215345808004, scoredDocuments.get(3).getScore());
+    void assertScore() {
+        // assert score
+        assertEquals(0.0, scoredDocuments.get(0).getScore());
+        assertEquals(1.4606636323886681, scoredDocuments.get(1).getScore());
+        assertEquals(0.7513001189965488, scoredDocuments.get(2).getScore());
+        assertEquals(0.9041143105210954, scoredDocuments.get(3).getScore());
+    }
+
+    @Test
+    void assertTitle() {
+        // assert title
+        assertEquals("test1", scoredDocuments.get(0).getTitle());
+        assertEquals("test2", scoredDocuments.get(1).getTitle());
+        assertEquals("test3", scoredDocuments.get(2).getTitle());
+        assertEquals("test4", scoredDocuments.get(3).getTitle());
+    }
+
+    @Test
+    void assertFilePath() {
+        // assert filepath
+        assertEquals("/test/test1", scoredDocuments.get(0).getFilepath());
+        assertEquals("/test/test2", scoredDocuments.get(1).getFilepath());
+        assertEquals("/test/test3", scoredDocuments.get(2).getFilepath());
+        assertEquals("/test/test4", scoredDocuments.get(3).getFilepath());
     }
 }
