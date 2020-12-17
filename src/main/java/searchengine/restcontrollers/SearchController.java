@@ -10,7 +10,7 @@ public class SearchController {
 
     /*
      * @param input: The input received from UI layer
-     * @returns a new instance of search. Intuitively what is returned is a list of ScoredDocument.
+     * @return a new instance of search. Intuitively what is returned is a list of ScoredDocument.
      */
 
     @PostMapping(path = "/search")

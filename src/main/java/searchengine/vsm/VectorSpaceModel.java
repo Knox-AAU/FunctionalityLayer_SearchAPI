@@ -4,7 +4,7 @@ import java.util.*;
 
 public class VectorSpaceModel {
 
-    /* <Term, Amount> */
+    /* <Term, Frequency> */
     private HashMap<String, Integer> queryTF = new HashMap<>();
 
     /* <Term, Score> */

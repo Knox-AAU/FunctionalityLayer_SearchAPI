@@ -11,6 +11,10 @@ import java.util.List;
 
 public class DataSelection {
 
+    /*
+    *@param input: the search query in the ofrmat "term1 term2 term3 term3" (space separated)
+    * @return a list of documents which contained at least one of the search terms
+     */
     public List<Document> retrieveDocuments(String input){
 
         List<Document> documents = new ArrayList<>();
@@ -48,6 +52,11 @@ public class DataSelection {
 
         return documents;
     }
+
+    /*
+    * @param input: the search query in the ofrmat "term1 term2 term3 term3" (space separated)
+    * @return the SQL query
+     */
 
     private String buildQuery(String input)
     {

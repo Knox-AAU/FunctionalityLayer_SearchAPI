@@ -25,8 +25,13 @@ import java.util.Map;
 public class Search {
 
     private List<ScoredDocument> result;
+    // Connection to make a request to the python API
     private static HttpURLConnection connection;
 
+    /*
+    * Retrieve documents from database through the DataSelection class.
+    * Uses the vector space model on the retrieved documents, and receives a list of scored documents
+     */
     public Search(String input) throws IOException, JSONException {
         //input = lemmatize(input);
         List<Document> documents = new DataSelection().retrieveDocuments(input);
@@ -37,6 +42,11 @@ public class Search {
         return result;
     }
 
+
+    /*
+    * @param input: String received through POST request
+    * @return a string containing the lemmatized words
+     */
     private String lemmatize(String input) throws IOException, JSONException {
 
         StringBuilder result = new StringBuilder();
