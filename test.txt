@@ -1,4 +1,0 @@
-1 China is bigger than Germany
-2 Russia is bigger than Denmark
-3 Monaco is bigger than Russia
-4 Monaco is smaller than Germany
