@@ -61,7 +61,8 @@ public class DataSelection {
         return documents;
     }
 
-    /** SubFunction in retrieveDocuments. Generates an SQL query that searches for the terms.
+    /** SubFunction in retrieveDocuments. Generates an SQL query that searches for the terms from the input string.
+     * The input string should be split with space between terms
      * @param input: the search query in the ofrmat "term1 term2 term3 term3" (space separated)
      * @return the SQL query
      */

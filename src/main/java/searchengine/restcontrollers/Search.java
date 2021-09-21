@@ -7,7 +7,6 @@ import searchengine.vsm.Document;
 import searchengine.vsm.ScoredDocument;
 import searchengine.vsm.VectorSpaceModel;
 import searchengine.booleanretrieval.DataSelection;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,11 +27,13 @@ public class Search {
     // Connection to make a request to the python API
     private static HttpURLConnection connection;
 
-    /*
-    * Retrieve documents from database through the DataSelection class.
-    * Uses the vector space model on the retrieved documents, and receives a list of scored documents
+    /**
+     * Retrieve documents from database through the DataSelection class.
+     * Uses the vector space model on the retrieved documents, and receives a list of scored documents
+     * @param input: The search terms that are used to find documents in wordcount database.
+     *             The result list is stored in result
      */
-    public Search(String input) throws IOException, JSONException {
+    public Search(String input){
         //input = lemmatize(input);
         List<Document> documents = new DataSelection().retrieveDocuments(input);
         result = new VectorSpaceModel(input).getScoredDocuments(documents);
@@ -43,7 +44,8 @@ public class Search {
     }
 
 
-    /*
+    /**
+     * lemmatizes the string from the input. should always be called before sending a query to the wordcount database
     * @param input: String received through POST request
     * @return a string containing the lemmatized words
      */
