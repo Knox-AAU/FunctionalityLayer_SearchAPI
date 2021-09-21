@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * Encapsulates a search for some documents. the resulting documents are ranked and stored in the result property.
+ */
 public class Search {
 
     private List<ScoredDocument> result;
