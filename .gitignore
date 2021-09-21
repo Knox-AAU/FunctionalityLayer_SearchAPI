@@ -23,7 +23,7 @@
 
 # Gradle
 .idea/**/gradle.xml
-.idea/**/libraries
+.idea/**/libraries/*
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -96,3 +96,4 @@ fabric.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+Knox16_G.iml
