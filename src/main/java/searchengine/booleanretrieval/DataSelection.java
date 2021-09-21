@@ -11,8 +11,8 @@ import java.util.List;
 
 public class DataSelection {
 
-    /*
-    *@param input: the search query in the ofrmat "term1 term2 term3 term3" (space separated)
+    /** Searches the wordcount database for documents containing the terms from the input string.
+    *@param input: the search query in the format "term1 term2 term3 term3" (space separated)
     * @return a list of documents which contained at least one of the search terms
      */
     public List<Document> retrieveDocuments(String input){
@@ -53,11 +53,10 @@ public class DataSelection {
         return documents;
     }
 
-    /*
+    /** SubFunction in retrieveDocuments. Generates an SQL query that searches for the terms.
     * @param input: the search query in the ofrmat "term1 term2 term3 term3" (space separated)
     * @return the SQL query
      */
-
     private String buildQuery(String input)
     {
         StringBuilder query = new StringBuilder();
