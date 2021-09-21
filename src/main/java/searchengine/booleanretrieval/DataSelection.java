@@ -20,6 +20,8 @@ public class DataSelection {
         List<Document> documents = new ArrayList<>();
 
         try {
+            //Class.forName(...) is needed for initializing the driver as jdbc
+            // for more info: https://jdbc.postgresql.org/documentation/81/load.html
             Class.forName("org.postgresql.Driver");
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/wordcount","postgres","1234");
             Statement stmt = conn.createStatement();
