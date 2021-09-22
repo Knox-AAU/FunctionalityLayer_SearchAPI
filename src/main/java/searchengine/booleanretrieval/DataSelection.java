@@ -16,7 +16,7 @@ public class DataSelection {
 
     /**
      * Searches the wordcount database for documents containing the terms from the input string.
-     * @param input: The search query in the format "term1 term2 term3 term3" (space separated)
+     * @param input: The search query in the format "term1 term2 ... termN" (space separated)
      * @return a list of documents which contained at least one of the search terms
      */
     public List<TFIDFDocument> retrieveDocuments(String input) {
