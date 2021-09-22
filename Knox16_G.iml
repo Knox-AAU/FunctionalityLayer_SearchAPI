@@ -18,6 +18,9 @@
         </sourceRoots>
       </configuration>
     </facet>
+    <facet type="Python" name="Python">
+      <configuration sdkName="Python 2.7" />
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_15">
     <output url="file://$MODULE_DIR$/target/classes" />
@@ -130,5 +133,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.2.10.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.7.0" level="project" />
     <orderEntry type="library" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
+    <orderEntry type="library" name="Python 2.7 interpreter library" level="application" />
   </component>
 </module>

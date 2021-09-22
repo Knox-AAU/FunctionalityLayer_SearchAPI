@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import searchengine.vsm.Document;
+import searchengine.vsm.TFIDFDocument;
 
 /**
  * Contains the retrieveDocuments class.
@@ -19,8 +19,8 @@ public class DataSelection {
      * @param input: The search query in the format "term1 term2 term3 term3" (space separated)
      * @return a list of documents which contained at least one of the search terms
      */
-    public List<Document> retrieveDocuments(String input) {
-        List<Document> documents = new ArrayList<>();
+    public List<TFIDFDocument> retrieveDocuments(String input) {
+        List<TFIDFDocument> documents = new ArrayList<>();
 
         try {
             //Class.forName(...) is needed for initializing the driver as jdbc
@@ -44,7 +44,7 @@ public class DataSelection {
 
                 if (!tempTitle.equals(title)) {
                     i++;
-                    documents.add(new Document(title, filepath));
+                    documents.add(new TFIDFDocument(title, filepath));
                 }
                 documents.get(i - 1).getTF().put(wordname, amount);
                 tempTitle = title;
