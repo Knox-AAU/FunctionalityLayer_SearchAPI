@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * Encapsulates a search for some documents. the resulting documents are ranked and stored in the result property.
+ * Encapsulates a search for some documents. The resulting documents are ranked and stored in the result property.
  */
 public class Search {
 
