@@ -2,8 +2,7 @@ package searchengine.restcontrollers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import searchengine.vsm.Document;
+import searchengine.vsm.TFIDFDocument;
 import searchengine.vsm.ScoredDocument;
 import searchengine.vsm.VectorSpaceModel;
 import searchengine.booleanretrieval.DataSelection;
@@ -11,14 +10,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -26,7 +19,7 @@ import java.util.Map;
  */
 public class Search {
 
-    private List<ScoredDocument> result;
+    private final List<ScoredDocument> result;
     // Connection to make a request to the python API
     private static HttpURLConnection connection;
 
@@ -38,7 +31,7 @@ public class Search {
      */
     public Search(String input){
         //input = lemmatize(input);
-        List<Document> documents = new DataSelection().retrieveDocuments(input);
+        List<TFIDFDocument> documents = new DataSelection().retrieveDocuments(input);
         result = new VectorSpaceModel(input).getScoredDocuments(documents);
     }
 

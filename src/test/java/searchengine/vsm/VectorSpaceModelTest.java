@@ -10,43 +10,43 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class VectorSpaceModelTest {
 
-    static Document doc1;
-    static Document doc2;
-    static Document doc3;
-    static Document doc4;
+    static TFIDFDocument doc1;
+    static TFIDFDocument doc2;
+    static TFIDFDocument doc3;
+    static TFIDFDocument doc4;
     static VectorSpaceModel vsm;
-    static List<Document> documents;
+    static List<TFIDFDocument> TFIDFDocuments;
     static List<ScoredDocument> scoredDocuments;
 
     @BeforeAll
     static void setup() {
         // arrange
-        documents = new ArrayList<>();
+        TFIDFDocuments = new ArrayList<>();
         scoredDocuments = new ArrayList<>();
 
-        doc1 = new Document("test1", "/test/test1");
+        doc1 = new TFIDFDocument("test1", "/test/test1");
         doc1.getTF().put("china", 1);
         doc1.getTF().put("bigger", 1);
         doc1.getTF().put("germany", 1);
-        documents.add(doc1);
+        TFIDFDocuments.add(doc1);
 
-        doc2 = new Document("test2", "/test/test2");
+        doc2 = new TFIDFDocument("test2", "/test/test2");
         doc2.getTF().put("russia", 1);
         doc2.getTF().put("bigger", 1);
         doc2.getTF().put("denmark", 1);
-        documents.add(doc2);
+        TFIDFDocuments.add(doc2);
 
-        doc3 = new Document("test3", "/test/test3");
+        doc3 = new TFIDFDocument("test3", "/test/test3");
         doc3.getTF().put("russia", 1);
         doc3.getTF().put("bigger", 1);
         doc3.getTF().put("monaco", 1);
-        documents.add(doc3);
+        TFIDFDocuments.add(doc3);
 
-        doc4 = new Document("test4", "/test/test4");
+        doc4 = new TFIDFDocument("test4", "/test/test4");
         doc4.getTF().put("monaco", 1);
         doc4.getTF().put("smaller", 1);
         doc4.getTF().put("germany", 1);
-        documents.add(doc4);
+        TFIDFDocuments.add(doc4);
     }
 
     @Test
@@ -54,7 +54,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("is denmark smaller than russia");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert score
         assertEquals(1.4273547170767573, scoredDocuments.get(0).getScore());
         assertEquals(0.9870592488560553, scoredDocuments.get(1).getScore());
@@ -67,7 +67,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("is denmark smaller than russia");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert title
         assertEquals("test2", scoredDocuments.get(0).getTitle());
         assertEquals("test3", scoredDocuments.get(1).getTitle());
@@ -80,7 +80,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("is denmark smaller than russia");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert filepath
         assertEquals("/test/test2", scoredDocuments.get(0).getFilepath());
         assertEquals("/test/test3", scoredDocuments.get(1).getFilepath());
@@ -93,7 +93,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("is china bigger than germany");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals("test1", scoredDocuments.get(0).getTitle());
     }
@@ -103,7 +103,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("is russia bigger than denmark");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals("test2", scoredDocuments.get(0).getTitle());
     }
@@ -113,7 +113,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("is russia bigger than monaco");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals("test3", scoredDocuments.get(0).getTitle());
     }
@@ -123,7 +123,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("is monaco smaller than germany");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals("test4", scoredDocuments.get(0).getTitle());
     }
@@ -133,7 +133,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("china bigger germany");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals(2.5031447906311417, scoredDocuments.get(0).getScore());
     }
@@ -143,7 +143,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("russia bigger denmark");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals(2.503144790631141, scoredDocuments.get(0).getScore());
     }
@@ -153,7 +153,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("russia bigger monaco");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals(3.8951843062652745, scoredDocuments.get(0).getScore());
     }
@@ -163,7 +163,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("monaco smaller germany");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals(2.3370064440880896, scoredDocuments.get(0).getScore());
     }
@@ -173,7 +173,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("test");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals(0.0, scoredDocuments.get(0).getScore());
         assertEquals(0.0, scoredDocuments.get(1).getScore());
@@ -186,7 +186,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("china bigger germany russia denmark monaco smaller");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals("test3", scoredDocuments.get(0).getTitle());
         assertEquals(2.2416054288023926, scoredDocuments.get(0).getScore());
@@ -206,7 +206,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("china china china china china china china china china china bigger germany russia denmark monaco smaller");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test3", scoredDocuments.get(0).getTitle());
         assertEquals(2.5153784203804257, scoredDocuments.get(0).getScore());
@@ -226,7 +226,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("china");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test1", scoredDocuments.get(0).getTitle());
         assertEquals(1.4606636323886684, scoredDocuments.get(0).getScore());
@@ -241,7 +241,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("germany");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test1", scoredDocuments.get(0).getTitle());
         assertEquals(1.4606636323886684, scoredDocuments.get(0).getScore());
@@ -258,7 +258,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("monaco");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test3", scoredDocuments.get(0).getTitle());
         assertEquals(2.253900356989646, scoredDocuments.get(0).getScore());
@@ -275,7 +275,7 @@ class VectorSpaceModelTest {
         // arrange
         vsm = new VectorSpaceModel("");
         // act
-        scoredDocuments = vsm.getScoredDocuments(documents);
+        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test1", scoredDocuments.get(0).getTitle());
     }

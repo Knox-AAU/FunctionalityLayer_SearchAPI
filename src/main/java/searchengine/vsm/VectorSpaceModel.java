@@ -41,12 +41,12 @@ public class VectorSpaceModel {
      *
      * @return A HashMap<String, Double> of idf values
      */
-    private HashMap<String, Double> calculateIDF(List<Document> documents) {
+    private HashMap<String, Double> calculateIDF(List<TFIDFDocument> documents) {
         HashMap<String, Double> idf = new HashMap<>();
         HashMap<String, Integer> df = new HashMap<>();
 
         // fills the documentTF HashMap for all documents
-        for (Document document : documents) {
+        for (TFIDFDocument document : documents) {
             for (String term : document.getTF().keySet()) {
                 if (df.containsKey(term)) {
                     df.put(term, df.get(term)+1);
@@ -69,12 +69,12 @@ public class VectorSpaceModel {
      * Calculates the TF-IDF value of all documents and the query
      */
 
-    private void calculateTFIDF(List<Document> documents) {
+    private void calculateTFIDF(List<TFIDFDocument> documents) {
         HashMap<String, Double> idf = calculateIDF(documents);
         int maximumFrequency = 0;
 
         // assign tfidf for all documents
-        for (Document document : documents) {
+        for (TFIDFDocument document : documents) {
             HashMap<String, Double> innerMap = new HashMap<>();
 
             for (String term : document.getTF().keySet()) {
@@ -104,7 +104,7 @@ public class VectorSpaceModel {
      * @param doc: the document to be scored
      * @return the cosine similarity score
      */
-    private Double cosineSimilarityScore(Document doc) {
+    private Double cosineSimilarityScore(TFIDFDocument doc) {
 
         Set<String> uniqueTerms = new HashSet<>();
         double dotProduct = 0;
@@ -144,13 +144,13 @@ public class VectorSpaceModel {
      * @param documents: The list of documents retrieved from the database
      * @return the list of ScoredDocuments
      */
-    public List<ScoredDocument> getScoredDocuments(List<Document> documents) {
+    public List<ScoredDocument> getScoredDocuments(List<TFIDFDocument> documents) {
 
         List<ScoredDocument> scoredDocuments = new ArrayList<>();
 
         calculateTFIDF(documents);
 
-        for (Document doc : documents) {
+        for (TFIDFDocument doc : documents) {
             Double score = cosineSimilarityScore(doc);
             scoredDocuments.add(new ScoredDocument(doc.getTitle(), score, doc.getFilepath()));
         }

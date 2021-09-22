@@ -1,29 +1,25 @@
 package searchengine.vsm;
 
+import javax.print.Doc;
 import java.util.HashMap;
 
 /**
  * Data class.
  * Stores TF IDF title and filepath for a document
  */
-public class Document {
+public class TFIDFDocument extends Document {
 
     /* <Title, <Term, Amount>> */
     private HashMap<String, Integer> TF = new HashMap<>();
     /* <Title, <Term, Score>> */
     private HashMap<String, Double> TFIDF = new HashMap<>();
 
-    private String title;
-
-    private String filepath;
-
     /** Constructor
      * @param title: String containing the document title.
      * @param filepath: Filepath to the storage location.
      */
-    public Document(String title, String filepath) {
-        this.title = title;
-        this.filepath = filepath;
+    public TFIDFDocument(String title, String filepath) {
+        super(title,filepath);
     }
 
     public HashMap<String, Double> getTFIDF() {
@@ -38,15 +34,4 @@ public class Document {
         this.TFIDF = TFIDF;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getFilepath() {
-        return filepath;
-    }
 }

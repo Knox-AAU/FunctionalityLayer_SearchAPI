@@ -1,26 +1,24 @@
 package searchengine.vsm;
 
-public class ScoredDocument implements Comparable<ScoredDocument> {
-    private final String title;
+/**
+ * Data class.
+ * Stores title filepath and score for a document.
+ */
+public class ScoredDocument extends Document implements Comparable<ScoredDocument> {
     private final Double score;
-    private final String filepath;
 
+    /** Constructor
+     * @param title: String containing the document title.
+     * @param score: Cosinus similarity score
+     * @param filepath: Filepath to the storage location.
+     */
     public ScoredDocument(String title, double score, String filepath){
-        this.title = title;
+        super(title,filepath);
         this.score = score;
-        this.filepath = filepath;
     }
 
     public Double getScore() {
         return score;
-    }
-
-    public String getFilepath() {
-        return filepath;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     @Override
