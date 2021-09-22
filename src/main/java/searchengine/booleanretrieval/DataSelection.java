@@ -9,7 +9,7 @@ import java.util.List;
 import searchengine.vsm.TFIDFDocument;
 
 /**
- * Contains the retrieveDocuments class.
+ * Contains the retrieveDocuments function.
  * Is used for retrieving document names.
  */
 public class DataSelection {
