@@ -24,7 +24,7 @@ class SearchControllerTest {
 
     @MockBean
     private Search search;
-    
+
     //COMMENTED OUT SO IT DOESNT FAIL WHEN NOT TUNNELLING IN
     //@Test
     public void whenSearch_thenReturnJson() throws Exception {
