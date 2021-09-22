@@ -16,8 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 * This test wont work as soon as actual data is put into the database.
  */
 //TODO SHOULD BE CHANGED TO USE A MOCK DATABASE OR DELETED SINCE IT WONT WORK WHEN ACTUAL DATA IS PUSHED TO DB
-//COMMENTED OUT SO IT DOESNT FAIL WHEN NOT TUNNELLING IN
-//@WebMvcTest(SearchController.class)
+@WebMvcTest(SearchController.class)
 class SearchControllerTest {
 
     @Autowired
@@ -25,8 +24,9 @@ class SearchControllerTest {
 
     @MockBean
     private Search search;
-
-    @Test
+    
+    //COMMENTED OUT SO IT DOESNT FAIL WHEN NOT TUNNELLING IN
+    //@Test
     public void whenSearch_thenReturnJson() throws Exception {
         mvc.perform(post("/search").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("input", "used forms"))
                 .andExpect(status().isOk())
