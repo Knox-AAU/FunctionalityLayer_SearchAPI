@@ -41,7 +41,7 @@ public class Search {
 
 
     /**
-     * lemmatizes the string from the input. should always be called before sending a query to the wordcount database
+     * Lemmatizes the string from the input. Should always be called before sending a query to the wordcount database
     * @param input: String received through POST request
     * @return a string containing the lemmatized words
      */
