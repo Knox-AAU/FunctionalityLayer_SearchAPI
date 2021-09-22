@@ -5,7 +5,6 @@ package searchengine.vsm;
  */
 public class Document {
 
-
     private String title;
     private String filepath;
 
