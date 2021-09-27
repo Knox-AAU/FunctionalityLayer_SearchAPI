@@ -13,7 +13,6 @@ import searchengine.vsm.TFIDFDocument;
  * Is used for retrieving document names.
  */
 public class DataSelection {
-
     /**
      * Searches the wordcount database for documents containing the terms from the input string.
      * @param input: The search query in the format "term1 term2 ... termN" (space separated)
