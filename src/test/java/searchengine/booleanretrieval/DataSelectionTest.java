@@ -1,12 +1,9 @@
 package searchengine.booleanretrieval;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.configuration.IMockitoConfiguration;
 import searchengine.ISqlConnection;
 import searchengine.vsm.TFIDFDocument;
 
-import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;

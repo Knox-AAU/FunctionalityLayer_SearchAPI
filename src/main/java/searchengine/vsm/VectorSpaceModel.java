@@ -6,7 +6,6 @@ import java.util.*;
  * Contains all methods related to the vector space model.
  */
 public class VectorSpaceModel {
-
     /**
      * Creates a vector space model from the query.
      * @param query: input query
