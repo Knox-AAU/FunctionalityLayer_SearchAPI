@@ -1,11 +1,10 @@
 package searchengine.booleanretrieval;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import searchengine.ISqlConnection;
 import searchengine.vsm.TFIDFDocument;
 
 /**
@@ -13,6 +12,13 @@ import searchengine.vsm.TFIDFDocument;
  * Is used for retrieving document names.
  */
 public class DataSelection {
+
+    public DataSelection(ISqlConnection connection){
+        this.connection = connection;
+    }
+
+    private ISqlConnection connection;
+
     /**
      * Searches the wordcount database for documents containing the terms from the input string.
      * @param input: The search query in the format "term1 term2 ... termN" (space separated)
@@ -22,14 +28,7 @@ public class DataSelection {
         List<TFIDFDocument> documents = new ArrayList<>();
 
         try {
-            //Class.forName(...) is needed for initializing the driver as jdbc
-            // for more info: https://jdbc.postgresql.org/documentation/81/load.html
-            Class.forName("org.postgresql.Driver");
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/wordcount",
-                    "postgres",
-                    "1234");
-            Statement stmt = conn.createStatement();
+            Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(buildQuery(input));
 
             String tempTitle = "";
@@ -51,7 +50,7 @@ public class DataSelection {
 
             rs.close();
             stmt.close();
-            conn.close();
+            connection.close();
 
         } catch (Exception e) {
             e.printStackTrace();
