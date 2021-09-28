@@ -1,8 +1,12 @@
 package searchengine.vsm;
+import lombok.Data;
 
 /**
  * Superclass for Document types
  */
+
+
+@Data
 public abstract class Document {
 
     private String title;
@@ -15,21 +19,5 @@ public abstract class Document {
     public Document(String title, String filepath){
         this.title=title;
         this.filepath=filepath;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getFilepath() {
-        return filepath;
-    }
-
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
     }
 }
