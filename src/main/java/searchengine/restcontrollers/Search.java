@@ -1,5 +1,6 @@
 package searchengine.restcontrollers;
 
+import lombok.Getter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import searchengine.vsm.TFIDFDocument;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 public class Search {
 
+    @Getter
     private final List<ScoredDocument> result;
     // Connection to make a request to the python API
     private static HttpURLConnection connection;
@@ -34,50 +36,4 @@ public class Search {
         List<TFIDFDocument> documents = new DataSelection().retrieveDocuments(input);
         result = new VectorSpaceModel(input).getScoredDocuments(documents);
     }
-
-    public List<ScoredDocument> getResult() {
-        return result;
-    }
-
-
-    /**
-     * Lemmatizes the string from the input. Should always be called before sending a query to the wordcount database
-    * @param input: String received through POST request
-    * @return a string containing the lemmatized words
-     */
-    private String lemmatize(String input) throws IOException, JSONException {
-
-        StringBuilder result = new StringBuilder();
-        input = input.replaceAll(" ", "%20");
-        URL url = new URL("http://localhost:8082/term/" + input);
-
-        try {
-            connection = (HttpURLConnection) url.openConnection();
-
-            connection.setRequestMethod("GET");
-            StringBuilder content;
-
-            try (BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()))) {
-
-                String line;
-                content = new StringBuilder();
-
-                while ((line = in.readLine()) != null) {
-
-                    content.append(line);
-                    content.append(System.lineSeparator());
-                }
-            }
-            JSONArray jsonArray = new JSONArray(content.toString());
-            for (int i = 0; i < jsonArray.length(); i++){
-                result.append(jsonArray.getJSONObject(i).getString(jsonArray.getJSONObject(i).keys().next().toString())).append(" ");
-            }
-
-        } finally {
-            connection.disconnect();
-        }
-        return result.toString();
-    }
-
 }

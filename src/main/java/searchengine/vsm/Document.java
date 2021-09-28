@@ -4,8 +4,6 @@ import lombok.Data;
 /**
  * Superclass for Document types
  */
-
-
 @Data
 public abstract class Document {
 
