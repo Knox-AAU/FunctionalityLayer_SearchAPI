@@ -3,7 +3,6 @@ package searchengine.restcontrollers;
 import org.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 import searchengine.SqlConnection;
-
 import java.io.IOException;
 import java.sql.SQLException;
 

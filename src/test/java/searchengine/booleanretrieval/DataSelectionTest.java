@@ -35,7 +35,7 @@ class DataSelectionTest {
             when(resultSet.getString("wordname")).thenReturn("lorem", "ipsum", "dolor");
             when(resultSet.getInt("amount")).thenReturn(5, 4, 3);
             when(resultSet.getString("articletitle")).thenReturn("testarticle1", "testarticle1", "testarticle2");
-            when(resultSet.getString("filepath")).thenReturn("/test/testarticle1", "testarticle1", "/test/testarticle2");
+            when(resultSet.getString("filepath")).thenReturn("/test/testarticle1", "/test/testarticle1", "/test/testarticle2");
 
             return new DataSelection(connection);
         }
