@@ -2,6 +2,7 @@ package searchengine.restcontrollers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import searchengine.ISqlConnection;
 import searchengine.vsm.TFIDFDocument;
 import searchengine.vsm.ScoredDocument;
 import searchengine.vsm.VectorSpaceModel;
@@ -29,9 +30,9 @@ public class Search {
      * @param input: The search terms that are used to find documents in wordcount database.
      *             The result list is stored in result
      */
-    public Search(String input){
+    public Search(String input, ISqlConnection connection){
         //input = lemmatize(input);
-        List<TFIDFDocument> documents = new DataSelection().retrieveDocuments(input);
+        List<TFIDFDocument> documents = new DataSelection(connection).retrieveDocuments(input);
         result = new VectorSpaceModel(input).getScoredDocuments(documents);
     }
 
