@@ -19,8 +19,8 @@ public class SqlConnection implements ISqlConnection {
      * @return Connection to wordcount
      */
     private Connection getConnection() throws ClassNotFoundException, SQLException {
-        //Class.forName(...) is needed for initializing the driver as jdbc
-        // for more info: https://jdbc.postgresql.org/documentation/81/load.html
+        // Class.forName(...) is needed for initializing the driver as jdbc
+        // For more info: https://jdbc.postgresql.org/documentation/81/load.html
         Class.forName("org.postgresql.Driver");
         return DriverManager.getConnection(
                 "jdbc:postgresql://localhost:5432/wordcount",
