@@ -8,7 +8,7 @@ import lombok.Getter;
  */
 public class ScoredDocument extends Document implements Comparable<ScoredDocument> {
     @Getter
-    private final double score;
+    private final Double score;
 
     /** Constructor
      * @param title: String containing the document title.
