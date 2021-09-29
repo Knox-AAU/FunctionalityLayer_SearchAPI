@@ -29,9 +29,9 @@ public class Search {
      * @param input: The search terms that are used to find documents in wordcount database.
      *             The result list is stored in result
      */
-    public Search(String input){
+    public Search(String input, String[] sources){
         //input = lemmatize(input);
-        List<TFIDFDocument> documents = new DataSelection().retrieveDocuments(input);
+        List<TFIDFDocument> documents = new DataSelection().retrieveDocuments(input, sources);
         result = new VectorSpaceModel(input).getScoredDocuments(documents);
     }
 
