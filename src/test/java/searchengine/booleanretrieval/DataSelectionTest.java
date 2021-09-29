@@ -51,7 +51,7 @@ class DataSelectionTest {
         DataSelection dataSelection = setup();
 
         //Act
-        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup");
+        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup", new String[0]);
 
         //Assert
         assertEquals(2, documentList.size());
@@ -63,7 +63,7 @@ class DataSelectionTest {
         DataSelection dataSelection = setup();
 
         //Act
-        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup");
+        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup", new String[0]);
 
         //Assert
         assertEquals(2, documentList.get(0).getTF().size());
@@ -77,7 +77,7 @@ class DataSelectionTest {
         DataSelection dataSelection = setup();
 
         //Act
-        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup");
+        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup", new String[0]);
 
         //Assert
         assertEquals(1, documentList.get(1).getTF().size());
