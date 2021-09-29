@@ -1,11 +1,10 @@
 package searchengine.booleanretrieval;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import searchengine.ISqlConnection;
 import searchengine.vsm.TFIDFDocument;
 
 /**
@@ -13,24 +12,25 @@ import searchengine.vsm.TFIDFDocument;
  * Is used for retrieving document names.
  */
 public class DataSelection {
-  /**
-   * Searches the wordcount database for documents containing the terms from the input string.
-   * @param input: The search query in the format "term1 term2 ... termN" (space separated)
-   * @return a list of documents which contained at least one of the search terms
-   */
-  public List<TFIDFDocument> retrieveDocuments(String input, String[] sources) {
+
+    public DataSelection(ISqlConnection connection){
+        this.connection = connection;
+    }
+
+    private ISqlConnection connection;
+
+    /**
+     * Searches the wordcount database for documents containing the terms from the input string.
+     * @param input: The search query in the format "term1 term2 ... termN" (space separated)
+     * @param sources: The list of sources to be searched
+     * @return a list of documents which contained at least one of the search terms
+     */
+    public List<TFIDFDocument> retrieveDocuments(String input, String[] sources) {
     List<TFIDFDocument> documents = new ArrayList<>();
 
-    try {
-      //Class.forName(...) is needed for initializing the driver as jdbc
-      // for more info: https://jdbc.postgresql.org/documentation/81/load.html
-      Class.forName("org.postgresql.Driver");
-      Connection conn = DriverManager.getConnection(
-              "jdbc:postgresql://localhost:5432/wordcount",
-              "postgres",
-              "1234");
-      Statement stmt = conn.createStatement();
-      ResultSet rs = stmt.executeQuery(buildQuery(input, sources));
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(buildQuery(input, sources));
 
       String tempTitle = "";
       int i = 0;
@@ -49,9 +49,9 @@ public class DataSelection {
         tempTitle = title;
       }
 
-      rs.close();
-      stmt.close();
-      conn.close();
+            rs.close();
+            stmt.close();
+            connection.close();
 
     } catch (Exception e) {
       e.printStackTrace();
