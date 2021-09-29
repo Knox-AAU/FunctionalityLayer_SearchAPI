@@ -11,6 +11,7 @@ public class SearchController {
 
     /**
      * @param input: The input received from the POST request
+     * @param sources: The list of sources received from the POST request
      * @return a new instance of search. (Will be converted to JSON with each property as a key by Spring).
      */
     @PostMapping(path = "/search")

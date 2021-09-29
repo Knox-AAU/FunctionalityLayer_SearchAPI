@@ -29,6 +29,7 @@ public class Search {
      * Uses the vector space model on the retrieved documents, and receives a list of scored documents
      * @param input: The search terms that are used to find documents in wordcount database.
      *             The result list is stored in result
+     * @param sources: The list of sources to be searched
      */
     public Search(String input, String[] sources,ISqlConnection connection){
         //input = lemmatize(input);
