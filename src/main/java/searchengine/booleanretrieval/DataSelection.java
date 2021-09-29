@@ -111,6 +111,7 @@ public class DataSelection {
         query.append(String.format("wordname='%s' ", terms[i]));
       }
     }
+    query.append(")  ORDER BY articletitle;");
     return query.toString();
   }
 
