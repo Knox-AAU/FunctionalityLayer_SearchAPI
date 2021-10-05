@@ -18,9 +18,6 @@
         </sourceRoots>
       </configuration>
     </facet>
-    <facet type="Python" name="Python">
-      <configuration sdkName="Python 2.7" />
-    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_15">
     <output url="file://$MODULE_DIR$/target/classes" />

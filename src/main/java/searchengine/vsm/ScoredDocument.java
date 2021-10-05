@@ -1,10 +1,13 @@
 package searchengine.vsm;
 
+import lombok.Getter;
+
 /**
  * Data class.
  * Stores title filepath and score for a document.
  */
 public class ScoredDocument extends Document implements Comparable<ScoredDocument> {
+    @Getter
     private final Double score;
 
     /** Constructor
@@ -17,9 +20,6 @@ public class ScoredDocument extends Document implements Comparable<ScoredDocumen
         this.score = score;
     }
 
-    public Double getScore() {
-        return score;
-    }
 
     @Override
     public int compareTo(ScoredDocument o) {
