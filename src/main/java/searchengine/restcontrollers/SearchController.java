@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class SearchController {
@@ -13,7 +14,7 @@ public class SearchController {
      * @return a new instance of search. Intuitively what is returned is a list of ScoredDocument.
      */
     @PostMapping(path = "/search")
-    public Search postSearch (@RequestParam String input) throws IOException, JSONException {
+    public Search postSearch (@RequestParam(name="input") String input, @RequestParam(name="sources") List<String> source) throws IOException, JSONException {
        return new Search(input);
     }
 
