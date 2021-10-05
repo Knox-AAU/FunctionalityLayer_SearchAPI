@@ -13,15 +13,16 @@ import searchengine.vsm.TFIDFDocument;
  */
 public class DataSelection {
 
-  public DataSelection(ISqlConnection connection){
-        this.connection = connection;
-    }
+  public DataSelection(ISqlConnection connection) {
+    this.connection = connection;
+  }
+
   private ISqlConnection connection;
 
   /**
      * Searches the wordcount database for documents containing the terms from the input string.
-     * @param input: The search query in the format "term1 term2 ... termN" (space separated)
-     * @param sources: The list of sources to be searched
+     * @param input The search query in the format "term1 term2 ... termN" (space separated)
+     * @param sources The list of sources to be searched
      * @return a list of documents which contained at least one of the search terms
      */
   public List<TFIDFDocument> retrieveDocuments(String input, List<String> sources) {
