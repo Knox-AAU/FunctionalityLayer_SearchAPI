@@ -6,6 +6,8 @@ import searchengine.vsm.TFIDFDocument;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,7 +53,7 @@ class DataSelectionTest {
         DataSelection dataSelection = setup();
 
         //Act
-        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup");
+        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup",  new ArrayList<String>());
 
         //Assert
         assertEquals(2, documentList.size());
@@ -63,7 +65,7 @@ class DataSelectionTest {
         DataSelection dataSelection = setup();
 
         //Act
-        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup");
+        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup", new ArrayList<String>());
 
         //Assert
         assertEquals(2, documentList.get(0).getTF().size());
@@ -77,7 +79,7 @@ class DataSelectionTest {
         DataSelection dataSelection = setup();
 
         //Act
-        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup");
+        List<TFIDFDocument> documentList = dataSelection.retrieveDocuments("this string is mocked - see setup", new ArrayList<String>());
 
         //Assert
         assertEquals(1, documentList.get(1).getTF().size());
