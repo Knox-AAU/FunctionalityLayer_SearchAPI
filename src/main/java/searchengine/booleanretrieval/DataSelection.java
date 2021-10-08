@@ -85,7 +85,7 @@ public class DataSelection {
     query.append(")");
     if (sources != null && sources.size() > 0) {
       query.append(" AND (sourcename = '");
-      query.append(String.join("' or sourcename = '", sources));
+      query.append(String.join("' OR sourcename = '", sources));
       query.append("') ");
     }
     query.append("ORDER BY articletitle;"); //Required as the function retrievedocuments(...) requires the list of articles to be ordered.
