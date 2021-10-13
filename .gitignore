@@ -33,6 +33,8 @@ fabric.properties
 *.war
 *.nar
 *.ear
+
+.env
 *.zip
 *.tar.gz
 *.rar
