@@ -8,14 +8,14 @@ import lombok.Data;
 public abstract class Document {
 
   private String title;
-  private String filepath;
+  private int id;
 
   /** Constructor
    * @param title String containing the document title
-   * @param filepath Filepath to the storage location
+   * @param id ID of the file
   */
-  public Document(String title, String filepath) {
+  public Document(String title, int id) {
     this.title = title;
-    this.filepath = filepath;
+    this.id = id;
   }
 }

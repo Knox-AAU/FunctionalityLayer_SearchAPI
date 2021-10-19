@@ -39,11 +39,11 @@ public class DataSelection {
         String wordname = rs.getString("wordname");
         int amount = rs.getInt("amount");
         String title = rs.getString("articletitle");
-        String filepath = rs.getString("filepath");
+        int fid = rs.getInt("fid");
 
         if (!tempTitle.equals(title)) {
           i++;
-          documents.add(new TFIDFDocument(title, filepath));
+          documents.add(new TFIDFDocument(title, fid));
         }
         documents.get(i - 1).getTF().put(wordname, amount);
         tempTitle = title;
@@ -68,7 +68,7 @@ public class DataSelection {
 
   private String buildQuery(String input, List<String> sources) { //TODO: Check if UI API returns string array
     StringBuilder query = new StringBuilder();
-    query.append("SELECT DISTINCT wordname, amount, articletitle, filepath "); //Distinct: Only select unique values
+    query.append("SELECT DISTINCT wordname, amount, articletitle, fid "); //Distinct: Only select unique values
     query.append("FROM wordratios ");
     query.append("WHERE articletitle ");
     query.append("IN ( SELECT articletitle ");
