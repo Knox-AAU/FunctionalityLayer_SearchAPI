@@ -82,10 +82,10 @@ class VectorSpaceModelTest {
         // act
         scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert filepath
-        assertEquals(1, scoredDocuments.get(0).getId());
-        assertEquals(2, scoredDocuments.get(1).getId());
-        assertEquals(3, scoredDocuments.get(2).getId());
-        assertEquals(4, scoredDocuments.get(3).getId());
+        assertEquals(2, scoredDocuments.get(0).getId());
+        assertEquals(3, scoredDocuments.get(1).getId());
+        assertEquals(4, scoredDocuments.get(2).getId());
+        assertEquals(1, scoredDocuments.get(3).getId());
     }
 
     @Test
