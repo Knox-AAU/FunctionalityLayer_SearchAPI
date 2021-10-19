@@ -13,10 +13,10 @@ public class ScoredDocument extends Document implements Comparable<ScoredDocumen
   /** Constructor
    * @param title String containing the document title.
    * @param score Cosinus similarity score.
-   * @param filepath Filepath to the storage location.
+   * @param id ID for the file.
    */
-  public ScoredDocument(String title, double score, String filepath) {
-    super(title, filepath);
+  public ScoredDocument(String title, double score, int id) {
+    super(title, id);
     this.score = score;
   }
 
