@@ -1,9 +1,11 @@
 package searchengine.http;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public interface IHTTPRequest {
-    IHTTPResponse Commit();
+    IHTTPResponse Commit() throws IOException;
     String GetMethod();
     String GetUrl();
     void SetUrl(String url);

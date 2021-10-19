@@ -1,8 +1,10 @@
 package searchengine.http;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -54,12 +56,24 @@ public class HTTPGetRequest implements IHTTPRequest{
             };
         }
         catch(Exception exception){
-            //Do nothing TODO find out if we should handle this
+            //TODO Give more accurate status code and error message
+            return new IHTTPResponse() {
+                @Override
+                public int GetStatus() {
+                    return 500;
+                }
+
+                @Override
+                public boolean GetSuccess() {
+                    return false;
+                }
+
+                @Override
+                public String GetContent() {
+                    return "Whoops, something went wrong.";
+                }
+            };
         }
-        finally{
-            //if (connection != null) connection.disconnect();
-        }
-        return null;
     }
 
     @Override

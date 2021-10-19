@@ -30,7 +30,8 @@ public class Search {
    *             The result list is stored in result
    * @param sources The list of sources to be searched
    */
-  public Search(String input, List<String> sources, ISqlConnection connection) {
+  public Search(String input, List<String> sources, ISqlConnection connection)
+  {
     input = new Lemmatizer().Lemmatize(input, "da");//TODO compute language
     System.out.println(input);
     List<TFIDFDocument> documents = new DataSelection(connection).retrieveDocuments(input, sources);
