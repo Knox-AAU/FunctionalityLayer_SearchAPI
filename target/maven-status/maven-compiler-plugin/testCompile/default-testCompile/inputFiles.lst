@@ -1,10 +1,4 @@
-D:\repos\Knox16_G\src\test\java\searchengine\query\QueryBuilderTest.java
-D:\repos\Knox16_G\src\test\java\searchengine\tokenizer\TokenizerTest.java
-D:\repos\Knox16_G\src\test\java\searchengine\restcontrollers\SearchControllerTest.java
-D:\repos\Knox16_G\src\test\java\searchengine\restcontrollers\SearchTest.java
-D:\repos\Knox16_G\src\test\java\searchengine\tokenizer\TokenTest.java
-D:\repos\Knox16_G\src\test\java\searchengine\tokenizer\TokenTypeTest.java
-D:\repos\Knox16_G\src\test\java\searchengine\vsm\DocumentTest.java
-D:\repos\Knox16_G\src\test\java\searchengine\vsm\VectorSpaceModelTest.java
-D:\repos\Knox16_G\src\test\java\searchengine\ApplicationTests.java
-D:\repos\Knox16_G\src\test\java\searchengine\query\QueryTest.java
+C:\Users\freja\Desktop\Knox16_G\src\test\java\searchengine\restcontrollers\SearchControllerTest.java
+C:\Users\freja\Desktop\Knox16_G\src\test\java\searchengine\vsm\VectorSpaceModelTest.java
+C:\Users\freja\Desktop\Knox16_G\src\test\java\searchengine\booleanretrieval\DataSelectionTest.java
+C:\Users\freja\Desktop\Knox16_G\src\test\java\searchengine\ApplicationTests.java
