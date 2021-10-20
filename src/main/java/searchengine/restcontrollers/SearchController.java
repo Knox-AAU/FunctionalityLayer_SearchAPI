@@ -16,7 +16,7 @@ public class SearchController {
      * @param sources The list of sources received from the POST request
      * @return a ResponseEntity containing a new instance of search. (Will be converted to JSON with each property as a key by Spring).
      */
-  @PostMapping(path = "/search")
+  @GetMapping(path = "/search")
   public ResponseEntity postSearch ( @RequestParam(name = "input") String input, @RequestParam(name = "sources", required = false) List<String> sources) throws IOException, JSONException, SQLException, ClassNotFoundException {
     if (input.isBlank()/*TODO INSERT NULL CHECK ON SOURCES*/) {return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);};
     return ResponseEntity.status(HttpStatus.OK).body(new Search(input, sources, new SqlConnection()));
