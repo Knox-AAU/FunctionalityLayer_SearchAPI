@@ -1,5 +1,7 @@
 package searchengine.http;
 
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.HashMap;
@@ -7,7 +9,7 @@ import java.util.HashMap;
 public interface IHTTPRequest {
     IHTTPResponse Commit() throws IOException;
     String GetMethod();
-    void SetMethod(String method) throws IOException;
+    void SetMethod(String method) throws HttpRequestMethodNotSupportedException;
     String GetUrl();
     void SetUrl(String url);
     HashMap<String, String> GetQueryParameters();

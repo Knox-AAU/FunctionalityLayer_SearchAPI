@@ -33,7 +33,6 @@ public class Search {
   public Search(String input, List<String> sources, ISqlConnection connection)
   {
     input = new Lemmatizer().Lemmatize(input, "da");//TODO compute language
-    System.out.println(input);
     List<TFIDFDocument> documents = new DataSelection(connection).retrieveDocuments(input, sources);
     result = new VectorSpaceModel(input).getScoredDocuments(documents);
   }

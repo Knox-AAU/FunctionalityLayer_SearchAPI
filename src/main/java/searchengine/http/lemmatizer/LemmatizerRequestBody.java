@@ -1,4 +1,4 @@
-package searchengine.http;
+package searchengine.http.lemmatizer;
 
 public class LemmatizerRequestBody {
     public LemmatizerRequestBody(String string, String language){

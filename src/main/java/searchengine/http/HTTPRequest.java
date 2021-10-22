@@ -1,5 +1,7 @@
 package searchengine.http;
 
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +11,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 
-/** Currently always sends and accepts json data */
+/**
+ * Class for simplifying sending HTTP requests
+ * Currently always sends and accepts json data
+ */
 public class HTTPRequest implements IHTTPRequest{
     public HTTPRequest(String url){
         SetUrl(url);
@@ -24,28 +29,26 @@ public class HTTPRequest implements IHTTPRequest{
     private HashMap<String, String> QueryParameters;
     private String Body;
 
+    /**
+     * Sends the request and returns the response
+     * @return IHTTPResponse from request
+     */
     @Override
     public IHTTPResponse Commit() {
-        HttpURLConnection http;
         try {
-            String queryParameters = "";//TODO Actual params
+            String queryParameters = "";//TODO url_encode parameters
             URL url = new URL(GetUrl() + queryParameters);
-            http = (HttpURLConnection) url.openConnection();
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(GetMethod());
             http.setRequestProperty("Accept", "application/json");
             http.setRequestProperty("Content-Type", "application/json");
 
+            //Write request body
             http.setDoOutput(true);
             http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));
 
-            StringBuilder content = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(http.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line);
-                    content.append(System.lineSeparator());
-                }
-            }
+            String response = ReadResponse(http);
+
             return new IHTTPResponse() {
                 @Override
                 public int GetStatus() {
@@ -59,7 +62,7 @@ public class HTTPRequest implements IHTTPRequest{
 
                 @Override
                 public String GetContent() {
-                    return content.toString();
+                    return response;
                 }
             };
         }
@@ -84,20 +87,42 @@ public class HTTPRequest implements IHTTPRequest{
         }
     }
 
+    /**
+     * Reads the response of the request and returns it
+     * @param http
+     * @return response from http request
+     * @throws IOException
+     */
+    private String ReadResponse(HttpURLConnection http) throws IOException {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(http.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+                content.append(System.lineSeparator());
+            }
+        }
+        return content.toString();
+    }
+
     @Override
     public String GetMethod() {
         return Method;
     }
 
+    /**
+     * @param method must be GET or POST (case insensitive)
+     * @throws HttpRequestMethodNotSupportedException
+     */
     @Override
-    public void SetMethod(String method) throws IOException {
+    public void SetMethod(String method) throws HttpRequestMethodNotSupportedException {
         method = method.toUpperCase(Locale.ROOT);
         switch (method){
             case "GET":
             case "POST":
                 Method = method; break;
             default:
-                throw new IOException(method + " is not a supported method.");
+                throw new HttpRequestMethodNotSupportedException(method + " is not a supported method.");
         }
     }
 
