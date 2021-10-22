@@ -34,7 +34,7 @@ fabric.properties
 *.nar
 *.ear
 
-.env
+src/main/resources/.env
 *.zip
 *.tar.gz
 *.rar
@@ -43,5 +43,3 @@ fabric.properties
 hs_err_pid*
 
 *.iml
-
-.env
