@@ -1,23 +1,32 @@
 package searchengine;
 
-import searchengine.http.HTTPGetRequest;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.apache.http.protocol.HTTP;
+import searchengine.http.HTTPRequest;
+import searchengine.http.IHTTPRequest;
 import searchengine.http.IHTTPResponse;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class Lemmatizer implements ILemmatizer {
     @Override
     public String Lemmatize(String input, String language)
     {
-        String url = "https://master01.srv.aau.dk/lemmatizer/";
-        HashMap<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("language", language);
-        queryParameters.put("text", input);
+        Dotenv dotenv = Dotenv.load();
+        String url = dotenv.get("LEMMATIZER_URL");
 
-        IHTTPResponse response = new HTTPGetRequest(url, queryParameters).Commit();
-        if (response.GetSuccess()) {
-            return response.GetContent();
+        try {
+            IHTTPRequest httpRequest = new HTTPRequest(url);
+            httpRequest.SetMethod("POST");
+            httpRequest.SetBody("{'string':'jeg er en test', 'language':'da'}");
+            IHTTPResponse response = httpRequest.Commit();
+            if (response.GetSuccess()) {
+                return response.GetContent();
+            }
+        }
+        catch(Exception exception){
+            System.err.println(exception.getMessage());
+            return input;
         }
         //TODO possibly log failed requests
         return input;//Return raw input if not succesful lemmatization

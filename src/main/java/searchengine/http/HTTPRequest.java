@@ -4,34 +4,41 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Locale;
 
-public class HTTPGetRequest implements IHTTPRequest{
-    public HTTPGetRequest(String url){
-        Method = "GET";
+/** Currently always sends and accepts json data */
+public class HTTPRequest implements IHTTPRequest{
+    public HTTPRequest(String url){
         SetUrl(url);
     }
-    public HTTPGetRequest(String url, HashMap<String, String> queryParameters){
+    public HTTPRequest(String url, HashMap<String, String> queryParameters){
         this(url);
         SetQueryParameters(queryParameters);
     }
 
-    private String Method;
+    private String Method = "GET";
     private String Url;
     private HashMap<String, String> QueryParameters;
+    private String Body;
 
     @Override
     public IHTTPResponse Commit() {
-        HttpURLConnection connection;
+        HttpURLConnection http;
         try {
-            URL url = new URL(GetUrl());
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod(GetMethod());
+            String queryParameters = "";//TODO Actual params
+            URL url = new URL(GetUrl() + queryParameters);
+            http = (HttpURLConnection) url.openConnection();
+            http.setRequestMethod(GetMethod());
+            http.setRequestProperty("Accept", "application/json");
+            http.setRequestProperty("Content-Type", "application/json");
+
+            http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));
+
             StringBuilder content = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(http.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     content.append(line);
@@ -82,6 +89,18 @@ public class HTTPGetRequest implements IHTTPRequest{
     }
 
     @Override
+    public void SetMethod(String method) throws IOException {
+        method = method.toUpperCase(Locale.ROOT);
+        switch (method){
+            case "GET":
+            case "POST":
+                Method = method;
+            default:
+                throw new IOException(method + "is not a supported method.");
+        }
+    }
+
+    @Override
     public String GetUrl() {
         return Url;
     }
@@ -104,5 +123,10 @@ public class HTTPGetRequest implements IHTTPRequest{
     @Override
     public void AddQueryParameter(String parameter, String value) {
         QueryParameters.put(parameter, value);
+    }
+
+    @Override
+    public void SetBody(String body) {
+        Body = body;
     }
 }
