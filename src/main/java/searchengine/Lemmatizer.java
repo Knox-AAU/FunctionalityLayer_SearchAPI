@@ -1,12 +1,8 @@
 package searchengine;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.apache.http.protocol.HTTP;
-import searchengine.http.HTTPRequest;
-import searchengine.http.IHTTPRequest;
-import searchengine.http.IHTTPResponse;
-
-import java.util.HashMap;
+import searchengine.http.*;
 
 public class Lemmatizer implements ILemmatizer {
     @Override
@@ -18,17 +14,19 @@ public class Lemmatizer implements ILemmatizer {
         try {
             IHTTPRequest httpRequest = new HTTPRequest(url);
             httpRequest.SetMethod("POST");
-            httpRequest.SetBody("{'string':'jeg er en test', 'language':'da'}");
+            String body = (new ObjectMapper()).writeValueAsString(new LemmatizerRequestBody(input, language));
+            httpRequest.SetBody(body);
             IHTTPResponse response = httpRequest.Commit();
             if (response.GetSuccess()) {
-                return response.GetContent();
+                LemmatizerResponse lemmatizerResponse = (new ObjectMapper()).readValue(response.GetContent(), LemmatizerResponse.class);
+                return lemmatizerResponse.lemmatized_string;
             }
         }
         catch(Exception exception){
             System.err.println(exception.getMessage());
             return input;
         }
-        //TODO possibly log failed requests
+        System.err.println("Lemmatizer request was not successful.");
         return input;//Return raw input if not succesful lemmatization
     }
 }

@@ -35,6 +35,7 @@ public class HTTPRequest implements IHTTPRequest{
             http.setRequestProperty("Accept", "application/json");
             http.setRequestProperty("Content-Type", "application/json");
 
+            http.setDoOutput(true);
             http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));
 
             StringBuilder content = new StringBuilder();
@@ -94,9 +95,9 @@ public class HTTPRequest implements IHTTPRequest{
         switch (method){
             case "GET":
             case "POST":
-                Method = method;
+                Method = method; break;
             default:
-                throw new IOException(method + "is not a supported method.");
+                throw new IOException(method + " is not a supported method.");
         }
     }
 
