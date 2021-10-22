@@ -22,10 +22,10 @@ public class TFIDFDocument extends Document {
 
   /** Constructor
    * @param title String containing the document title.
-   * @param filepath Filepath to the storage location.
+   * @param id ID for the file.
    */
-  public TFIDFDocument(String title, String filepath) {
-    super(title, filepath);
+  public TFIDFDocument(String title, int id) {
+    super(title, id);
     TFIDF = new HashMap<>();
     TF = new HashMap<>();
   }

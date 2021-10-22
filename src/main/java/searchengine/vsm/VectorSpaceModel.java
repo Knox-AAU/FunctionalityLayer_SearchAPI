@@ -50,7 +50,7 @@ public class VectorSpaceModel {
 
     for (TFIDFDocument doc : documents) {
       double score = cosineSimilarityScore(doc);
-      scoredDocuments.add(new ScoredDocument(doc.getTitle(), score, doc.getFilepath()));
+      scoredDocuments.add(new ScoredDocument(doc.getTitle(), score, doc.getId()));
     }
 
     scoredDocuments.sort(Collections.reverseOrder());

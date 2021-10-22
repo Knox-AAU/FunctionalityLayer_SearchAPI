@@ -24,25 +24,25 @@ class VectorSpaceModelTest {
         TFIDFDocuments = new ArrayList<>();
         scoredDocuments = new ArrayList<>();
 
-        doc1 = new TFIDFDocument("test1", "/test/test1");
+        doc1 = new TFIDFDocument("test1", 1);
         doc1.getTF().put("china", 1);
         doc1.getTF().put("bigger", 1);
         doc1.getTF().put("germany", 1);
         TFIDFDocuments.add(doc1);
 
-        doc2 = new TFIDFDocument("test2", "/test/test2");
+        doc2 = new TFIDFDocument("test2", 2);
         doc2.getTF().put("russia", 1);
         doc2.getTF().put("bigger", 1);
         doc2.getTF().put("denmark", 1);
         TFIDFDocuments.add(doc2);
 
-        doc3 = new TFIDFDocument("test3", "/test/test3");
+        doc3 = new TFIDFDocument("test3", 3);
         doc3.getTF().put("russia", 1);
         doc3.getTF().put("bigger", 1);
         doc3.getTF().put("monaco", 1);
         TFIDFDocuments.add(doc3);
 
-        doc4 = new TFIDFDocument("test4", "/test/test4");
+        doc4 = new TFIDFDocument("test4", 4);
         doc4.getTF().put("monaco", 1);
         doc4.getTF().put("smaller", 1);
         doc4.getTF().put("germany", 1);
@@ -76,16 +76,16 @@ class VectorSpaceModelTest {
     }
 
     @Test
-    void assertFilePath() {
+    void assertId() {
         // arrange
         vsm = new VectorSpaceModel("is denmark smaller than russia");
         // act
         scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert filepath
-        assertEquals("/test/test2", scoredDocuments.get(0).getFilepath());
-        assertEquals("/test/test3", scoredDocuments.get(1).getFilepath());
-        assertEquals("/test/test4", scoredDocuments.get(2).getFilepath());
-        assertEquals("/test/test1", scoredDocuments.get(3).getFilepath());
+        assertEquals(2, scoredDocuments.get(0).getId());
+        assertEquals(3, scoredDocuments.get(1).getId());
+        assertEquals(4, scoredDocuments.get(2).getId());
+        assertEquals(1, scoredDocuments.get(3).getId());
     }
 
     @Test
