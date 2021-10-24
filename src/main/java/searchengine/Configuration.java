@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Configuration {
-    private static String get(String key) {
+    public String get(String key) {
         return Dotenv.configure().directory(System.getProperty("user.dir")).load().get(key);
     }
 
@@ -18,8 +18,4 @@ public class Configuration {
             throw new FileNotFoundException(".env file not found at: " + expectedPath);
         };
     }
-
-    public String DB_CONNECTION_URL = get("DB_CONNECTION_URL");
-    public String DB_CONNECTION_USERNAME = get("DB_CONNECTION_USERNAME");
-    public String DB_CONNECTION_PASSWORD = get("DB_CONNECTION_PASSWORD");
 }

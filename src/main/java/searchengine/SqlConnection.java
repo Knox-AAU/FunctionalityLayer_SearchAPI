@@ -24,9 +24,9 @@ public class SqlConnection implements ISqlConnection {
         // For more info: https://jdbc.postgresql.org/documentation/81/load.html
         Class.forName("org.postgresql.Driver");
         return DriverManager.getConnection(
-                Application.configuration.DB_CONNECTION_URL,
-                Application.configuration.DB_CONNECTION_USERNAME,
-                Application.configuration.DB_CONNECTION_PASSWORD);
+                Application.configuration.get("DB_CONNECTION_URL"),
+                Application.configuration.get("DB_CONNECTION_USERNAME"),
+                Application.configuration.get("DB_CONNECTION_PASSWORD"));
     }
 
     /** Returns the java.sql.Connection.createStatement() on the wrapped class
