@@ -17,6 +17,7 @@ import java.util.Locale;
  */
 public class HTTPRequest implements IHTTPRequest{
     public HTTPRequest(String url){
+        Method = "POST";
         SetUrl(url);
     }
     public HTTPRequest(String url, HashMap<String, String> queryParameters){
@@ -24,7 +25,7 @@ public class HTTPRequest implements IHTTPRequest{
         SetQueryParameters(queryParameters);
     }
 
-    private String Method = "GET";
+    private String Method;
     private String Url;
     private HashMap<String, String> QueryParameters;
     private String Body;
@@ -34,7 +35,7 @@ public class HTTPRequest implements IHTTPRequest{
      * @return IHTTPResponse from request
      */
     @Override
-    public IHTTPResponse Commit() {
+    public IHTTPResponse Send() {
         try {
             String queryParameters = "";//TODO url_encode parameters
             URL url = new URL(GetUrl() + queryParameters);
@@ -44,8 +45,8 @@ public class HTTPRequest implements IHTTPRequest{
             http.setRequestProperty("Content-Type", "application/json");
 
             //Write request body
-            http.setDoOutput(true);
-            http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));
+            http.setDoOutput(true);//Required for getting the output stream
+            http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));//Writes the body to the output stream as UTF-8 encoded bytes
 
             String response = ReadResponse(http);
 
@@ -118,7 +119,6 @@ public class HTTPRequest implements IHTTPRequest{
     public void SetMethod(String method) throws HttpRequestMethodNotSupportedException {
         method = method.toUpperCase(Locale.ROOT);
         switch (method){
-            case "GET":
             case "POST":
                 Method = method; break;
             default:

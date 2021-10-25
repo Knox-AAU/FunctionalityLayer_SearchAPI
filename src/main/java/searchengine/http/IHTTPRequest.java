@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public interface IHTTPRequest {
-    IHTTPResponse Commit() throws IOException;
+    IHTTPResponse Send() throws IOException;
     String GetMethod();
     void SetMethod(String method) throws HttpRequestMethodNotSupportedException;
     String GetUrl();
