@@ -81,7 +81,7 @@ public class HTTPRequest implements IHTTPRequest{
 
                 @Override
                 public String GetContent() {
-                    return "Whoops, something went wrong.";
+                    return "Internal server error";
                 }
             };
         }
