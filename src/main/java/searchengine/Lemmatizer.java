@@ -53,8 +53,8 @@ public class Lemmatizer implements ILemmatizer {
         //JSON encode the input using object mapping from the LemmatizerRequestBody object
         //The JSON is in the format
         // {
-        //   'string': '<input>',
-        //   'language': '<language>'
+        //   "string": "<input>",
+        //   "language": "<language>"
         // }
         return (new ObjectMapper()).writeValueAsString(new LemmatizerRequestBody(input, language));
     }
@@ -69,7 +69,7 @@ public class Lemmatizer implements ILemmatizer {
         //JSON decode the input using object mapping from the LemmatizerResponse class
         //The JSON response is in the format
         // {
-        //   'lemmatized_string': ...
+        //   "lemmatized_string": ...
         // }
         return (new ObjectMapper()).readValue(json, LemmatizerResponse.class).lemmatized_string;
     }
