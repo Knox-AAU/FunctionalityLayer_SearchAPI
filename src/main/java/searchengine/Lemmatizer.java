@@ -56,8 +56,8 @@ public class Lemmatizer implements ILemmatizer {
         //   "string": "<input>",
         //   "language": "<language>"
         // }
-       ObjectMapper JSONifier = new ObjectMapper()
-       LemmatizerRequestBody lemmatizerInput = new LemmatizerRequestBody(input, language)
+       ObjectMapper JSONifier = new ObjectMapper();
+       LemmatizerRequestBody lemmatizerInput = new LemmatizerRequestBody(input, language);
         return JSONifier.writeValueAsString(lemmatizerInput); // Stringifies input in JSON format
     }
 
