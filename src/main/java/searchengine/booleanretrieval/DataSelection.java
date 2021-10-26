@@ -4,7 +4,14 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import searchengine.ISqlConnection;
+import searchengine.http.HTTPRequest;
+import searchengine.http.IHTTPRequest;
+import searchengine.http.IHTTPResponse;
+import searchengine.http.database.WordRatioResponseElement;
 import searchengine.vsm.TFIDFDocument;
 
 /**
@@ -12,12 +19,6 @@ import searchengine.vsm.TFIDFDocument;
  * Is used for retrieving document names.
  */
 public class DataSelection {
-
-  public DataSelection(ISqlConnection connection) {
-    this.connection = connection;
-  }
-
-  private ISqlConnection connection;
 
   /**
      * Searches the wordcount database for documents containing the terms from the input string.
@@ -29,9 +30,24 @@ public class DataSelection {
     List<TFIDFDocument> documents = new ArrayList<>();
 
     try {
-      Statement stmt = connection.createStatement();
-      ResultSet rs = stmt.executeQuery(buildQuery(input, sources));
+      IHTTPRequest http = new HTTPRequest("wordratio/");
+      http.SetMethod("GET");
+      http.AddQueryParameter("terms", input.split(" "));
+      http.AddQueryParameter("sources", (String[])sources.toArray());
 
+      IHTTPResponse httpResponse = http.Send();
+      if(!httpResponse.GetSuccess()){
+        throw new Exception("Internal server error (retrieving documents failed)");
+      }
+      //TODO refactor/cleanup this so it is more readable
+      ObjectMapper objMapper = new ObjectMapper();
+      TypeFactory typeFactory = objMapper.getTypeFactory();
+      var valueType = typeFactory.constructCollectionType(List.class, WordRatioResponseElement.class);
+      List<WordRatioResponseElement> responseElements =  objMapper.readValue(httpResponse.GetContent(), valueType);
+
+      for(WordRatioResponseElement wordRatio : responseElements){
+        //TODO refactor while loop code here
+      }
       String tempTitle = "";
       int i = 0;
 
@@ -48,10 +64,6 @@ public class DataSelection {
         documents.get(i - 1).getTF().put(wordname, amount);
         tempTitle = title;
       }
-
-      rs.close();
-      stmt.close();
-      connection.close();
 
     } catch (Exception e) {
       e.printStackTrace();

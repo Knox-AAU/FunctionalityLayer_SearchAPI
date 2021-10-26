@@ -1,15 +1,19 @@
 package searchengine.http;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.util.UriBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Class for simplifying sending HTTP requests
@@ -17,17 +21,18 @@ import java.util.Locale;
  */
 public class HTTPRequest implements IHTTPRequest{
     public HTTPRequest(String url){
-        Method = "POST";
+        Method = "GET";
         SetUrl(url);
+        QueryParameters = new HashMap<String, String[]>();
     }
-    public HTTPRequest(String url, HashMap<String, String> queryParameters){
+    public HTTPRequest(String url, HashMap<String, String[]> queryParameters){
         this(url);
         SetQueryParameters(queryParameters);
     }
 
     private String Method;
     private String Url;
-    private HashMap<String, String> QueryParameters;
+    private HashMap<String, String[]> QueryParameters;
     private String Body;
 
     /**
@@ -37,16 +42,22 @@ public class HTTPRequest implements IHTTPRequest{
     @Override
     public IHTTPResponse Send() {
         try {
-            String queryParameters = "";//TODO url_encode parameters
-            URL url = new URL(GetUrl() + queryParameters);
+            URIBuilder uriBuilder = new URIBuilder(GetUrl());
+            UrlEncodeQueryParameters(uriBuilder, GetQueryParameters());
+            URL url = new URL(uriBuilder.toString());
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(GetMethod());
             http.setRequestProperty("Accept", "application/json");
             http.setRequestProperty("Content-Type", "application/json");
 
-            //Write request body
-            http.setDoOutput(true);//Required for getting the output stream
-            http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));//Writes the body to the output stream as UTF-8 encoded bytes
+            if(RequestCanContainBody()) {
+                //Write request body
+                http.setDoOutput(true);//Required for getting the output stream
+                http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));//Writes the body to the output stream as UTF-8 encoded bytes
+            }
+            else if(!Body.isEmpty()){
+                 throw new Exception(GetMethod() + " does not support a request body, but the request body was set");
+            }
 
             String response = ReadResponse(http);
 
@@ -137,22 +148,46 @@ public class HTTPRequest implements IHTTPRequest{
     }
 
     @Override
-    public HashMap<String, String> GetQueryParameters() {
+    public HashMap<String, String[]> GetQueryParameters() {
         return QueryParameters;
     }
 
     @Override
-    public void SetQueryParameters(HashMap<String, String> queryParameters) {
+    public void SetQueryParameters(HashMap<String, String[]> queryParameters) {
         QueryParameters = queryParameters;
     }
 
     @Override
-    public void AddQueryParameter(String parameter, String value) {
-        QueryParameters.put(parameter, value);
+    public void AddQueryParameter(String parameter, String[] values) {
+        QueryParameters.put(parameter, values);
     }
 
     @Override
-    public void SetBody(String body) {
-        Body = body;
+    public void SetBody(String body) { Body = body; }
+
+    /**
+     * If HTTP requests of the current HTTP request method can contain a body.
+     * @return true|false true if the request can contain a body
+     */
+    private boolean RequestCanContainBody(){
+        switch (GetMethod()){
+            case "POST":
+                return true;
+        }
+        return false;
+    }
+
+    //TODO javadoc og kontroller at uribuilder kan tage arrays og lister og format korrekt
+    private void UrlEncodeQueryParameters(URIBuilder uriBuilder, HashMap<String, String[]> queryParameters) {
+        //Return empty string if no query parameters
+        if (queryParameters.isEmpty()){ return; }
+
+        Set<String> keySet = queryParameters.keySet();
+        for(String key : keySet){
+            String[] values = queryParameters.get(key);
+            for(String value : values) {
+                uriBuilder.addParameter(key, value);
+            }
+        }
     }
 }
