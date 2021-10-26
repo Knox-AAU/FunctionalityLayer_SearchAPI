@@ -112,7 +112,7 @@ public class HTTPRequest implements IHTTPRequest{
     }
 
     /**
-     * @param method must be GET or POST (case insensitive)
+     * @param method must be POST (case insensitive)
      * @throws HttpRequestMethodNotSupportedException
      */
     @Override
