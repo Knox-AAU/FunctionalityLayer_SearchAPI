@@ -12,14 +12,14 @@ import searchengine.http.lemmatizer.LemmatizerResponse;
  */
 public class Lemmatizer implements ILemmatizer {
     /**
-     * Lemmatizes the input based on lemmatization rules for the given language.
+     * Lemmatizes the input sentence based on lemmatization rules for the given language.
      * Uses the lemmatizer API
-     * @param input
+     * @param inputSentence
      * @param language
      * @return Lemmatized input string | input if errors
      */
     @Override
-    public String Lemmatize(String input, String language)
+    public String Lemmatize(String inputSentence, String language)
     {
         Dotenv dotenv = Dotenv.load();
         String url = dotenv.get("LEMMATIZER_URL");
@@ -27,7 +27,7 @@ public class Lemmatizer implements ILemmatizer {
         try {
             IHTTPRequest httpRequest = new HTTPRequest(url);
             httpRequest.SetMethod("POST");
-            String body = JsonEncodeInputForLemmatizeRequest(input, language);
+            String body = JsonEncodeInputForLemmatizeRequest(inputSentence, language);
             httpRequest.SetBody(body);
             IHTTPResponse response = httpRequest.Send();
             if (response.GetSuccess()) {
@@ -36,10 +36,10 @@ public class Lemmatizer implements ILemmatizer {
         }
         catch(Exception exception){
             System.err.println(exception.getMessage());
-            return input;//Return raw input if not succesful lemmatization
+            return inputSentence;//Return raw input if not succesful lemmatization
         }
         System.err.println("Lemmatizer request was not successful.");
-        return input;//Return raw input if not succesful lemmatization
+        return inputSentence;//Return raw input if not succesful lemmatization
     }
 
     /**
