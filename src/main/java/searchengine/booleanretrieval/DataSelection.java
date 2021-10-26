@@ -45,11 +45,15 @@ public class DataSelection {
       var valueType = typeFactory.constructCollectionType(List.class, WordRatioResponseElement.class);
       List<WordRatioResponseElement> responseElements =  objMapper.readValue(httpResponse.GetContent(), valueType);
 
+      TFIDFDocument currentDocument;
+      String currentTitle = "";
       for(WordRatioResponseElement wordRatio : responseElements){
         //TODO refactor while loop code here
+        //...
+        if(!currentTitle.equals(title)){
+          currentDocument = new TFIDFDocument(title, fid);
+        }
       }
-      String tempTitle = "";
-      int i = 0;
 
       while (rs.next()) {
         String wordname = rs.getString("wordname");
