@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import searchengine.ISqlConnection;
+import searchengine.Lemmatizer;
 import searchengine.booleanretrieval.DataSelection;
 import searchengine.vsm.ScoredDocument;
 import searchengine.vsm.TFIDFDocument;
@@ -29,8 +30,9 @@ public class Search {
    *             The result list is stored in result
    * @param sources The list of sources to be searched
    */
-  public Search(String input, List<String> sources, ISqlConnection connection) {
-    //input = lemmatize(input);
+  public Search(String input, List<String> sources, ISqlConnection connection)
+  {
+    input = new Lemmatizer().Lemmatize(input, "da");//TODO compute language
     List<TFIDFDocument> documents = new DataSelection(connection).retrieveDocuments(input, sources);
     result = new VectorSpaceModel(input).getScoredDocuments(documents);
   }
