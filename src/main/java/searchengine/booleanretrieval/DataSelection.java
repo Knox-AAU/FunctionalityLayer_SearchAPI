@@ -1,13 +1,15 @@
 package searchengine.booleanretrieval;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import searchengine.ISqlConnection;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.apache.http.HttpException;
+import org.jetbrains.annotations.NotNull;
 import searchengine.http.HTTPRequest;
 import searchengine.http.IHTTPRequest;
 import searchengine.http.IHTTPResponse;
@@ -30,81 +32,87 @@ public class DataSelection {
     List<TFIDFDocument> documents = new ArrayList<>();
 
     try {
-      IHTTPRequest http = new HTTPRequest("wordratio/");
-      http.SetMethod("GET");
-      http.AddQueryParameter("terms", input.split(" "));
-      http.AddQueryParameter("sources", (String[])sources.toArray());
+      IHTTPResponse httpResponse = getHttpResponse(input, sources);
+      List<WordRatioResponseElement> responseElements = JSONDecodeDataResponse(httpResponse);
 
-      IHTTPResponse httpResponse = http.Send();
-      if(!httpResponse.GetSuccess()){
-        throw new Exception("Internal server error (retrieving documents failed)");
-      }
-      //TODO refactor/cleanup this so it is more readable
-      ObjectMapper objMapper = new ObjectMapper();
-      TypeFactory typeFactory = objMapper.getTypeFactory();
-      var valueType = typeFactory.constructCollectionType(List.class, WordRatioResponseElement.class);
-      List<WordRatioResponseElement> responseElements =  objMapper.readValue(httpResponse.GetContent(), valueType);
-
-      TFIDFDocument currentDocument;
-      String currentTitle = "";
-      for(WordRatioResponseElement wordRatio : responseElements){
-        //TODO refactor while loop code here
-        //...
-        if(!currentTitle.equals(title)){
-          currentDocument = new TFIDFDocument(title, fid);
-        }
-      }
-
-      while (rs.next()) {
-        String wordname = rs.getString("wordname");
-        int amount = rs.getInt("amount");
-        String title = rs.getString("articletitle");
-        int fid = rs.getInt("fid");
-
-        if (!tempTitle.equals(title)) {
-          i++;
-          documents.add(new TFIDFDocument(title, fid));
-        }
-        documents.get(i - 1).getTF().put(wordname, amount);
-        tempTitle = title;
-      }
-
+      documents = CreateTFIDFDocumentsFromResponseElements(responseElements);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
     return documents;
   }
-  /*
-   * SubFunction in retrieveDocuments. Generates an SQL query that searches for the terms from the input string in the wordcount database.
-   * @param input: The input string should be split with space between terms.
-   * @param sources: a String array of the selected sources (databases) to search in.
-   * @return the SQL query
+
+  /**
+   * Build HTTP request, send it to the database API and return the response.
+   * @param input the terms that should be sent to the database api
+   * @param sources the different sources that should be sent to the database api
+   * @return The result af a HTTP call to the database api
+   * @throws HttpException when the HTTP request is not successful
    */
+  @NotNull
+  private IHTTPResponse getHttpResponse(String input, List<String> sources) throws Exception {
+    Dotenv dotenv = Dotenv.load();
+    IHTTPRequest http = new HTTPRequest(dotenv.get(("DATABASE_API_URL")));
+    http.SetMethod("GET");
+    http.AddQueryParameter("terms", input.split(" "));
+    http.AddQueryParameter("sources", sources.toArray(new String[0]));
 
-  private String buildQuery(String input, List<String> sources) { //TODO: Check if UI API returns string array
-    StringBuilder query = new StringBuilder();
-    query.append("SELECT DISTINCT wordname, amount, articletitle, fid "); //Distinct: Only select unique values
-    query.append("FROM wordratios ");
-    query.append("WHERE articletitle ");
-    query.append("IN ( SELECT articletitle ");
-    query.append("FROM wordratios WHERE ");
-    String[] terms = input.split("\\s+"); //Split on all whitespace
+    IHTTPResponse httpResponse = http.Send();
+    if(!httpResponse.GetSuccess()){
+      throw new HttpException("Internal server error (retrieving documents failed)");
+    }
+    return httpResponse;
+  }
 
-    for (int i = 0; i < terms.length; i++) { //Append terms to query
-      if (i < terms.length - 1) {
-        query.append(String.format("wordname='%s' OR ", terms[i]));
-      } else {
-        query.append(String.format("wordname='%s' ", terms[i]));
+  /**
+   * The responseElements are translated into a list of TF-IDF documents by iterating over the responseElements,
+   * adding unique documents to the list and for each word in the documents, calculating their TF value in the document
+   * @param responseElements the list of responseElements that should be translated into TF-IDF documents
+   * @return a list of TF-IDF documents
+   */
+  private List<TFIDFDocument> CreateTFIDFDocumentsFromResponseElements(List<WordRatioResponseElement> responseElements) {
+    List<TFIDFDocument> documents = new ArrayList<>();
+    String tempTitle = "";
+    int i = 0;
+
+    // The response elements must be sorted using their article title, since the following calculations depend on identical
+    // titles following directly after each other.
+    responseElements.sort(Comparator.comparing(WordRatioResponseElement::getArticleTitle));
+
+    // Go through all words (sorted by what article they appear in) and make a TF-IDF document for each new article.
+    for(WordRatioResponseElement element : responseElements) {
+      String wordName = element.getWordName();
+      int amount = element.getAmount();
+      String title = element.getArticleTitle();
+
+      if (!tempTitle.equals(title)) {
+        i++;
+        int fid = element.getFid(); // File ID
+        documents.add(new TFIDFDocument(title, fid));
       }
+
+      // Store the TF value of the word in the TF-IDF document
+      documents.get(i - 1).getTF().put(wordName, amount);
+      tempTitle = title;
     }
-    query.append(")");
-    if (sources != null && sources.size() > 0) {
-      query.append(" AND (sourcename = '");
-      query.append(String.join("' OR sourcename = '", sources));
-      query.append("') ");
-    }
-    query.append("ORDER BY articletitle;"); //Required as the function retrievedocuments(...) requires the list of articles to be ordered.
-    return query.toString();
+    return documents;
+  }
+
+  /**
+   * This function decodes from a HTTP response in Json format into WordRatioResponseElement objects
+   * @param httpResponse the response to be decoded
+   * @return a list of WordRatioResponseElement objects
+   * @throws com.fasterxml.jackson.core.JsonProcessingException if the JSON is not legal
+   */
+  private List<WordRatioResponseElement> JSONDecodeDataResponse(IHTTPResponse httpResponse) throws com.fasterxml.jackson.core.JsonProcessingException {
+    ObjectMapper objMapper = new ObjectMapper();
+    TypeFactory typeFactory = objMapper.getTypeFactory();
+
+    //Define that the JSON should be read into a List (List.class) of WordRatioResponseElement objects (WordRatioResponseElement.class)
+    CollectionType valueType = typeFactory.constructCollectionType(List.class, WordRatioResponseElement.class);
+
+    // Map the JSON to the value type
+    return objMapper.readValue(httpResponse.GetContent(), valueType);
   }
 }

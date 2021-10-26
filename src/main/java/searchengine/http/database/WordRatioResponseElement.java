@@ -1,5 +1,10 @@
 package searchengine.http.database;
 
+import lombok.Data;
+import lombok.Getter;
+
+@Data
+@Getter
 public class WordRatioResponseElement {
     int id;
     String wordName;
@@ -10,4 +15,5 @@ public class WordRatioResponseElement {
     int sourceId;
     String sourceName;
     float percent;
+    int fid;
 }

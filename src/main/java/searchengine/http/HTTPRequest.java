@@ -2,14 +2,12 @@ package searchengine.http;
 
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.util.UriBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
@@ -21,18 +19,19 @@ import java.util.Set;
  */
 public class HTTPRequest implements IHTTPRequest{
     public HTTPRequest(String url){
-        Method = "GET";
+        method = "GET";
         SetUrl(url);
-        QueryParameters = new HashMap<String, String[]>();
+        queryParameters = new HashMap<>();
     }
+
     public HTTPRequest(String url, HashMap<String, String[]> queryParameters){
         this(url);
         SetQueryParameters(queryParameters);
     }
 
-    private String Method;
-    private String Url;
-    private HashMap<String, String[]> QueryParameters;
+    private String method;
+    private String url;
+    private HashMap<String, String[]> queryParameters;
     private String Body;
 
     /**
@@ -42,20 +41,22 @@ public class HTTPRequest implements IHTTPRequest{
     @Override
     public IHTTPResponse Send() {
         try {
-            URIBuilder uriBuilder = new URIBuilder(GetUrl());
-            UrlEncodeQueryParameters(uriBuilder, GetQueryParameters());
+            // Set the http connection up with the correct URL, query parameters, method and content-type
+            URIBuilder uriBuilder = new URIBuilder(url); // URI handles encoding of characters like æ, ø, å
+            UrlEncodeQueryParameters(uriBuilder, queryParameters);
             URL url = new URL(uriBuilder.toString());
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            http.setRequestMethod(GetMethod());
-            http.setRequestProperty("Accept", "application/json");
+            http.setRequestMethod(method);
+            http.setRequestProperty("Accept", "application/json"); // Set up to recieve JSON
             http.setRequestProperty("Content-Type", "application/json");
 
+            // If the request is a POST, we need to allow access to the output stream
             if(RequestCanContainBody()) {
                 //Write request body
                 http.setDoOutput(true);//Required for getting the output stream
                 http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));//Writes the body to the output stream as UTF-8 encoded bytes
             }
-            else if(!Body.isEmpty()){
+            else if(Body != null && !Body.isEmpty()){
                  throw new Exception(GetMethod() + " does not support a request body, but the request body was set");
             }
 
@@ -101,7 +102,7 @@ public class HTTPRequest implements IHTTPRequest{
 
     /**
      * Reads the response of the request and returns it
-     * @param http
+     * @param http is a HTTP connection
      * @return response from http request
      * @throws IOException
      */
@@ -119,11 +120,11 @@ public class HTTPRequest implements IHTTPRequest{
 
     @Override
     public String GetMethod() {
-        return Method;
+        return method;
     }
 
     /**
-     * @param method must be POST (case insensitive)
+     * @param method must be POST or GET (case insensitive)
      * @throws HttpRequestMethodNotSupportedException
      */
     @Override
@@ -131,7 +132,8 @@ public class HTTPRequest implements IHTTPRequest{
         method = method.toUpperCase(Locale.ROOT);
         switch (method){
             case "POST":
-                Method = method; break;
+            case "GET":
+                this.method = method; break;
             default:
                 throw new HttpRequestMethodNotSupportedException(method + " is not a supported method.");
         }
@@ -139,27 +141,27 @@ public class HTTPRequest implements IHTTPRequest{
 
     @Override
     public String GetUrl() {
-        return Url;
+        return url;
     }
 
     @Override
     public void SetUrl(String url) {
-        Url = url;
+        this.url = url;
     }
 
     @Override
     public HashMap<String, String[]> GetQueryParameters() {
-        return QueryParameters;
+        return queryParameters;
     }
 
     @Override
     public void SetQueryParameters(HashMap<String, String[]> queryParameters) {
-        QueryParameters = queryParameters;
+        this.queryParameters = queryParameters;
     }
 
     @Override
     public void AddQueryParameter(String parameter, String[] values) {
-        QueryParameters.put(parameter, values);
+        queryParameters.put(parameter, values);
     }
 
     @Override
