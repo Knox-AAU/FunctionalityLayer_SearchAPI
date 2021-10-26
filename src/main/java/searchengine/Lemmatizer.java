@@ -73,6 +73,7 @@ public class Lemmatizer implements ILemmatizer {
         // {
         //   "lemmatized_string": ...
         // }
-        return (new ObjectMapper()).readValue(json, LemmatizerResponse.class).lemmatized_string;
+        ObjectMapper JSONdecoder = new ObjectMapper();
+        return JSONdecoder.readValue(json, LemmatizerResponse.class).lemmatized_string;
     }
 }
