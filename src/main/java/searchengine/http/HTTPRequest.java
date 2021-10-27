@@ -37,7 +37,7 @@ public class HTTPRequest implements IHTTPRequest{
     private String Body;
 
     /**
-     * Sends a http request based on the fields of the HTTPRequest and returns the response.
+     * Sends a http request based on the fields of the HTTPRequest instance and returns the response.
      * @return IHTTPResponse from request
      */
     @Override
