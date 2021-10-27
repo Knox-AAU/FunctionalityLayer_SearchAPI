@@ -1,4 +1,4 @@
-# SEARCH ENGINE / VIRTUAL ASSISTANT
+# SEARCH ENGINE
 This project is a part of the Knox multiproject on AAU, and is located in layer four. The goal is to create functionality within Knox, by making the information queryable through a search engine, and eventually, a virtual assistant.  
 This module receives queries and compares these queries to the documents in the Knox database. It ranks documents and returns the most relevant information to the user. 
 
