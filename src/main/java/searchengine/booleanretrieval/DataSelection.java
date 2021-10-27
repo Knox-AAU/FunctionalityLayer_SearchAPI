@@ -47,13 +47,14 @@ public class DataSelection {
    * Build HTTP request, send it to the database API and return the response.
    * @param input the terms that should be sent to the database api
    * @param sources the different sources that should be sent to the database api
-   * @return The result af a HTTP call to the database api
+   * @return The result af a HTTP request to the database API
    * @throws HttpException when the HTTP request is not successful
    */
   @NotNull
   private IHTTPResponse getHttpResponse(String input, List<String> sources) throws Exception {
     Dotenv dotenv = Dotenv.load();
-    IHTTPRequest http = new HTTPRequest(dotenv.get(("DATABASE_API_URL")));
+    String apiEndpoint = dotenv.get("DATABASE_API_URL");
+    IHTTPRequest http = new HTTPRequest(apiEndPoint);
     http.SetMethod("GET");
     if(input != null) {
       http.AddQueryParameter("terms", input.split(" "));
@@ -76,28 +77,27 @@ public class DataSelection {
    */
   private List<TFIDFDocument> CreateTFIDFDocumentsFromResponseElements(List<WordRatioResponseElement> responseElements) {
     List<TFIDFDocument> documents = new ArrayList<>();
-    String tempTitle = "";
-    int i = 0;
-
     // The response elements must be sorted using their article title, since the following calculations depend on identical
     // titles following directly after each other.
     responseElements.sort(Comparator.comparing(WordRatioResponseElement::getArticleTitle));
 
     // Go through all words (sorted by what article they appear in) and make a TF-IDF document for each new article.
+    TFIDFDocument currentDocument;
+    String currentTitle = "";
     for(WordRatioResponseElement element : responseElements) {
       String wordName = element.getWordName();
       int amount = element.getAmount();
       String title = element.getArticleTitle();
 
-      if (!tempTitle.equals(title)) {
-        i++;
+      if (!currentTitle.equals(title)) {
+        currentTitle = title;
         int fid = element.getFid(); // File ID
-        documents.add(new TFIDFDocument(title, fid));
+        currentDocument = new TFIDFDocument(title, fid);
+        documents.add(currentDocument);
       }
 
       // Store the TF value of the word in the TF-IDF document
-      documents.get(i - 1).getTF().put(wordName, amount);
-      tempTitle = title;
+      currentDocument.getTF().put(wordName, amount);
     }
     return documents;
   }
