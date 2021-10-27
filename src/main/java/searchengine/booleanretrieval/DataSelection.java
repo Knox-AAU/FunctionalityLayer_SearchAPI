@@ -74,28 +74,27 @@ public class DataSelection {
    */
   private List<TFIDFDocument> CreateTFIDFDocumentsFromResponseElements(List<WordRatioResponseElement> responseElements) {
     List<TFIDFDocument> documents = new ArrayList<>();
-    String tempTitle = "";
-    int i = 0;
-
     // The response elements must be sorted using their article title, since the following calculations depend on identical
     // titles following directly after each other.
     responseElements.sort(Comparator.comparing(WordRatioResponseElement::getArticleTitle));
 
     // Go through all words (sorted by what article they appear in) and make a TF-IDF document for each new article.
+    TFIDFDocument currentDocument;
+    String currentTitle = "";
     for(WordRatioResponseElement element : responseElements) {
       String wordName = element.getWordName();
       int amount = element.getAmount();
       String title = element.getArticleTitle();
 
-      if (!tempTitle.equals(title)) {
-        i++;
+      if (!currentTitle.equals(title)) {
+        currentTitle = title;
         int fid = element.getFid(); // File ID
-        documents.add(new TFIDFDocument(title, fid));
+        currentDocument = new TFIDFDocument(title, fid);
+        documents.add(currentDocument);
       }
 
       // Store the TF value of the word in the TF-IDF document
-      documents.get(i - 1).getTF().put(wordName, amount);
-      tempTitle = title;
+      currentDocument.getTF().put(wordName, amount);
     }
     return documents;
   }
