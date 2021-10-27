@@ -68,7 +68,7 @@ public class HTTPRequest implements IHTTPRequest{
             return httpResponse(200, true, response);
         }
         catch (URISyntaxException exception) {
-            return httpResponse(500, false, "Internal server error - Bad URL syntax");
+            return httpResponse(500, false, "Internal server error - Bad URL syntax - " + url);
         } catch (Exception e) {
             return httpResponse(500, false, e.getMessage());
         }
