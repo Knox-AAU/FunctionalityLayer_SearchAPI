@@ -53,7 +53,8 @@ public class DataSelection {
   @NotNull
   private IHTTPResponse getHttpResponse(String input, List<String> sources) throws Exception {
     Dotenv dotenv = Dotenv.load();
-    IHTTPRequest http = new HTTPRequest(dotenv.get(("DATABASE_API_URL")));
+    String apiEndpoint = dotenv.get("DATABASE_API_URL")
+    IHTTPRequest http = new HTTPRequest(apiEndPoint);
     http.SetMethod("GET");
     http.AddQueryParameter("terms", input.split(" "));
     http.AddQueryParameter("sources", sources.toArray(new String[0]));
