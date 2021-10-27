@@ -44,7 +44,7 @@ public class HTTPRequest implements IHTTPRequest{
     public IHTTPResponse Send() {
         try {
             // Set the http connection up with the correct URL, query parameters, method and content-type
-            URIBuilder uriBuilder = new URIBuilder(url); // URI handles encoding of characters like æ, ø, å
+            URIBuilder uriBuilder = new URIBuilder(url);
             UrlEncodeQueryParameters(uriBuilder, queryParameters);
             URL url = new URL(uriBuilder.toString());
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
