@@ -15,5 +15,5 @@ public class WordRatioResponseElement {
     int sourceId;
     String sourceName;
     float percent;
-    int fid;
+    int fileId;
 }
