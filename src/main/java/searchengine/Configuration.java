@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 
 public class Configuration {
     public String get(String key) {
+        // finds env file in current directory and loads from the key given
         return Dotenv.configure().directory(System.getProperty("user.dir")).load().get(key);
     }
 
