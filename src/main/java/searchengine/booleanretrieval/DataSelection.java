@@ -51,7 +51,7 @@ public class DataSelection {
    * @throws HttpException when the HTTP request is not successful
    */
   @NotNull
-  private IHTTPResponse getHttpResponse(String input, List<String> sources) throws Exception {
+  private IHTTPResponse getHttpResponse(String input, List<String> sources) throws HttpException {
     Dotenv dotenv = Dotenv.load();
 
     String apiEndPoint = dotenv.get("DATABASE_API_URL");
