@@ -32,7 +32,7 @@ public class DataSelection {
     List<TFIDFDocument> documents = new ArrayList<>();
 
     try {
-      IHTTPResponse httpResponse = getHttpResponse(input, sources);
+      IHTTPResponse httpResponse = requestDatabaseResponse(input, sources);
       List<WordRatioResponseElement> responseElements = JSONDecodeDataResponse(httpResponse);
 
       documents = CreateTFIDFDocumentsFromResponseElements(responseElements);
@@ -51,7 +51,7 @@ public class DataSelection {
    * @throws HttpException when the HTTP request is not successful
    */
   @NotNull
-  private IHTTPResponse getHttpResponse(String input, List<String> sources) throws Exception {
+  private IHTTPResponse requestDatabaseResponse(String input, List<String> sources) throws Exception {
     Dotenv dotenv = Dotenv.load();
 
     String apiEndPoint = dotenv.get("DATABASE_API_URL");
