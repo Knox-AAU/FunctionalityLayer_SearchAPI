@@ -49,7 +49,7 @@ public class HTTPRequest implements IHTTPRequest{
             URL url = new URL(uriBuilder.toString());
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
-            http.setRequestProperty("Accept", "application/json"); // Set up to recieve JSON
+            http.setRequestProperty("Accept", "application/json"); // Set up to receive JSON
             http.setRequestProperty("Content-Type", "application/json");
 
             // If the request is a POST, we need to allow access to the output stream
