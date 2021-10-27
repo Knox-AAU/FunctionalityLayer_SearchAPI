@@ -1,5 +1,6 @@
 package searchengine.booleanretrieval;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.http.HttpException;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import searchengine.http.HTTPRequest;
 import searchengine.http.IHTTPRequest;
 import searchengine.http.IHTTPResponse;
@@ -49,9 +51,12 @@ public class DataSelection {
    * @param sources the different sources that should be sent to the database api
    * @return The result af a HTTP request to the database API
    * @throws HttpException when the HTTP request is not successful
+   * @throws HttpRequestMethodNotSupportedException if method is not allowed
+   * @throws IOException the http request cannot be sent.
    */
   @NotNull
-  private IHTTPResponse requestDatabaseResponse(String input, List<String> sources) throws Exception {
+
+  private IHTTPResponse requestDatabaseResponse(String input, List<String> sources) throws HttpException, HttpRequestMethodNotSupportedException, IOException {
     Dotenv dotenv = Dotenv.load();
 
     String apiEndPoint = dotenv.get("DATABASE_API_URL");

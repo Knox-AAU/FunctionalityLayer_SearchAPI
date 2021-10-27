@@ -37,14 +37,14 @@ public class HTTPRequest implements IHTTPRequest{
     private String Body;
 
     /**
-     * Sends a http request based on the fields of the HTTPRequest and returns the response.
+     * Sends a http request based on the fields of the HTTPRequest instance and returns the response.
      * @return IHTTPResponse from request
      */
     @Override
     public IHTTPResponse Send() {
         try {
             // Set the http connection up with the correct URL, query parameters, method and content-type
-            URIBuilder uriBuilder = new URIBuilder(url); // URI handles encoding of characters like æ, ø, å
+            URIBuilder uriBuilder = new URIBuilder(url);
             UrlEncodeQueryParameters(uriBuilder, queryParameters);
             URL url = new URL(uriBuilder.toString());
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
