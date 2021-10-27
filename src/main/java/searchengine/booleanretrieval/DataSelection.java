@@ -55,12 +55,15 @@ public class DataSelection {
     Dotenv dotenv = Dotenv.load();
     IHTTPRequest http = new HTTPRequest(dotenv.get(("DATABASE_API_URL")));
     http.SetMethod("GET");
-    http.AddQueryParameter("terms", input.split(" "));
-    http.AddQueryParameter("sources", sources.toArray(new String[0]));
-
+    if(input != null) {
+      http.AddQueryParameter("terms", input.split(" "));
+    }
+    if(sources != null) {
+      http.AddQueryParameter("sources", sources.toArray(new String[0]));
+    }
     IHTTPResponse httpResponse = http.Send();
     if(!httpResponse.GetSuccess()){
-      throw new HttpException("Internal server error (retrieving documents failed)");
+      throw new HttpException("Internal server error - " + httpResponse.GetContent());
     }
     return httpResponse;
   }
