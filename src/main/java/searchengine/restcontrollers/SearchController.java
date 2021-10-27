@@ -18,7 +18,7 @@ public class SearchController {
      */
   @GetMapping(path = "/search")
   public ResponseEntity postSearch ( @RequestParam(name = "input") String input, @RequestParam(name = "sources", required = false) List<String> sources) throws IOException, JSONException, SQLException, ClassNotFoundException {
-    if (input.isBlank()/*TODO INSERT NULL CHECK ON SOURCES*/) {return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);};
+    if (input.isBlank()) {return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);};
     return ResponseEntity.status(HttpStatus.OK).body(new Search(input, sources, new SqlConnection()));
   }
 }
