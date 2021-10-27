@@ -1,12 +1,14 @@
 package searchengine.http;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -55,49 +57,46 @@ public class HTTPRequest implements IHTTPRequest{
                 //Write request body
                 http.setDoOutput(true);//Required for getting the output stream
                 http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));//Writes the body to the output stream as UTF-8 encoded bytes
-            }
-            else if(Body != null && !Body.isEmpty()){
+            } else if(Body != null && !Body.isEmpty()) {
                  throw new Exception(GetMethod() + " does not support a request body, but the request body was set");
             }
 
             String response = ReadResponse(http);
 
-            return new IHTTPResponse() {
-                @Override
-                public int GetStatus() {
-                    return 200;
-                }
-
-                @Override
-                public boolean GetSuccess() {
-                    return true;
-                }
-
-                @Override
-                public String GetContent() {
-                    return response;
-                }
-            };
+            // The HTTP request was successful and a response can be returned
+            return httpResponse(200, true, response);
         }
-        catch(Exception exception){
-            //TODO Give more accurate status code and error message
-            return new IHTTPResponse() {
-                @Override
-                public int GetStatus() {
-                    return 500;
-                }
-
-                @Override
-                public boolean GetSuccess() {
-                    return false;
-                }
-
-                @Override
-                public String GetContent() {
-                    return "Internal server error";
-                }
-            };
+        catch (URISyntaxException exception) {
+            return httpResponse(500, false, "Internal server error - Bad URL syntax");
+        } catch (Exception e) {
+            return httpResponse(500, false, e.getMessage());
         }
+    }
+
+    /**
+     * Creates an IHTTPResponse object with the properties specified
+     * @param status the status code to set in the response
+     * @param success whether the http request that created the response
+     * @param response the content of the response
+     * @return a new IHTTPResponse
+     */
+    private IHTTPResponse httpResponse(int status, boolean success, String response) {
+        return new IHTTPResponse() {
+            @Override
+            public int GetStatus() {
+                return status;
+            }
+
+            @Override
+            public boolean GetSuccess() {
+                return success;
+            }
+
+            @Override
+            public String GetContent() {
+                return response;
+            }
+        };
     }
 
     /**
@@ -124,18 +123,16 @@ public class HTTPRequest implements IHTTPRequest{
     }
 
     /**
+     * This function sets the method of the HTTP request. Only POST and GET are currently supported
      * @param method must be POST or GET (case insensitive)
      * @throws HttpRequestMethodNotSupportedException
      */
     @Override
     public void SetMethod(String method) throws HttpRequestMethodNotSupportedException {
         method = method.toUpperCase(Locale.ROOT);
-        switch (method){
-            case "POST":
-            case "GET":
-                this.method = method; break;
-            default:
-                throw new HttpRequestMethodNotSupportedException(method + " is not a supported method.");
+        switch (method) {
+            case "POST", "GET" -> this.method = method;
+            default -> throw new HttpRequestMethodNotSupportedException(method + " is not a supported method.");
         }
     }
 
@@ -179,9 +176,13 @@ public class HTTPRequest implements IHTTPRequest{
         return false;
     }
 
-    //TODO javadoc og kontroller at uribuilder kan tage arrays og lister og format korrekt
+    /**
+     * Encodes a list of parameters and adds them to an uriBuilder
+     * @param uriBuilder the uriBuilder which needs to have the parameters added
+     * @param queryParameters the parameters to add to the uriBuilder.
+     */
     private void UrlEncodeQueryParameters(URIBuilder uriBuilder, HashMap<String, String[]> queryParameters) {
-        //Return empty string if no query parameters
+        //Do nothing if there are no parameters
         if (queryParameters.isEmpty()){ return; }
 
         Set<String> keySet = queryParameters.keySet();
