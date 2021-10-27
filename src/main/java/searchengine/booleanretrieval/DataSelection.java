@@ -47,7 +47,7 @@ public class DataSelection {
    * Build HTTP request, send it to the database API and return the response.
    * @param input the terms that should be sent to the database api
    * @param sources the different sources that should be sent to the database api
-   * @return The result af a HTTP call to the database api
+   * @return The result af a HTTP request to the database API
    * @throws HttpException when the HTTP request is not successful
    */
   @NotNull
