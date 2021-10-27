@@ -54,7 +54,7 @@ public class DataSelection {
   private IHTTPResponse getHttpResponse(String input, List<String> sources) throws Exception {
     Dotenv dotenv = Dotenv.load();
     String apiEndpoint = dotenv.get("DATABASE_API_URL");
-    IHTTPRequest http = new HTTPRequest(apiEndPoint);
+    IHTTPRequest http = new HTTPRequest(apiEndpoint);
     http.SetMethod("GET");
     if(input != null) {
       http.AddQueryParameter("terms", input.split(" "));
@@ -82,7 +82,7 @@ public class DataSelection {
     responseElements.sort(Comparator.comparing(WordRatioResponseElement::getArticleTitle));
 
     // Go through all words (sorted by what article they appear in) and make a TF-IDF document for each new article.
-    TFIDFDocument currentDocument;
+    TFIDFDocument currentDocument = null;
     String currentTitle = "";
     for(WordRatioResponseElement element : responseElements) {
       String wordName = element.getWordName();
@@ -97,7 +97,9 @@ public class DataSelection {
       }
 
       // Store the TF value of the word in the TF-IDF document
-      currentDocument.getTF().put(wordName, amount);
+      if(currentDocument != null) {
+        currentDocument.getTF().put(wordName, amount);
+      }
     }
     return documents;
   }
