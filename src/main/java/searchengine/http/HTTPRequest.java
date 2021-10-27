@@ -1,7 +1,6 @@
 package searchengine.http;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.io.BufferedReader;
@@ -34,7 +33,7 @@ public class HTTPRequest implements IHTTPRequest{
     private String method;
     private String url;
     private HashMap<String, String[]> queryParameters;
-    private String Body;
+    private String body;
 
     /**
      * Sends a http request based on the fields of the HTTPRequest instance and returns the response.
@@ -56,8 +55,8 @@ public class HTTPRequest implements IHTTPRequest{
             if(RequestCanContainBody()) {
                 //Write request body
                 http.setDoOutput(true);//Required for getting the output stream
-                http.getOutputStream().write(Body.getBytes(StandardCharsets.UTF_8));//Writes the body to the output stream as UTF-8 encoded bytes
-            } else if(Body != null && !Body.isEmpty()) {
+                http.getOutputStream().write(body.getBytes(StandardCharsets.UTF_8));//Writes the body to the output stream as UTF-8 encoded bytes
+            } else if(body != null && !body.isEmpty()) {
                  throw new Exception(GetMethod() + " does not support a request body, but the request body was set");
             }
 
@@ -163,7 +162,7 @@ public class HTTPRequest implements IHTTPRequest{
     }
 
     @Override
-    public void SetBody(String body) { Body = body; }
+    public void SetBody(String body) { this.body = body; }
 
     /**
      * If HTTP requests of the current HTTP request method can contain a body.
