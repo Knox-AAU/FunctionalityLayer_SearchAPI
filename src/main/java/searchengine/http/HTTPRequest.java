@@ -37,7 +37,7 @@ public class HTTPRequest implements IHTTPRequest{
     private String Body;
 
     /**
-     * Sends the request and returns the response
+     * Sends a http request based on the fields of the HTTPRequest and returns the response.
      * @return IHTTPResponse from request
      */
     @Override
@@ -61,6 +61,7 @@ public class HTTPRequest implements IHTTPRequest{
                  throw new Exception(GetMethod() + " does not support a request body, but the request body was set");
             }
 
+            // Sends and reads response
             String response = ReadResponse(http);
 
             // The HTTP request was successful and a response can be returned
