@@ -53,7 +53,7 @@ public class DataSelection {
   @NotNull
   private IHTTPResponse getHttpResponse(String input, List<String> sources) throws Exception {
     Dotenv dotenv = Dotenv.load();
-    String apiEndpoint = dotenv.get("DATABASE_API_URL");
+    String apiEndPoint = dotenv.get("DATABASE_API_URL");
     IHTTPRequest http = new HTTPRequest(apiEndPoint);
     http.SetMethod("GET");
     if(input != null) {
