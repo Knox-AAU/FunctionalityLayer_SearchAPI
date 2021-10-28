@@ -19,7 +19,7 @@ public class Lemmatizer implements ILemmatizer {
      * @return Lemmatized input string | input if errors
      */
     @Override
-    public String Lemmatize(String inputSentence, String language)
+    public String Lemmatize(String inputSentence)
     {
         Dotenv dotenv = Dotenv.load();
         String url = dotenv.get("LEMMATIZER_URL");
@@ -27,7 +27,7 @@ public class Lemmatizer implements ILemmatizer {
         try {
             IHTTPRequest httpRequest = new HTTPRequest(url);
             httpRequest.SetMethod("POST");
-            String body = JsonEncodeInputForLemmatizeRequest(inputSentence, language);
+            String body = JsonEncodeInputForLemmatizeRequest(inputSentence);
             httpRequest.SetBody(body);
             IHTTPResponse response = httpRequest.Send();
             if (response.GetSuccess()) {
@@ -49,7 +49,7 @@ public class Lemmatizer implements ILemmatizer {
      * @return json string
      * @throws JsonProcessingException
      */
-    private String JsonEncodeInputForLemmatizeRequest(String input, String language) throws JsonProcessingException {
+    private String JsonEncodeInputForLemmatizeRequest(String input) throws JsonProcessingException {
         //JSON encode the input using object mapping from the LemmatizerRequestBody object
         //The JSON is in the format
         // {
@@ -57,7 +57,7 @@ public class Lemmatizer implements ILemmatizer {
         //   "language": "<language>"
         // }
        ObjectMapper JSONifier = new ObjectMapper();
-       LemmatizerRequestBody lemmatizerInput = new LemmatizerRequestBody(input, language);
+       LemmatizerRequestBody lemmatizerInput = new LemmatizerRequestBody(input);
         return JSONifier.writeValueAsString(lemmatizerInput); // Stringifies input in JSON format
     }
 
