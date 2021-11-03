@@ -97,7 +97,7 @@ public class DataSelection {
 
       if (!currentTitle.equals(title)) {
         currentTitle = title;
-        int fid = element.getArticleId(); // File ID
+        int fid = element.getArticleId();
         currentDocument = new TFIDFDocument(title, fid);
         documents.add(currentDocument);
       }
