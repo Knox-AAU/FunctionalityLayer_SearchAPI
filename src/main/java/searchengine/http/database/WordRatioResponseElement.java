@@ -6,14 +6,12 @@ import lombok.Getter;
 @Data
 @Getter
 public class WordRatioResponseElement {
-    int id;
-    String wordName;
-    int amount;
-    String articleTitle;
+    int articleId;
+    String word;
+    int count;
+    String title;
     String filePath;
-    int totalWordsInArticle;
-    int sourceId;
-    String sourceName;
+    String totalWords;
+    String publisherName;
     float percent;
-    int fileId;
 }
