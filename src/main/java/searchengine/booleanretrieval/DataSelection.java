@@ -85,19 +85,19 @@ public class DataSelection {
     List<TFIDFDocument> documents = new ArrayList<>();
     // The response elements must be sorted using their article title, since the following calculations depend on identical
     // titles following directly after each other.
-    responseElements.sort(Comparator.comparing(WordRatioResponseElement::getArticleTitle));
+    responseElements.sort(Comparator.comparing(WordRatioResponseElement::getTitle));
 
     // Go through all words (sorted by what article they appear in) and make a TF-IDF document for each new article.
     TFIDFDocument currentDocument = null;
     String currentTitle = "";
     for(WordRatioResponseElement element : responseElements) {
-      String wordName = element.getWordName();
-      int amount = element.getAmount();
-      String title = element.getArticleTitle();
+      String wordName = element.getWord();
+      int amount = element.getCount();
+      String title = element.getTitle();
 
       if (!currentTitle.equals(title)) {
         currentTitle = title;
-        int fid = element.getFileId(); // File ID
+        int fid = element.getArticleId();
         currentDocument = new TFIDFDocument(title, fid);
         documents.add(currentDocument);
       }
