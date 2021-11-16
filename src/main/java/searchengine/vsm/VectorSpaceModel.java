@@ -129,6 +129,8 @@ public class VectorSpaceModel {
         }
       }
     }
+
+    // We get the document count from the database API
     int documentCount = 1;
     try {
       IHTTPResponse httpResponse = requestCountFromDB();
@@ -146,6 +148,13 @@ public class VectorSpaceModel {
     return idf;
   }
 
+  /**
+   * This function calls the database API and returns a response containing the amount of documents
+   * @return A httpresponse that contains the document count
+   * @throws HttpException
+   * @throws HttpRequestMethodNotSupportedException
+   * @throws IOException
+   */
   private IHTTPResponse requestCountFromDB() throws HttpException, HttpRequestMethodNotSupportedException, IOException {
     Dotenv dotenv = Dotenv.load();
 
