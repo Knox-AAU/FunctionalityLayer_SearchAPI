@@ -53,9 +53,12 @@ class VectorSpaceModelTest {
     @Test
     void assertTitle() {
         // arrange
-        vsm = new VectorSpaceModel("is denmark smaller than russia");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("is denmark smaller than russia");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
+
         // assert title
         assertEquals("test2", scoredDocuments.get(0).getTitle());
         assertEquals("test4", scoredDocuments.get(1).getTitle());
@@ -66,9 +69,12 @@ class VectorSpaceModelTest {
     @Test
     void assertId() {
         // arrange
-        vsm = new VectorSpaceModel("is denmark smaller than russia");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("is denmark smaller than russia");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
+
         // assert filepath
         assertEquals(2, scoredDocuments.get(0).getId());
         assertEquals(4, scoredDocuments.get(1).getId());
@@ -80,7 +86,7 @@ class VectorSpaceModelTest {
     void assertTopRankedTest1() throws Exception {
         // arrange
         VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
-        doReturn(1).when(vsmMock).getDocumentCount();
+        doReturn(4).when(vsmMock).getDocumentCount();
         vsmMock.createQueryTF("is china bigger than germany");
         // act
         scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
@@ -92,7 +98,7 @@ class VectorSpaceModelTest {
     void assertTopRankedTest2() {
         // arrange
         VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
-        doReturn(1).when(vsmMock).getDocumentCount();
+        doReturn(4).when(vsmMock).getDocumentCount();
         vsmMock.createQueryTF("is russia bigger than denmark");
         // act
         scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
@@ -104,7 +110,7 @@ class VectorSpaceModelTest {
     void assertTopRankedTest3() {
         // arrange
         VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
-        doReturn(1).when(vsmMock).getDocumentCount();
+        doReturn(4).when(vsmMock).getDocumentCount();
         vsmMock.createQueryTF("is russia bigger than monaco");
         // act
         scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
@@ -117,7 +123,7 @@ class VectorSpaceModelTest {
     void assertTopRankedTest4() {
         // arrange
         VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
-        doReturn(1).when(vsmMock).getDocumentCount();
+        doReturn(4).when(vsmMock).getDocumentCount();
         vsmMock.createQueryTF("is monaco smaller than germany");
         // act
         scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
@@ -128,9 +134,11 @@ class VectorSpaceModelTest {
     @Test
     void noMatchTest() {
         // arrange
-        vsm = new VectorSpaceModel("test");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("test");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals(0.0, scoredDocuments.get(0).getScore());
         assertEquals(0.0, scoredDocuments.get(1).getScore());
@@ -141,9 +149,11 @@ class VectorSpaceModelTest {
     @Test
     void everyTermUsedTest() {
         // arrange
-        vsm = new VectorSpaceModel("china bigger germany russia denmark monaco smaller");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("china bigger germany russia denmark monaco smaller");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
         // assert
         assertEquals("test4", scoredDocuments.get(0).getTitle());
 
@@ -156,10 +166,13 @@ class VectorSpaceModelTest {
 
     @Test
     void repeatingTermTest() {
+
         // arrange
-        vsm = new VectorSpaceModel("china china china china china china china china china china bigger germany russia denmark monaco smaller");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("china china china china china china china china china china bigger germany russia denmark monaco smaller");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test1", scoredDocuments.get(0).getTitle());
 
@@ -173,9 +186,11 @@ class VectorSpaceModelTest {
     @Test
     void singeTermSearchChina() {
         // arrange
-        vsm = new VectorSpaceModel("china");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("china");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test1", scoredDocuments.get(0).getTitle());
 
@@ -187,12 +202,13 @@ class VectorSpaceModelTest {
     @Test
     void singeTermSearchGermany() {
         // arrange
-        vsm = new VectorSpaceModel("germany");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("germany");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test1", scoredDocuments.get(0).getTitle());
-        //assertEquals(2.1609640474436813, scoredDocuments.get(0).getScore());
 
         assertEquals("test4", scoredDocuments.get(1).getTitle());
     }
@@ -200,9 +216,11 @@ class VectorSpaceModelTest {
     @Test
     void singeTermSearchMonaco() {
         // arrange
-        vsm = new VectorSpaceModel("monaco");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("monaco");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test3", scoredDocuments.get(0).getTitle());
         assertEquals("test4", scoredDocuments.get(1).getTitle());
@@ -211,9 +229,11 @@ class VectorSpaceModelTest {
     @Test
     void foreignTextSearch() {
         // arrange
-        vsm = new VectorSpaceModel("");
+        VectorSpaceModel vsmMock = spy(VectorSpaceModel.class);
+        doReturn(4).when(vsmMock).getDocumentCount();
+        vsmMock.createQueryTF("");
         // act
-        scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
+        scoredDocuments = vsmMock.getScoredDocuments( TFIDFDocuments );
         //assert
         assertEquals("test1", scoredDocuments.get(0).getTitle());
     }
