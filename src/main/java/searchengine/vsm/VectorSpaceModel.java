@@ -84,7 +84,7 @@ public class VectorSpaceModel {
    */
   private void calculateTFIDF(List<TFIDFDocument> documents) {
     HashMap<String, Double> idf = calculateIDF(documents);
-    int maximumFrequency = 0;
+    //ANOTHER VERSION: int maximumFrequency = 0;
 
     // Assign TF-IDF for all documents
     for (TFIDFDocument document : documents) {
@@ -94,22 +94,22 @@ public class VectorSpaceModel {
         // TFIDF_td = TF_td * IDF_t
         // td: term in document, t: term
 
-        //This is normalizing to avoid bias for large documents
-        //innerMap.put(term, 0.5 + (0.5 * document.getTF().getOrDefault(term, 0) / (maximumFrequency * document.getTF().getOrDefault(term, 0))) * idf.getOrDefault(term, 1.0));
-
-        //This is standard TFIDF
+        //This is standard TFIDF for documents
         innerMap.put(term, (double) document.getTFmap().getOrDefault(term, 0) * idf.get(term));
+
+        //ANOTHER VERSION: This is normalizing to avoid bias for large documents
+        //ANOTHER VERSION: innerMap.put(term, 0.5 + (0.5 * document.getTF().getOrDefault(term, 0) / (maximumFrequency * document.getTF().getOrDefault(term, 0))) * idf.getOrDefault(term, 1.0));
       }
       document.setTFIDFmap(innerMap);
     }
 
     // Assign TF-IDF for the query
     for (String term : queryTFMap.keySet()) {
-      //This is the normal TFIDF
+      //This is standard TFIDF for queries
       queryTFIDFMap.put(term, queryTFMap.getOrDefault(term, 0) * idf.getOrDefault(term, 1.0));
 
-      //This is TFIDF with double normalization, for reducing bias for longer documents. Does not make much sense to use for the query
-      //queryTFIDFMap.put(term, 0.5 + (0.5 * queryTFMap.getOrDefault(term, 0) / (maximumFrequency * queryTFMap.getOrDefault(term, 1))) * idf.getOrDefault(term, 1.0));
+      //ANOTHER VERSION: This is TFIDF with double normalization, for reducing bias for longer documents. Does not make much sense to use for the query
+      //ANOTHER VERSION: queryTFIDFMap.put(term, 0.5 + (0.5 * queryTFMap.getOrDefault(term, 0) / (maximumFrequency * queryTFMap.getOrDefault(term, 1))) * idf.getOrDefault(term, 1.0));
     }
   }
 
