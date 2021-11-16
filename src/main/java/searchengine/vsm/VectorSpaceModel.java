@@ -90,20 +90,22 @@ public class VectorSpaceModel {
     for (TFIDFDocument document : documents) {
       HashMap<String, Double> innerMap = new HashMap<>();
 
-      for (String term : document.getTF().keySet()) {
-        int termFrequency = document.getTF().get(term);
+      // Iterates through all the terms in the tf map to find the highest frequency for a term
+      // Used for normalization. Not really used right now.
+      for (String term : document.getTFmap().keySet()) {
+        int termFrequency = document.getTFmap().get(term);
         if (termFrequency > maximumFrequency) maximumFrequency = termFrequency;
       }
 
-      for (String term : document.getTF().keySet()) {
+      for (String term : document.getTFmap().keySet()) {
         // TFIDF_td = TF_td * IDF_t
         // td: term in document, t: term
         //This is normalizing to avoid bias for large documents
         //innerMap.put(term, 0.5 + (0.5 * document.getTF().getOrDefault(term, 0) / (maximumFrequency * document.getTF().getOrDefault(term, 0))) * idf.getOrDefault(term, 1.0));
         //This is standard TFIDF
-        innerMap.put(term, (double) document.getTF().getOrDefault(term, 0) * idf.get(term));
+        innerMap.put(term, (double) document.getTFmap().getOrDefault(term, 0) * idf.get(term));
       }
-      document.setTFIDF(innerMap);
+      document.setTFIDFmap(innerMap);
     }
 
     // Iterates through all the terms in the query to find the highest frequency for a term
@@ -134,7 +136,7 @@ public class VectorSpaceModel {
     // Fills the document term frequency HashMap
     // This means that all terms from all documents are added, along with their frequency across all documents
     for (TFIDFDocument document : documents) {
-      for (String term : document.getTF().keySet()) { // Find all terms in document
+      for (String term : document.getTFmap().keySet()) { // Find all terms in document
         if (df.containsKey(term)) {
           df.put(term, df.get(term)+1);
         } else {
@@ -197,7 +199,6 @@ public class VectorSpaceModel {
     double documentTFIDF = 0;
 
     //Used to use all terms, but terms not in query are irrelevant. This is no problem in production, as we only get wordcount for documents that contain query words from the database, but the tests get messed up by the doc terms
-    //uniqueTerms.addAll(doc.getTFIDF().keySet());
     uniqueTerms.addAll(queryTFIDFMap.keySet());
 
     //If there is only 1 term, closeness is defined by docTFIDF / queryTFIDF
@@ -206,16 +207,16 @@ public class VectorSpaceModel {
     // The dot product of the document and the vector
     for (String term : uniqueTerms) {
       if (uniqueTerms.size() == 1) {
-        dotProduct = doc.getTFIDF().getOrDefault(term, 0.0);
+        dotProduct = doc.getTFIDFmap().getOrDefault(term, 0.0);
       } else {
-        dotProduct += doc.getTFIDF().getOrDefault(term, 0.0)
+        dotProduct += doc.getTFIDFmap().getOrDefault(term, 0.0)
             * queryTFIDFMap.getOrDefault(term, 0.0);
       }
     }
     //If there is only 1 term, the ratio is document TFIDF over query TFIDF, also be aware that IDF does nothing for 1 term but be a scalar
     if (uniqueTerms.size() == 1) return dotProduct / getLength(queryTFIDFMap);
     //If there are more terms, use standard cosine similarity
-    return dotProduct / (getLength(doc.getTFIDF()) * getLength(queryTFIDFMap));
+    return dotProduct / (getLength(doc.getTFIDFmap()) * getLength(queryTFIDFMap));
   }
 
   /**

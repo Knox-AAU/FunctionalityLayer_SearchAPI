@@ -104,7 +104,7 @@ public class DataSelection {
 
       // Store the TF value of the word in the TF-IDF document
       if(currentDocument != null) {
-        currentDocument.getTF().put(wordName, amount);
+        currentDocument.getTFmap().put(wordName, amount);
       }
     }
     return documents;
