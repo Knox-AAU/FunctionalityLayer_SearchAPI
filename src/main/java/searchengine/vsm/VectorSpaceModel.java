@@ -1,5 +1,13 @@
 package searchengine.vsm;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import org.apache.http.HttpException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import searchengine.http.HTTPRequest;
+import searchengine.http.IHTTPRequest;
+import searchengine.http.IHTTPResponse;
+
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -121,13 +129,35 @@ public class VectorSpaceModel {
         }
       }
     }
+    int documentCount = 1;
+    try {
+      IHTTPResponse httpResponse = requestCountFromDB();
+      documentCount = Integer.parseInt(httpResponse.GetContent().trim());
+      System.out.println(documentCount);
+    } catch (HttpException | HttpRequestMethodNotSupportedException | IOException e) {
+      e.printStackTrace();
+    }
 
     // Get the inverse document frequency of each term
     for (String term : df.keySet()) {
-      idf.put(term, Math.log10(documents.size() / (double) df.get(term))); // IDF_t = log(N/DF_t)
+      idf.put(term, Math.log10(documentCount / (double) df.get(term))); // IDF_t = log(N/DF_t)
     }
 
     return idf;
+  }
+
+  private IHTTPResponse requestCountFromDB() throws HttpException, HttpRequestMethodNotSupportedException, IOException {
+    Dotenv dotenv = Dotenv.load();
+
+    String apiEndPoint = dotenv.get("DATABASE_API_COUNT_URL");
+    IHTTPRequest http = new HTTPRequest(apiEndPoint);
+    http.SetMethod("GET");
+
+    searchengine.http.IHTTPResponse httpResponse = http.Send();
+    if(!httpResponse.GetSuccess()){
+      throw new HttpException("Internal server error - " + httpResponse.GetContent());
+    }
+    return httpResponse;
   }
 
   /**
