@@ -90,38 +90,59 @@ public class VectorSpaceModel {
     for (TFIDFDocument document : documents) {
       HashMap<String, Double> innerMap = new HashMap<>();
 
-      // Iterates through all the terms in the tf map to find the highest frequency for a term
-      // Used for normalization. Not really used right now.
-      for (String term : document.getTFmap().keySet()) {
-        int termFrequency = document.getTFmap().get(term);
-        if (termFrequency > maximumFrequency) maximumFrequency = termFrequency;
-      }
-
       for (String term : document.getTFmap().keySet()) {
         // TFIDF_td = TF_td * IDF_t
         // td: term in document, t: term
+
         //This is normalizing to avoid bias for large documents
         //innerMap.put(term, 0.5 + (0.5 * document.getTF().getOrDefault(term, 0) / (maximumFrequency * document.getTF().getOrDefault(term, 0))) * idf.getOrDefault(term, 1.0));
+
         //This is standard TFIDF
         innerMap.put(term, (double) document.getTFmap().getOrDefault(term, 0) * idf.get(term));
       }
       document.setTFIDFmap(innerMap);
     }
 
+    // Assign TF-IDF for the query
+    for (String term : queryTFMap.keySet()) {
+      //This is the normal TFIDF
+      queryTFIDFMap.put(term, queryTFMap.getOrDefault(term, 0) * idf.getOrDefault(term, 1.0));
+
+      //This is TFIDF with double normalization, for reducing bias for longer documents. Does not make much sense to use for the query
+      //queryTFIDFMap.put(term, 0.5 + (0.5 * queryTFMap.getOrDefault(term, 0) / (maximumFrequency * queryTFMap.getOrDefault(term, 1))) * idf.getOrDefault(term, 1.0));
+    }
+  }
+
+  /**
+   * This function returns the maximum frequency of an old maximum frequency and
+   * compares with the frequencies in the query tf map.
+   *
+   * This method is not used right now. It is useful for normalization
+   * @param oldMaximumFrequency the old maximum Frequency
+   */
+  private int getMaximumQueryFrequency(int oldMaximumFrequency) {
     // Iterates through all the terms in the query to find the highest frequency for a term
     for (String term : queryTFMap.keySet()) {
       int termFrequency = queryTFMap.get(term);
-      if (termFrequency > maximumFrequency) {
-        maximumFrequency = termFrequency;
+      if (termFrequency > oldMaximumFrequency) {
+        oldMaximumFrequency = termFrequency;
       }
     }
-    // Assign TF-IDF for the query
-    for (String term : queryTFMap.keySet()) {
-      queryTFIDFMap.put(term, queryTFMap.getOrDefault(term, 0) * idf.getOrDefault(term, 1.0));
-      //This is the normal TFIDF
-      //queryTFIDFMap.put(term, 0.5 + (0.5 * queryTFMap.getOrDefault(term, 0) / (maximumFrequency * queryTFMap.getOrDefault(term, 1))) * idf.getOrDefault(term, 1.0));
-      //This is TFIDF with double normalization, for reducing bias for longer documents. Does not make much sense to use for the query
+    return oldMaximumFrequency;
+  }
+  /**
+   * This function returns the maximum frequency of an tf map.
+   *
+   * This method is not used right now. It is useful for normalization
+   */
+  private int getMaximumFrequencyInDocs(int maximumFrequency, TFIDFDocument document) {
+    // Iterates through all the terms in the tf map to find the highest frequency for a term
+    // Used for normalization. Not really used right now.
+    for (String term : document.getTFmap().keySet()) {
+      int termFrequency = document.getTFmap().get(term);
+      if (termFrequency > maximumFrequency) maximumFrequency = termFrequency;
     }
+    return maximumFrequency;
   }
 
   /**
