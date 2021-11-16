@@ -22,6 +22,12 @@ public class VectorSpaceModel {
     createQueryTF(query);
   }
 
+  /**
+   * Creates an empty vector space model.
+   */
+  public VectorSpaceModel() {
+  }
+
   /* <Term, Frequency> */ //TODO: Add getter and setter?
   private HashMap<String, Integer> queryTFMap = new HashMap<>();
   /* <Term, Score> */
@@ -31,8 +37,15 @@ public class VectorSpaceModel {
    * Splits the query string into individual terms.
    * @param query: input query
    */
-  private void createQueryTF(String query) {
+  public void createQueryTF(String query) {
     // Split the query into terms and places them into an array. Query is split on all whitespaces.
+    if(queryTFMap == null) {
+      queryTFMap = new HashMap<>();
+    }
+
+    if (queryTFIDFMap == null) {
+      queryTFIDFMap = new HashMap<>();
+    }
     String[] termArray = query.split("\\s+");
 
     //Counts term frequency in the query//
@@ -132,7 +145,6 @@ public class VectorSpaceModel {
 
     // We get the document count from the database API
     int documentCount = getDocumentCount();
-
     // Get the inverse document frequency of each term
     for (String term : df.keySet()) {
       idf.put(term, Math.log10(documentCount / (double) df.get(term))); // IDF_t = log(N/DF_t)
@@ -141,7 +153,7 @@ public class VectorSpaceModel {
     return idf;
   }
 
-  private int getDocumentCount() {
+  public int getDocumentCount() {
     int documentCount = 1;
     try {
       IHTTPResponse httpResponse = requestCountFromDB();
