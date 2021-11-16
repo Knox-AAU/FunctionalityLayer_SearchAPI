@@ -1,10 +1,8 @@
 package searchengine.vsm;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.print.Doc;
 import java.util.HashMap;
 
 /**
@@ -15,10 +13,10 @@ public class TFIDFDocument extends Document {
 
   /* <Title, <Term, Amount>> */
   @Getter @Setter
-  private HashMap<String, Integer> TF;
+  private HashMap<String, Integer> TFmap;
   /* <Title, <Term, Score>> */
   @Getter @Setter
-  private HashMap<String, Double> TFIDF;
+  private HashMap<String, Double> TFIDFmap;
 
   /** Constructor
    * @param title String containing the document title.
@@ -26,8 +24,8 @@ public class TFIDFDocument extends Document {
    */
   public TFIDFDocument(String title, int id) {
     super(title, id);
-    TFIDF = new HashMap<>();
-    TF = new HashMap<>();
+    TFIDFmap = new HashMap<>();
+    TFmap = new HashMap<>();
   }
 
 
