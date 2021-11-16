@@ -131,14 +131,7 @@ public class VectorSpaceModel {
     }
 
     // We get the document count from the database API
-    int documentCount = 1;
-    try {
-      IHTTPResponse httpResponse = requestCountFromDB();
-      documentCount = Integer.parseInt(httpResponse.GetContent().trim());
-      System.out.println(documentCount);
-    } catch (HttpException | HttpRequestMethodNotSupportedException | IOException e) {
-      e.printStackTrace();
-    }
+    int documentCount = getDocumentCount();
 
     // Get the inverse document frequency of each term
     for (String term : df.keySet()) {
@@ -146,6 +139,17 @@ public class VectorSpaceModel {
     }
 
     return idf;
+  }
+
+  private int getDocumentCount() {
+    int documentCount = 1;
+    try {
+      IHTTPResponse httpResponse = requestCountFromDB();
+      documentCount = Integer.parseInt(httpResponse.GetContent().trim());
+    } catch (HttpException | HttpRequestMethodNotSupportedException | IOException e) {
+      e.printStackTrace();
+    }
+    return documentCount;
   }
 
   /**

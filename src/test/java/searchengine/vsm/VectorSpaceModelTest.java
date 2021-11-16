@@ -92,6 +92,7 @@ class VectorSpaceModelTest {
     void assertTopRankedTest1() {
         // arrange
         vsm = new VectorSpaceModel("is china bigger than germany");
+
         // act
         scoredDocuments = vsm.getScoredDocuments( TFIDFDocuments );
         // assert
