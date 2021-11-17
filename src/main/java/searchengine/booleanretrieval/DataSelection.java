@@ -8,10 +8,10 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.http.HttpException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import searchengine.Application;
 import searchengine.http.HTTPRequest;
 import searchengine.http.IHTTPRequest;
 import searchengine.http.IHTTPResponse;
@@ -57,9 +57,7 @@ public class DataSelection {
   @NotNull
 
   private IHTTPResponse requestDatabaseResponse(String input, List<String> sources) throws HttpException, HttpRequestMethodNotSupportedException, IOException {
-    Dotenv dotenv = Dotenv.load();
-
-    String apiEndPoint = dotenv.get("DATABASE_API_URL");
+    String apiEndPoint = Application.configuration.get("DATABASE_API_URL");
     IHTTPRequest http = new HTTPRequest(apiEndPoint);
     http.SetMethod("GET");
     if(input != null) {

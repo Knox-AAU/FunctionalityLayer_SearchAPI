@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import io.github.cdimascio.dotenv.Dotenv;
 
 public class SqlConnection implements ISqlConnection {
 
@@ -20,15 +19,13 @@ public class SqlConnection implements ISqlConnection {
      * @return Connection to wordcount
      */
     private Connection getConnection() throws ClassNotFoundException, SQLException {
-        Dotenv dotenv = Dotenv.load();
-
         // Class.forName(...) is needed for initializing the driver as jdbc
         // For more info: https://jdbc.postgresql.org/documentation/81/load.html
         Class.forName("org.postgresql.Driver");
         return DriverManager.getConnection(
-                dotenv.get("DB_CONNECTION_URL"),
-                dotenv.get("DB_CONNECTION_USERNAME"),
-                dotenv.get("DB_CONNECTION_PASSWORD"));
+                Application.configuration.get("DB_CONNECTION_URL"),
+                Application.configuration.get("DB_CONNECTION_USERNAME"),
+                Application.configuration.get("DB_CONNECTION_PASSWORD"));
     }
 
     /** Returns the java.sql.Connection.createStatement() on the wrapped class
