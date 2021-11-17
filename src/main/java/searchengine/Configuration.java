@@ -14,6 +14,7 @@ public class Configuration {
 
     public Configuration() throws FileNotFoundException {
         String expectedPath = System.getProperty("user.dir") + "/.env";
+        System.out.println(System.getProperty("user.dir") + "/.env");
         File envFile = new File(expectedPath);
         if(!envFile.exists()){
             throw new FileNotFoundException(".env file not found at: " + expectedPath);
