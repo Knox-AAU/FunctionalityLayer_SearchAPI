@@ -20,8 +20,6 @@ public class Search {
 
   @Getter
   private final List<ScoredDocument> result;
-  // Connection to make a request to the python API
-  private static HttpURLConnection connection;
 
   /**
    * Retrieve documents from database through the DataSelection class.
@@ -30,10 +28,10 @@ public class Search {
    *             The result list is stored in result
    * @param sources The list of sources to be searched
    */
-  public Search(String input, List<String> sources, ISqlConnection connection)
+  public Search(String input, List<String> sources)
   {
     input = new Lemmatizer().Lemmatize(input, "da");//TODO compute language
-    List<TFIDFDocument> documents = new DataSelection(connection).retrieveDocuments(input, sources);
+    List<TFIDFDocument> documents = new DataSelection().retrieveDocuments(input, sources);
     result = new VectorSpaceModel(input).getScoredDocuments(documents);
   }
 }
