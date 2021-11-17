@@ -1,8 +1,8 @@
 package searchengine.vsm;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.http.HttpException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import searchengine.Application;
 import searchengine.http.HTTPRequest;
 import searchengine.http.IHTTPRequest;
 import searchengine.http.IHTTPResponse;
@@ -195,9 +195,7 @@ public class VectorSpaceModel {
    * @throws IOException
    */
   private IHTTPResponse requestCountFromDB() throws HttpException, HttpRequestMethodNotSupportedException, IOException {
-    Dotenv dotenv = Dotenv.load();
-
-    String apiEndPoint = dotenv.get("DATABASE_API_COUNT_URL");
+    String apiEndPoint = Application.configuration.get("DATABASE_API_COUNT_URL");
     IHTTPRequest http = new HTTPRequest(apiEndPoint);
     http.SetMethod("GET");
 

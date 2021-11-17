@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import io.github.cdimascio.dotenv.Dotenv;
 
 public class SqlConnection implements ISqlConnection {
 

@@ -2,7 +2,6 @@ package searchengine;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.cdimascio.dotenv.Dotenv;
 import searchengine.http.*;
 import searchengine.http.lemmatizer.LemmatizerRequestBody;
 import searchengine.http.lemmatizer.LemmatizerResponse;
@@ -21,8 +20,7 @@ public class Lemmatizer implements ILemmatizer {
     @Override
     public String Lemmatize(String inputSentence, String language)
     {
-        Dotenv dotenv = Dotenv.load();
-        String url = dotenv.get("LEMMATIZER_URL");
+        String url = Application.configuration.get("LEMMATIZER_URL");
 
         try {
             IHTTPRequest httpRequest = new HTTPRequest(url);
