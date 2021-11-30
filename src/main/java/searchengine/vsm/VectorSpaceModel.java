@@ -215,7 +215,6 @@ public class VectorSpaceModel {
 
     Set<String> uniqueTerms = new HashSet<>();
     double dotProduct = 0;
-    double documentTFIDF = 0;
 
     //Used to use all terms, but terms not in query are irrelevant. This is no problem in production, as we only get wordcount for documents that contain query words from the database, but the tests get messed up by the doc terms
     uniqueTerms.addAll(queryTFIDFMap.keySet());

@@ -1,7 +1,6 @@
 package searchengine.booleanretrieval;
 
 import org.junit.jupiter.api.Test;
-import searchengine.ISqlConnection;
 import searchengine.vsm.TFIDFDocument;
 
 import java.sql.ResultSet;
