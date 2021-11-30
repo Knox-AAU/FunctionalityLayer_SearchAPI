@@ -15,6 +15,13 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * 
+ * This test has been removed because of an endpoint change. It was changed from using an SQLConnection to using a HTTP request to the database instead.
+ * The test is yet to be updated.
+ * 
+ */
+
 class DataSelectionTest {
 
     /** Handles the Arrange part of the tests (can't use @BeforeAll since it will give race condition errors) */
