@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * 
- * This test has been removed because of an endpoint change. It was changed from using an SQLConnection to using a HTTP request to the database instead.
+ * This test has been removed because of an endpoint change. It was changed from using an SQLConnection to using a HTTP request to the database API instead.
  * The test is yet to be updated.
  * 
  */
