@@ -2,10 +2,8 @@ package searchengine;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import searchengine.restcontrollers.Search;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 @SpringBootApplication
 public class Application {

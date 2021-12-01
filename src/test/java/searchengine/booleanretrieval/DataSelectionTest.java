@@ -1,7 +1,6 @@
 package searchengine.booleanretrieval;
 
 import org.junit.jupiter.api.Test;
-import searchengine.ISqlConnection;
 import searchengine.vsm.TFIDFDocument;
 
 import java.sql.ResultSet;
@@ -15,6 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+/**
+ * 
+ * This test has been removed because of an endpoint change. It was changed from using an SQLConnection to using a HTTP request to the database API instead.
+ * The test is yet to be updated.
+ * 
+ */
 
 class DataSelectionTest {
 

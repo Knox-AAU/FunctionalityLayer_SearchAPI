@@ -1,7 +1,6 @@
 package searchengine;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import io.github.cdimascio.dotenv.DotenvBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
