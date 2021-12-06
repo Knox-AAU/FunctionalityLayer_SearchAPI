@@ -28,7 +28,7 @@ public class VectorSpaceModel {
   public VectorSpaceModel() {
   }
 
-  /* <Term, Frequency> */ //TODO: Add getter and setter?
+  /* <Term, Frequency> */
   private HashMap<String, Integer> queryTFMap = new HashMap<>();
   /* <Term, Score> */
   private HashMap<String, Double> queryTFIDFMap = new HashMap<>();

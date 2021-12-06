@@ -30,7 +30,12 @@ public class Search {
    */
   public Search(String input, List<String> sources)
   {
-    input = new Lemmatizer().Lemmatize(input, "da");//TODO compute language
+    /* TODO compute language. Right now all inputs are interpreted as being Danish.
+        This can be a problem, since it could lead to lemmatization errors.
+        It would be good, if the language of the input could be determined before being lemmatized
+          The fix should, however, happen in the code for the lemmatizer, as it would be useful for all requests to the lemmatizer.
+    */
+    input = new Lemmatizer().Lemmatize(input, "da");
     List<TFIDFDocument> documents = new DataSelection().retrieveDocuments(input, sources);
     result = new VectorSpaceModel(input).getScoredDocuments(documents);
   }
