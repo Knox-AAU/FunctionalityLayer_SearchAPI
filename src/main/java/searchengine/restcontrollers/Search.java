@@ -1,14 +1,10 @@
 package searchengine.restcontrollers;
 
 import lombok.Getter;
-import org.json.JSONArray;
-import org.json.JSONException;
-import searchengine.ISqlConnection;
 import searchengine.Lemmatizer;
 import searchengine.booleanretrieval.DataSelection;
 import searchengine.vsm.ScoredDocument;
 import searchengine.vsm.TFIDFDocument;
-import java.net.HttpURLConnection;
 import searchengine.vsm.VectorSpaceModel;
 import java.util.List;
 
