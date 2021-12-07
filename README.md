@@ -3,7 +3,7 @@ This project is a part of the Knox multiproject on AAU, and is located in layer 
 This module receives queries and compares these queries to the documents in the Knox database. It ranks documents and returns the most relevant information to the user. 
 
 ## WIKI
-The search engine is documented in the [wiki](https://wiki.knox.cs.aau.dk/Search-engine/GruppeG).
+The search engine is documented in the [wiki](https://wiki.knox.cs.aau.dk/Search-engine/GruppeG/SearchEngine).
 
 ## Opening the Project
 The project is structured as a Maven project. To open the project in IntelliJ, clone the repository from Github, open IntelliJ and under File->Open, navigate to the FunctionalityLayer_SearchAPI repo. Select pom.xml and open this file. Maven should make sure the project opens correctly, and deal with any missing dependencies. If this fails, right-click pom.xml inside IntelliJ and under Maven, select Reload project.
