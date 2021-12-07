@@ -26,7 +26,7 @@ public class Search {
    */
   public Search(String input, List<String> sources)
   {
-    input = new Lemmatizer().Lemmatize(input, "da");//TODO compute language
+    input = new Lemmatizer().Lemmatize(input);
     List<TFIDFDocument> documents = new DataSelection().retrieveDocuments(input, sources);
     result = new VectorSpaceModel(input).getScoredDocuments(documents);
   }
